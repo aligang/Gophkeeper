@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package token;
+
+option go_package = "github.com/aligang/Gophkeeper/internal/token";
+
+message Token {
+  string id = 1;
+  string issued_at = 2;
+  string value = 3 ;
+}

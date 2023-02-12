@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package pipeline;
+
+option go_package = "github.com/aligang/Gophkeeper/internal/pipeline";
+
+
+message PipelineInitTree {
+  message Account {
+    message Register {
+      string login = 1;
+      string password = 2;
+    }
+    Register register = 1;
+  }
+  message Secret {
+    message Text {
+      message Get {
+        string id = 1;
+      }
+      message Create {
+        string data = 1;
+      }
+      message Update {
+        string id = 1;
+        string data = 2;
+      }
+      message Delete {
+        string id = 1;
+      }
+
+      Get get = 1;
+      Create create = 2;
+      Update update = 3;
+      Delete delete = 4;
+    }
+    message LoginPassword {
+      message Get {
+        string id = 1;
+      }
+      message Create {
+        string login = 1;
+        string password = 2;
+      }
+      message Update {
+        string id = 1;
+        string login = 2;
+        string password = 3;
+      }
+      message Delete {
+        string id = 1;
+      }
+
+      Get get = 1;
+      Create create = 2;
+      Update update = 3;
+      Delete delete = 4;
+    }
+    message CreditCard {
+      message Get {
+        string id = 1;
+      }
+      message Create {
+        string card_number = 1;
+        string card_holder = 2;
+        string valid_till = 3;
+        string cvc = 4;
+      }
+      message Update {
+        string id = 1;
+        string card_number = 2;
+        string card_holder = 3;
+        string valid_till = 4;
+        string cvc = 5;
+      }
+      message Delete {
+        string id = 1;
+      }
+
+      Get get = 1;
+      Create create = 2;
+      Update update = 3;
+      Delete delete = 4;
+    }
+    message File {
+      message Download {
+        string id = 1;
+        string file_path = 2;
+      }
+
+      message Upload {
+        string file_path = 2;
+      }
+      message Update {
+        string id = 1;
+        string file_path = 2;
+      }
+      message Delete {
+        string id = 1;
+      }
+
+      Download download = 1;
+      Upload upload = 2;
+      Update update = 3;
+      Delete delete = 4;
+    }
+    message List {}
+
+    Text text = 1;
+    LoginPassword login_password = 2;
+    CreditCard credit_card = 3;
+    File file = 4;
+    List list = 99;
+  }
+
+  Account account = 1;
+  Secret secret = 2;
+}

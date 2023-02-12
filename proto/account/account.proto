@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package account;
+
+option go_package = "github.com/aligang/Gophkeeper/internal/account";
+
+
+message Account {
+  string id = 1;
+  string login = 2;
+  string password = 3 ;
+  string created_at = 4;
+}
