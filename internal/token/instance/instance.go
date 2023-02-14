@@ -38,19 +38,3 @@ func genTokenValue(n int) (string, error) {
 
 	return base64.StdEncoding.EncodeToString(rnd), nil
 }
-
-//const LetterAlphabet = 26
-//const DigitAlphabet = 10
-
-//
-//func base64Random(rnd []byte) []byte {
-//	generator := []func(int) byte{
-//		func(i int) byte { return 'A' + rnd[i]%LetterAlphabet },
-//		func(i int) byte { return 'a' + rnd[i]%LetterAlphabet },
-//		func(i int) byte { return '0' + rnd[i]%DigitAlphabet },
-//	}
-//	rand.Prime()
-//	for i := range rnd {
-//		rnd[i] = generator[rnd[i]%3](i)
-//	}
-//}

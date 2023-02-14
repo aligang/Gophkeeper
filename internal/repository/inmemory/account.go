@@ -8,22 +8,20 @@ import (
 )
 
 type accountRecord struct {
-	id                string
-	createdAt         time.Time
-	login             string
-	password          string
-	encryptionEnabled bool
-	encryptionKey     string
+	id            string
+	createdAt     time.Time
+	login         string
+	password      string
+	encryptionKey string
 }
 
 func convertAccountInstance(a *accountInstance.Account) *accountRecord {
 	return &accountRecord{
-		id:                a.Id,
-		password:          a.Password,
-		login:             a.Login,
-		createdAt:         a.CreatedAt,
-		encryptionEnabled: a.EncryptionEnabled,
-		encryptionKey:     a.EncryptionKey,
+		id:            a.Id,
+		password:      a.Password,
+		login:         a.Login,
+		createdAt:     a.CreatedAt,
+		encryptionKey: a.EncryptionKey,
 	}
 }
 

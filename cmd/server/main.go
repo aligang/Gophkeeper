@@ -6,6 +6,7 @@ import (
 	"github.com/aligang/Gophkeeper/internal/account"
 	accountHandler "github.com/aligang/Gophkeeper/internal/account/handler"
 	"github.com/aligang/Gophkeeper/internal/config"
+	"github.com/aligang/Gophkeeper/internal/gb/fsgc"
 	"github.com/aligang/Gophkeeper/internal/gb/tokengc"
 	"github.com/aligang/Gophkeeper/internal/logging"
 	"github.com/aligang/Gophkeeper/internal/repository"
@@ -40,19 +41,19 @@ func main() {
 	go func() {
 		<-exitSignal
 		stopServer <- struct{}{}
-		close(stopServer)
+		close(exitSignal)
 		cancel()
 		wg.Done()
 	}()
 
-	//wg.Add(1)
-	//go func() {
-	//	logging.Debug("starting FileSystemGC...")
-	//	fsGarbageCollection := fsgc.New(cfg, storage, fileStorage)
-	//	fsGarbageCollection.Run(ctx)
-	//	logging.Debug("FileSystemGC stopped")
-	//	wg.Done()
-	//}()
+	wg.Add(1)
+	go func() {
+		logging.Debug("starting FileSystemGC...")
+		fsGarbageCollection := fsgc.New(cfg, storage, fileStorage)
+		fsGarbageCollection.Run(ctx)
+		logging.Debug("FileSystemGC stopped")
+		wg.Done()
+	}()
 
 	wg.Add(1)
 	go func() {
@@ -65,12 +66,12 @@ func main() {
 
 	wg.Add(1)
 	go func() {
-		listen, err := net.Listen("tcp", ":8080")
+		listen, err := net.Listen("tcp", cfg.Address)
 		if err != nil {
 			log.Fatal(err)
 		}
 		accountHandler := accountHandler.New(storage, cfg)
-		secretHandler := secretHandler.New(storage, fileStorage)
+		secretHandler := secretHandler.New(storage, fileStorage, cfg)
 		s := grpc.NewServer(grpc.ChainUnaryInterceptor(accountHandler.AuthInterceptor))
 
 		account.RegisterAccountServiceServer(s, accountHandler)

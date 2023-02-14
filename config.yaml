@@ -1,5 +1,4 @@
-address: "127.0.0.1:8080"
+address: "127.0.0.1:8090"
 file_storage: "/tmp/gophkeeper"
 repository_type: IN_MEMORY
-#RepositoryType: SQL
-database_dsn: "psql://test:test@127.0.0.1:5432"
+database_dsn: "postgres://gophkeeper:gophkeeper@127.0.0.1:5432/gophkeeper"
