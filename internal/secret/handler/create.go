@@ -42,8 +42,11 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret.CreateSecretReques
 				AccountId: accountID,
 				CreatedAt: time.Now(),
 			},
-			Text: req.GetText().String(),
+			Text: req.GetText().GetData(),
 		}
+		//if h.cfg.SecretEncryptionEnabled {
+		//	s, err = encryption.EncryptTextSecret(s, " ")
+		//}
 		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
 			return h.storage.AddTextSecret(ctx, s)
 		})

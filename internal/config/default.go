@@ -8,6 +8,7 @@ func getServerDefaultConfig() *ServerConfig {
 		TokenValidityTimeMinutes: 2,
 		TokenRenewalTimeMinutes:  1,
 		FileStaleTimeMinutes:     2,
+		SecretEncryptionEnabled:  false,
 	}
 }
 

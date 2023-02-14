@@ -19,6 +19,10 @@ func getServerConfigFromEnv() *ServerConfig {
 	if err != nil {
 		FileStaleTime = -1
 	}
+	EnableSecretEncryption, err := strconv.ParseBool(os.Getenv("ENABLE_SECRET_ENCRYPTION"))
+	if err != nil {
+		EnableSecretEncryption = false
+	}
 
 	s := ServerConfig{
 		Address:                  os.Getenv("ADDRESS"),
@@ -28,6 +32,7 @@ func getServerConfigFromEnv() *ServerConfig {
 		TokenValidityTimeMinutes: TokenValidityTime,
 		TokenRenewalTimeMinutes:  TokenRenewalTime,
 		FileStaleTimeMinutes:     FileStaleTime,
+		SecretEncryptionEnabled:  EnableSecretEncryption,
 	}
 	if s.RepositoryType == RepositoryType_SQL {
 		//s.OptionalDatabaseUri = &ServerConfig_DatabaseUri{DatabaseUri: os.Getenv("DATABASE_URI")}

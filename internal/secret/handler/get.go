@@ -61,7 +61,7 @@ func (h *GrpcHandler) Get(ctx context.Context, req *secret.GetSecretRequest) (*s
 
 		if err != nil {
 			logger.Debug("Secret record not found")
-			return nil, status.Errorf(codes.NotFound, "Secret record not found")
+			return nil, status.Errorf(codes.NotFound, "Secret not found")
 		}
 		logger.Debug("Checking access permissions... ")
 		if err = CheckOwnership(s.AccountId, accountID); err != nil {

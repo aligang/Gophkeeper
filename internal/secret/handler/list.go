@@ -58,7 +58,7 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret.ListSecretRequest) (
 			&secret.SecretDescription{
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
-				ModifiedAt: s.ModifiedAt.Format(time.RFC3339),
+				ModifiedAt: convertTime(s.ModifiedAt),
 				SecretType: secret.SecretType_TEXT,
 			},
 		)
@@ -70,7 +70,7 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret.ListSecretRequest) (
 			&secret.SecretDescription{
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
-				ModifiedAt: s.ModifiedAt.Format(time.RFC3339),
+				ModifiedAt: convertTime(s.ModifiedAt),
 				SecretType: secret.SecretType_TEXT,
 			},
 		)
@@ -82,19 +82,19 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret.ListSecretRequest) (
 			&secret.SecretDescription{
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
-				ModifiedAt: s.ModifiedAt.Format(time.RFC3339),
+				ModifiedAt: convertTime(s.ModifiedAt),
 				SecretType: secret.SecretType_TEXT,
 			},
 		)
 	}
-	
+
 	for _, s := range fileSecrets {
 		response.Secrets = append(
 			response.Secrets,
 			&secret.SecretDescription{
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
-				ModifiedAt: s.ModifiedAt.Format(time.RFC3339),
+				ModifiedAt: convertTime(s.ModifiedAt),
 				SecretType: secret.SecretType_FILE,
 			},
 		)

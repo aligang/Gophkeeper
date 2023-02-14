@@ -19,6 +19,7 @@ func getServerConfigFromCli() *ServerConfig {
 		fmt.Fprintf(os.Stderr, "		-tv 'token validity time'.\n")
 		fmt.Fprintf(os.Stderr, "		-tr 'token renewal time'.\n")
 		fmt.Fprintf(os.Stderr, "		-fs 'file stale time'.\n")
+		fmt.Fprintf(os.Stderr, "		-e 'enable secret encryption'.\n")
 	}
 
 	flag.StringVar(&conf.Address, "a", "", "host to listen on")
@@ -27,6 +28,7 @@ func getServerConfigFromCli() *ServerConfig {
 	flag.Int64Var(&conf.TokenValidityTimeMinutes, "tv", -1, "token")
 	flag.Int64Var(&conf.TokenRenewalTimeMinutes, "tr", -1, "File Storage Path")
 	flag.Int64Var(&conf.FileStaleTimeMinutes, "fs", -1, "Config File Path")
+	flag.BoolVar(&conf.SecretEncryptionEnabled, "e", false, "Enable encryption")
 	flag.Parse()
 	parsedRepoType := flag.Arg(0)
 	//if parsedRepoType != "in-memory" && parsedRepoType != "sql" {
@@ -55,21 +57,20 @@ func getServerConfigFromCli() *ServerConfig {
 	return conf
 }
 
-func getClientConfigFromCli() (*ClientConfig, *pipeline.PipelineInitTree) {
-	conf := &ClientConfig{}
+func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 	target := &pipeline.PipelineInitTree{}
 
-	flag.StringVar(&conf.ServerAddress, "a", "", "host to listen on")
-	flag.StringVar(&conf.Login, "l", "", "File Storage Path")
-	flag.StringVar(&conf.Password, "p", "", "Config File Path")
+	//flag.StringVar(&conf.ServerAddress, "a", "", "host to listen on")
+	//flag.StringVar(&conf.Login, "l", "", "File Storage Path")
+	//flag.StringVar(&conf.Password, "p", "", "Config File Path")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: ./client \n")
 		fmt.Fprintf(os.Stderr, "options:\n")
-		fmt.Fprintf(os.Stderr, "-a 'server address'.\n")
-		fmt.Fprintf(os.Stderr, "-l 'login'.\n")
-		fmt.Fprintf(os.Stderr, "-p 'password'.\n")
+		//fmt.Fprintf(os.Stderr, "-a 'server address'.\n")
+		//fmt.Fprintf(os.Stderr, "-l 'login'.\n")
+		//fmt.Fprintf(os.Stderr, "-p 'password'.\n")
 		fmt.Fprintf(os.Stderr, "sub-command:\n")
-		fmt.Fprintf(os.Stderr, "account|secret'.\n")
+		fmt.Fprintf(os.Stderr, "account|secret|version'.\n")
 	}
 
 	flag.Parse()
@@ -82,6 +83,8 @@ func getClientConfigFromCli() (*ClientConfig, *pipeline.PipelineInitTree) {
 	subcommand := args[0]
 	args = args[1:]
 	switch subcommand {
+	case "version":
+		target.Version = &pipeline.PipelineInitTree_Version{}
 	case "account":
 		target.Account = &pipeline.PipelineInitTree_Account{}
 		subFlags := flag.NewFlagSet("client account", flag.ExitOnError)
@@ -420,5 +423,5 @@ func getClientConfigFromCli() (*ClientConfig, *pipeline.PipelineInitTree) {
 		os.Exit(1)
 	}
 
-	return conf, target
+	return target
 }

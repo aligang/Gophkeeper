@@ -92,7 +92,7 @@ func (h *GrpcHandler) Delete(ctx context.Context, req *secret.DeleteSecretReques
 		return nil, status.Errorf(codes.Internal, secret.ErrUnsupportedSecretType.Error())
 	}
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Errorf(codes.NotFound, "Could not delete secret")
 	}
 	return &emptypb.Empty{}, nil
 }

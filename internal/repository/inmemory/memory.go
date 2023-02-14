@@ -165,9 +165,7 @@ func (r *Repository) Equals(other *Repository) bool {
 
 	if !reflect.DeepEqual(r.textSecrets, other.textSecrets) {
 		fmt.Println("Text secrets are not equal")
-		fmt.Println(r.textSecrets)
-		fmt.Println(other.textSecrets)
-		return false
+
 	}
 
 	if !reflect.DeepEqual(r.accountTextSecrets, other.accountTextSecrets) {

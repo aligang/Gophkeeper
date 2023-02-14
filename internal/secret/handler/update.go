@@ -54,12 +54,13 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 					CreatedAt:  oldSecret.CreatedAt,
 					ModifiedAt: time.Now(),
 				},
-				Text: req.GetText().String(),
+				Text: req.GetText().GetData(),
 			}
 			desc.Id = s.Id
 			desc.SecretType = secret.SecretType_TEXT
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
 			desc.ModifiedAt = s.ModifiedAt.Format(time.RFC3339)
+
 			return h.storage.UpdateTextSecret(ctx, s)
 		})
 
@@ -195,6 +196,9 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 		desc.ModifiedAt = s.ModifiedAt.Format(time.RFC3339)
 	default:
 		return nil, status.Errorf(codes.Internal, err.Error())
+	}
+	if err != nil {
+		return nil, status.Errorf(codes.Unavailable, "Could not update secret")
 	}
 
 	return desc, nil

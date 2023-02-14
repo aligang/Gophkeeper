@@ -112,3 +112,7 @@ func (r *FileRepository) Equals(another *FileRepository) bool {
 func (r *FileRepository) GetRootDirectory() string {
 	return r.root
 }
+
+func (r *FileRepository) CleanOut() error {
+	return os.RemoveAll(r.root)
+}

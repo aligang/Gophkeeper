@@ -3,6 +3,7 @@ package fs
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/internal/config"
+	"github.com/aligang/Gophkeeper/internal/fixtures"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
@@ -12,7 +13,7 @@ const referenceObjectName = "test-object"
 const referencePayload = "test-data"
 
 func TestRepoMethods(t *testing.T) {
-	repoPath := "/tmp/" + pathFixture()
+	repoPath := fixtures.PathFixture()
 	fileRepo := New(
 		&config.ServerConfig{
 			FileStorage: repoPath,

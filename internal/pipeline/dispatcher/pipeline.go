@@ -11,6 +11,7 @@ import (
 	"github.com/aligang/Gophkeeper/internal/pipeline/secret/file"
 	loginPassword "github.com/aligang/Gophkeeper/internal/pipeline/secret/loginpassword"
 	"github.com/aligang/Gophkeeper/internal/pipeline/secret/text"
+	"github.com/aligang/Gophkeeper/internal/pipeline/version"
 	secretProto "github.com/aligang/Gophkeeper/internal/secret"
 	tokenGetter "github.com/aligang/Gophkeeper/internal/token/tokengetter"
 	"google.golang.org/grpc"
@@ -32,6 +33,8 @@ func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
 	accountClient := acccountProto.NewAccountServiceClient(conn)
 
 	switch {
+	case pipelineTree.Version != nil:
+		version.Print()
 	case pipelineTree.Account != nil:
 		acc := pipelineTree.Account
 		switch {

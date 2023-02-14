@@ -1,7 +1,5 @@
 package config
 
-import "github.com/aligang/Gophkeeper/internal/pipeline"
-
 func GetServerConfig() *ServerConfig {
 	var cfg *ServerConfig
 	cfg = getServerConfigFromEnv().merge(getServerConfigFromCli())
@@ -38,22 +36,26 @@ func (c *ServerConfig) merge(another *ServerConfig) *ServerConfig {
 		c.FileStaleTimeMinutes = another.FileStaleTimeMinutes
 	}
 
+	if c.SecretEncryptionEnabled == false && another.SecretEncryptionEnabled == true {
+		c.SecretEncryptionEnabled = true
+	}
+
 	if c.ConfigFile == "" && another.ConfigFile != "" {
 		c.ConfigFile = another.ConfigFile
 	}
 	return c
 }
 
-func GetClientConfig() (*ClientConfig, *pipeline.PipelineInitTree) {
+func GetClientConfig() *ClientConfig {
 	var cfg *ClientConfig
 	cfg = getClientConfigFromEnv()
-	cliCfg, pipelineTree := getClientConfigFromCli()
-	cfg = cfg.merge(cliCfg)
+	//cliCfg, pipelineTree := getClientConfigFromCli()
+	//cfg = cfg.merge(cliCfg)
 	//if cfg.ConfigFile != "" {
 	//	cfg = cfg.merge(getServerConfigFromYaml(cfg.ConfigFile))
 	//}
 	cfg = cfg.merge(getClientDefaultConfig())
-	return cfg, pipelineTree
+	return cfg
 }
 
 func (c *ClientConfig) merge(another *ClientConfig) *ClientConfig {

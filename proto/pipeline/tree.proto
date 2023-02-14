@@ -6,6 +6,9 @@ option go_package = "github.com/aligang/Gophkeeper/internal/pipeline";
 
 
 message PipelineInitTree {
+  message Version {
+
+  }
   message Account {
     message Register {
       string login = 1;
@@ -115,4 +118,5 @@ message PipelineInitTree {
 
   Account account = 1;
   Secret secret = 2;
+  Version version = 3;
 }

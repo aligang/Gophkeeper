@@ -9,8 +9,8 @@ import (
 )
 
 func TestRepoInitializationGeneration(t *testing.T) {
-	validExistingPath := "/tmp/" + fixtures.PathFixture()
-	validNonExistingPath := "/tmp/" + fixtures.PathFixture()
+	validExistingPath := fixtures.PathFixture()
+	validNonExistingPath := fixtures.PathFixture()
 
 	invalidPath := "/" + fixtures.PathFixture()
 	_ = os.Remove(validExistingPath)

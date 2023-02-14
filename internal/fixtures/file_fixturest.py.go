@@ -17,5 +17,5 @@ func PathFixture() string {
 		path[i] = generator[path[i]%2](i)
 	}
 
-	return string(path)
+	return "tmp/" + string(path)
 }

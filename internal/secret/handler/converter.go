@@ -75,3 +75,11 @@ func convertFileSecretInstance(instance *secretInstance.FileSecret) *secret.Secr
 	}
 	return s
 }
+
+func convertTime(t time.Time) string {
+	if t.IsZero() {
+		return ""
+	}
+	return t.Format(time.RFC3339)
+
+}
