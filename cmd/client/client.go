@@ -11,7 +11,8 @@ import (
 func main() {
 	logging.Configure(os.Stdout, zerolog.DebugLevel)
 	logging.Debug("Starting GophKeeper client")
-	clientCfg, pipelineCfg := config.GetClientConfig()
+	clientCfg := config.GetClientConfig()
+	pipelineCfg := config.GetClientPipelineConfigFromCli()
 	dispatcher.Start(clientCfg, pipelineCfg)
 	//fmt.Println(clientCfg)
 }
