@@ -34,4 +34,6 @@ message ClientConfig {
   string login = 2;
   string password = 3;
   string static_token = 4;
+
+  string config_file = 99;
 }

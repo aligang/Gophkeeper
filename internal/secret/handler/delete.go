@@ -36,8 +36,8 @@ func (h *GrpcHandler) Delete(ctx context.Context, req *secret.DeleteSecretReques
 
 	switch req.SecretType {
 	case secret.SecretType_TEXT:
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			s, terr := h.storage.GetTextSecret(ctx, req.Id)
+		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
+			s, terr := h.storage.GetTextSecret(tCtx, req.Id, tx)
 			if terr != nil {
 				return terr
 			}
@@ -45,12 +45,12 @@ func (h *GrpcHandler) Delete(ctx context.Context, req *secret.DeleteSecretReques
 			if terr != nil {
 				return terr
 			}
-			return h.storage.DeleteTextSecret(ctx, req.Id)
+			return h.storage.DeleteTextSecret(tCtx, req.Id, tx)
 		})
 
 	case secret.SecretType_LOGIN_PASSWORD:
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			s, terr := h.storage.GetLoginPasswordSecret(ctx, req.Id)
+		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
+			s, terr := h.storage.GetLoginPasswordSecret(tCtx, req.Id, tx)
 			if terr != nil {
 				return terr
 			}
@@ -58,11 +58,11 @@ func (h *GrpcHandler) Delete(ctx context.Context, req *secret.DeleteSecretReques
 			if terr != nil {
 				return terr
 			}
-			return h.storage.DeleteLoginPasswordSecret(ctx, req.Id)
+			return h.storage.DeleteLoginPasswordSecret(tCtx, req.Id, tx)
 		})
 	case secret.SecretType_CREDIT_CARD:
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			s, terr := h.storage.GetCreditCardSecret(ctx, req.Id)
+		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
+			s, terr := h.storage.GetCreditCardSecret(tCtx, req.Id, tx)
 			if terr != nil {
 				return terr
 			}
@@ -70,19 +70,19 @@ func (h *GrpcHandler) Delete(ctx context.Context, req *secret.DeleteSecretReques
 			if terr != nil {
 				return terr
 			}
-			return h.storage.DeleteCreditCardSecret(ctx, req.Id)
+			return h.storage.DeleteCreditCardSecret(tCtx, req.Id, tx)
 		})
 	case secret.SecretType_FILE:
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			s, terr := h.storage.GetFileSecret(ctx, req.Id)
+		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
+			s, terr := h.storage.GetFileSecret(tCtx, req.Id, tx)
 			if terr != nil {
 				return terr
 			}
-			terr = h.storage.DeleteFileSecret(ctx, req.Id)
+			terr = h.storage.DeleteFileSecret(tCtx, req.Id, tx)
 			if terr != nil {
 				return terr
 			}
-			terr = h.storage.MoveFileSecretToDeletionQueue(ctx, s.ObjectId, time.Now())
+			terr = h.storage.MoveFileSecretToDeletionQueue(tCtx, s.ObjectId, time.Now(), tx)
 			if terr != nil {
 				return terr
 			}

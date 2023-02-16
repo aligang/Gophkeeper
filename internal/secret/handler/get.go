@@ -30,7 +30,7 @@ func (h *GrpcHandler) Get(ctx context.Context, req *secret.GetSecretRequest) (*s
 	var resp *secret.Secret
 	switch req.SecretType {
 	case secret.SecretType_TEXT:
-		s, err := h.storage.GetTextSecret(ctx, req.Id)
+		s, err := h.storage.GetTextSecret(ctx, req.Id, nil)
 		if err != nil {
 			return nil, status.Errorf(codes.NotFound, "Secret not found")
 		}
@@ -39,7 +39,7 @@ func (h *GrpcHandler) Get(ctx context.Context, req *secret.GetSecretRequest) (*s
 		}
 		resp = convertTextSecretInstance(s)
 	case secret.SecretType_LOGIN_PASSWORD:
-		s, err := h.storage.GetLoginPasswordSecret(ctx, req.Id)
+		s, err := h.storage.GetLoginPasswordSecret(ctx, req.Id, nil)
 		if err != nil {
 			return nil, status.Errorf(codes.NotFound, "Secret not found")
 		}
@@ -48,7 +48,7 @@ func (h *GrpcHandler) Get(ctx context.Context, req *secret.GetSecretRequest) (*s
 		}
 		resp = convertLoginPasswordSecretInstance(s)
 	case secret.SecretType_CREDIT_CARD:
-		s, err := h.storage.GetCreditCardSecret(ctx, req.Id)
+		s, err := h.storage.GetCreditCardSecret(ctx, req.Id, nil)
 		if err != nil {
 			return nil, status.Errorf(codes.NotFound, "Secret not found")
 		}
@@ -57,7 +57,7 @@ func (h *GrpcHandler) Get(ctx context.Context, req *secret.GetSecretRequest) (*s
 		}
 		resp = convertCreditCardSecretInstance(s)
 	case secret.SecretType_FILE:
-		s, err := h.storage.GetFileSecret(ctx, req.Id)
+		s, err := h.storage.GetFileSecret(ctx, req.Id, nil)
 
 		if err != nil {
 			logger.Debug("Secret record not found")

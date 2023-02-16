@@ -22,7 +22,7 @@ type LoginPasswordSecret struct {
 
 type CreditCardSecret struct {
 	BaseSecret
-	Number     string
+	CardNumber string
 	CardHolder string
 	ValidTill  string
 	Cvc        string

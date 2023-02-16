@@ -3,6 +3,7 @@ package inmemory
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/internal/repository/repositoryerrors"
+	"github.com/aligang/Gophkeeper/internal/repository/transaction"
 	tokenInstance "github.com/aligang/Gophkeeper/internal/token/instance"
 	"sort"
 	"time"
@@ -18,7 +19,7 @@ type tokenRecord struct {
 func convertTokenInstance(i *tokenInstance.Token) *tokenRecord {
 	return &tokenRecord{
 		id:       i.Id,
-		value:    i.Value,
+		value:    i.TokenValue,
 		owner:    i.Owner,
 		issuedAt: i.IssuedAt,
 	}
@@ -26,14 +27,14 @@ func convertTokenInstance(i *tokenInstance.Token) *tokenRecord {
 
 func convertTokenRecord(r *tokenRecord) *tokenInstance.Token {
 	return &tokenInstance.Token{
-		Id:       r.id,
-		Value:    r.value,
-		Owner:    r.owner,
-		IssuedAt: r.issuedAt,
+		Id:         r.id,
+		TokenValue: r.value,
+		Owner:      r.owner,
+		IssuedAt:   r.issuedAt,
 	}
 }
 
-func (r *Repository) GetToken(ctx context.Context, tokenValue string) (*tokenInstance.Token, error) {
+func (r *Repository) GetToken(ctx context.Context, tokenValue string, tx *transaction.DBTransaction) (*tokenInstance.Token, error) {
 	logger := r.log.GetSubLogger("Token", "Get")
 	logger.Debug("Fetching token record")
 	tokenRecord, ok := r.tokens[tokenValue]
@@ -45,20 +46,20 @@ func (r *Repository) GetToken(ctx context.Context, tokenValue string) (*tokenIns
 	return convertTokenRecord(tokenRecord), nil
 }
 
-func (r *Repository) AddToken(ctx context.Context, instance *tokenInstance.Token) error {
+func (r *Repository) AddToken(ctx context.Context, instance *tokenInstance.Token, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("Token", "Add")
 	logger.Debug("Adding token record %s", instance.Id)
-	r.tokens[instance.Value] = convertTokenInstance(instance)
+	r.tokens[instance.TokenValue] = convertTokenInstance(instance)
 	_, ok := r.accountTokens[instance.Owner]
 	if !ok {
 		r.accountTokens[instance.Owner] = map[string]interface{}{}
 	}
 	logger.Debug("Token record %s added to databes", instance.Id)
-	r.accountTokens[instance.Owner][instance.Value] = nil
+	r.accountTokens[instance.Owner][instance.TokenValue] = nil
 	return nil
 }
 
-func (r *Repository) ListAccountTokens(ctx context.Context, accountID string) ([]*tokenInstance.Token, error) {
+func (r *Repository) ListAccountTokens(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*tokenInstance.Token, error) {
 	logger := r.log.GetSubLogger("AccountToken", "List")
 	logger.Debug("Listing record")
 	tokens, ok := r.accountTokens[accountID]
@@ -82,7 +83,7 @@ func (r *Repository) ListAccountTokens(ctx context.Context, accountID string) ([
 	return tokenInstances, nil
 }
 
-func (r *Repository) ListTokens(ctx context.Context) ([]*tokenInstance.Token, error) {
+func (r *Repository) ListTokens(ctx context.Context, tx *transaction.DBTransaction) ([]*tokenInstance.Token, error) {
 	logger := r.log.GetSubLogger("Token", "List")
 	logger.Debug("Listing record")
 
@@ -95,12 +96,12 @@ func (r *Repository) ListTokens(ctx context.Context) ([]*tokenInstance.Token, er
 	return tokenInstances, nil
 }
 
-func (r *Repository) DeleteToken(ctx context.Context, t *tokenInstance.Token) error {
+func (r *Repository) DeleteToken(ctx context.Context, t *tokenInstance.Token, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("Token", "Delete")
 	logger.Debug("Deleting token %s", t.Id)
-	delete(r.tokens, t.Value)
+	delete(r.tokens, t.TokenValue)
 
-	delete(r.accountTokens[t.Owner], t.Value)
+	delete(r.accountTokens[t.Owner], t.TokenValue)
 	if len(r.accountTokens[t.Owner]) == 0 {
 		delete(r.accountTokens, t.Owner)
 	}

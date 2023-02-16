@@ -28,6 +28,7 @@ type PipelineInitTree struct {
 	Account *PipelineInitTree_Account `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
 	Secret  *PipelineInitTree_Secret  `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
 	Version *PipelineInitTree_Version `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	Token   *PipelineInitTree_Token   `protobuf:"bytes,4,opt,name=token,proto3" json:"token,omitempty"`
 }
 
 func (x *PipelineInitTree) Reset() {
@@ -83,6 +84,13 @@ func (x *PipelineInitTree) GetVersion() *PipelineInitTree_Version {
 	return nil
 }
 
+func (x *PipelineInitTree) GetToken() *PipelineInitTree_Token {
+	if x != nil {
+		return x.Token
+	}
+	return nil
+}
+
 type PipelineInitTree_Version struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -121,6 +129,53 @@ func (*PipelineInitTree_Version) Descriptor() ([]byte, []int) {
 	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 0}
 }
 
+type PipelineInitTree_Token struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Get *PipelineInitTree_Token_Get `protobuf:"bytes,1,opt,name=get,proto3" json:"get,omitempty"`
+}
+
+func (x *PipelineInitTree_Token) Reset() {
+	*x = PipelineInitTree_Token{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_pipeline_tree_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PipelineInitTree_Token) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PipelineInitTree_Token) ProtoMessage() {}
+
+func (x *PipelineInitTree_Token) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_pipeline_tree_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PipelineInitTree_Token.ProtoReflect.Descriptor instead.
+func (*PipelineInitTree_Token) Descriptor() ([]byte, []int) {
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 1}
+}
+
+func (x *PipelineInitTree_Token) GetGet() *PipelineInitTree_Token_Get {
+	if x != nil {
+		return x.Get
+	}
+	return nil
+}
+
 type PipelineInitTree_Account struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -132,7 +187,7 @@ type PipelineInitTree_Account struct {
 func (x *PipelineInitTree_Account) Reset() {
 	*x = PipelineInitTree_Account{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[2]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -145,7 +200,7 @@ func (x *PipelineInitTree_Account) String() string {
 func (*PipelineInitTree_Account) ProtoMessage() {}
 
 func (x *PipelineInitTree_Account) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[2]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -158,7 +213,7 @@ func (x *PipelineInitTree_Account) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PipelineInitTree_Account.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Account) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 1}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2}
 }
 
 func (x *PipelineInitTree_Account) GetRegister() *PipelineInitTree_Account_Register {
@@ -183,7 +238,7 @@ type PipelineInitTree_Secret struct {
 func (x *PipelineInitTree_Secret) Reset() {
 	*x = PipelineInitTree_Secret{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[3]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -196,7 +251,7 @@ func (x *PipelineInitTree_Secret) String() string {
 func (*PipelineInitTree_Secret) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[3]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -209,7 +264,7 @@ func (x *PipelineInitTree_Secret) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PipelineInitTree_Secret.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3}
 }
 
 func (x *PipelineInitTree_Secret) GetText() *PipelineInitTree_Secret_Text {
@@ -247,6 +302,44 @@ func (x *PipelineInitTree_Secret) GetList() *PipelineInitTree_Secret_List {
 	return nil
 }
 
+type PipelineInitTree_Token_Get struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *PipelineInitTree_Token_Get) Reset() {
+	*x = PipelineInitTree_Token_Get{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_pipeline_tree_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PipelineInitTree_Token_Get) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PipelineInitTree_Token_Get) ProtoMessage() {}
+
+func (x *PipelineInitTree_Token_Get) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_pipeline_tree_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PipelineInitTree_Token_Get.ProtoReflect.Descriptor instead.
+func (*PipelineInitTree_Token_Get) Descriptor() ([]byte, []int) {
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 1, 0}
+}
+
 type PipelineInitTree_Account_Register struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -259,7 +352,7 @@ type PipelineInitTree_Account_Register struct {
 func (x *PipelineInitTree_Account_Register) Reset() {
 	*x = PipelineInitTree_Account_Register{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[4]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -272,7 +365,7 @@ func (x *PipelineInitTree_Account_Register) String() string {
 func (*PipelineInitTree_Account_Register) ProtoMessage() {}
 
 func (x *PipelineInitTree_Account_Register) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[4]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -285,7 +378,7 @@ func (x *PipelineInitTree_Account_Register) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use PipelineInitTree_Account_Register.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Account_Register) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 1, 0}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 0}
 }
 
 func (x *PipelineInitTree_Account_Register) GetLogin() string {
@@ -316,7 +409,7 @@ type PipelineInitTree_Secret_Text struct {
 func (x *PipelineInitTree_Secret_Text) Reset() {
 	*x = PipelineInitTree_Secret_Text{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[5]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -329,7 +422,7 @@ func (x *PipelineInitTree_Secret_Text) String() string {
 func (*PipelineInitTree_Secret_Text) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_Text) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[5]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -342,7 +435,7 @@ func (x *PipelineInitTree_Secret_Text) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PipelineInitTree_Secret_Text.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_Text) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 0}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 0}
 }
 
 func (x *PipelineInitTree_Secret_Text) GetGet() *PipelineInitTree_Secret_Text_Get {
@@ -387,7 +480,7 @@ type PipelineInitTree_Secret_LoginPassword struct {
 func (x *PipelineInitTree_Secret_LoginPassword) Reset() {
 	*x = PipelineInitTree_Secret_LoginPassword{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[6]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -400,7 +493,7 @@ func (x *PipelineInitTree_Secret_LoginPassword) String() string {
 func (*PipelineInitTree_Secret_LoginPassword) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_LoginPassword) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[6]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -413,7 +506,7 @@ func (x *PipelineInitTree_Secret_LoginPassword) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use PipelineInitTree_Secret_LoginPassword.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_LoginPassword) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 1}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 1}
 }
 
 func (x *PipelineInitTree_Secret_LoginPassword) GetGet() *PipelineInitTree_Secret_LoginPassword_Get {
@@ -458,7 +551,7 @@ type PipelineInitTree_Secret_CreditCard struct {
 func (x *PipelineInitTree_Secret_CreditCard) Reset() {
 	*x = PipelineInitTree_Secret_CreditCard{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[7]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -471,7 +564,7 @@ func (x *PipelineInitTree_Secret_CreditCard) String() string {
 func (*PipelineInitTree_Secret_CreditCard) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_CreditCard) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[7]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -484,7 +577,7 @@ func (x *PipelineInitTree_Secret_CreditCard) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use PipelineInitTree_Secret_CreditCard.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_CreditCard) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 2}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 2}
 }
 
 func (x *PipelineInitTree_Secret_CreditCard) GetGet() *PipelineInitTree_Secret_CreditCard_Get {
@@ -529,7 +622,7 @@ type PipelineInitTree_Secret_File struct {
 func (x *PipelineInitTree_Secret_File) Reset() {
 	*x = PipelineInitTree_Secret_File{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[8]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -542,7 +635,7 @@ func (x *PipelineInitTree_Secret_File) String() string {
 func (*PipelineInitTree_Secret_File) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_File) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[8]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -555,7 +648,7 @@ func (x *PipelineInitTree_Secret_File) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PipelineInitTree_Secret_File.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_File) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 3}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 3}
 }
 
 func (x *PipelineInitTree_Secret_File) GetDownload() *PipelineInitTree_Secret_File_Download {
@@ -595,7 +688,7 @@ type PipelineInitTree_Secret_List struct {
 func (x *PipelineInitTree_Secret_List) Reset() {
 	*x = PipelineInitTree_Secret_List{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[9]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -608,7 +701,7 @@ func (x *PipelineInitTree_Secret_List) String() string {
 func (*PipelineInitTree_Secret_List) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_List) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[9]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -621,7 +714,7 @@ func (x *PipelineInitTree_Secret_List) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PipelineInitTree_Secret_List.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_List) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 4}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 4}
 }
 
 type PipelineInitTree_Secret_Text_Get struct {
@@ -635,7 +728,7 @@ type PipelineInitTree_Secret_Text_Get struct {
 func (x *PipelineInitTree_Secret_Text_Get) Reset() {
 	*x = PipelineInitTree_Secret_Text_Get{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[10]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -648,7 +741,7 @@ func (x *PipelineInitTree_Secret_Text_Get) String() string {
 func (*PipelineInitTree_Secret_Text_Get) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_Text_Get) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[10]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -661,7 +754,7 @@ func (x *PipelineInitTree_Secret_Text_Get) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PipelineInitTree_Secret_Text_Get.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_Text_Get) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 0, 0}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 0, 0}
 }
 
 func (x *PipelineInitTree_Secret_Text_Get) GetId() string {
@@ -682,7 +775,7 @@ type PipelineInitTree_Secret_Text_Create struct {
 func (x *PipelineInitTree_Secret_Text_Create) Reset() {
 	*x = PipelineInitTree_Secret_Text_Create{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[11]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -695,7 +788,7 @@ func (x *PipelineInitTree_Secret_Text_Create) String() string {
 func (*PipelineInitTree_Secret_Text_Create) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_Text_Create) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[11]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -708,7 +801,7 @@ func (x *PipelineInitTree_Secret_Text_Create) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use PipelineInitTree_Secret_Text_Create.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_Text_Create) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 0, 1}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 0, 1}
 }
 
 func (x *PipelineInitTree_Secret_Text_Create) GetData() string {
@@ -730,7 +823,7 @@ type PipelineInitTree_Secret_Text_Update struct {
 func (x *PipelineInitTree_Secret_Text_Update) Reset() {
 	*x = PipelineInitTree_Secret_Text_Update{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[12]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -743,7 +836,7 @@ func (x *PipelineInitTree_Secret_Text_Update) String() string {
 func (*PipelineInitTree_Secret_Text_Update) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_Text_Update) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[12]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -756,7 +849,7 @@ func (x *PipelineInitTree_Secret_Text_Update) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use PipelineInitTree_Secret_Text_Update.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_Text_Update) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 0, 2}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 0, 2}
 }
 
 func (x *PipelineInitTree_Secret_Text_Update) GetId() string {
@@ -784,7 +877,7 @@ type PipelineInitTree_Secret_Text_Delete struct {
 func (x *PipelineInitTree_Secret_Text_Delete) Reset() {
 	*x = PipelineInitTree_Secret_Text_Delete{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[13]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -797,7 +890,7 @@ func (x *PipelineInitTree_Secret_Text_Delete) String() string {
 func (*PipelineInitTree_Secret_Text_Delete) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_Text_Delete) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[13]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -810,7 +903,7 @@ func (x *PipelineInitTree_Secret_Text_Delete) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use PipelineInitTree_Secret_Text_Delete.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_Text_Delete) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 0, 3}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 0, 3}
 }
 
 func (x *PipelineInitTree_Secret_Text_Delete) GetId() string {
@@ -831,7 +924,7 @@ type PipelineInitTree_Secret_LoginPassword_Get struct {
 func (x *PipelineInitTree_Secret_LoginPassword_Get) Reset() {
 	*x = PipelineInitTree_Secret_LoginPassword_Get{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[14]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -844,7 +937,7 @@ func (x *PipelineInitTree_Secret_LoginPassword_Get) String() string {
 func (*PipelineInitTree_Secret_LoginPassword_Get) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_LoginPassword_Get) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[14]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -857,7 +950,7 @@ func (x *PipelineInitTree_Secret_LoginPassword_Get) ProtoReflect() protoreflect.
 
 // Deprecated: Use PipelineInitTree_Secret_LoginPassword_Get.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_LoginPassword_Get) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 1, 0}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 1, 0}
 }
 
 func (x *PipelineInitTree_Secret_LoginPassword_Get) GetId() string {
@@ -879,7 +972,7 @@ type PipelineInitTree_Secret_LoginPassword_Create struct {
 func (x *PipelineInitTree_Secret_LoginPassword_Create) Reset() {
 	*x = PipelineInitTree_Secret_LoginPassword_Create{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[15]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -892,7 +985,7 @@ func (x *PipelineInitTree_Secret_LoginPassword_Create) String() string {
 func (*PipelineInitTree_Secret_LoginPassword_Create) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_LoginPassword_Create) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[15]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -905,7 +998,7 @@ func (x *PipelineInitTree_Secret_LoginPassword_Create) ProtoReflect() protorefle
 
 // Deprecated: Use PipelineInitTree_Secret_LoginPassword_Create.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_LoginPassword_Create) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 1, 1}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 1, 1}
 }
 
 func (x *PipelineInitTree_Secret_LoginPassword_Create) GetLogin() string {
@@ -935,7 +1028,7 @@ type PipelineInitTree_Secret_LoginPassword_Update struct {
 func (x *PipelineInitTree_Secret_LoginPassword_Update) Reset() {
 	*x = PipelineInitTree_Secret_LoginPassword_Update{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[16]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -948,7 +1041,7 @@ func (x *PipelineInitTree_Secret_LoginPassword_Update) String() string {
 func (*PipelineInitTree_Secret_LoginPassword_Update) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_LoginPassword_Update) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[16]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -961,7 +1054,7 @@ func (x *PipelineInitTree_Secret_LoginPassword_Update) ProtoReflect() protorefle
 
 // Deprecated: Use PipelineInitTree_Secret_LoginPassword_Update.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_LoginPassword_Update) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 1, 2}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 1, 2}
 }
 
 func (x *PipelineInitTree_Secret_LoginPassword_Update) GetId() string {
@@ -996,7 +1089,7 @@ type PipelineInitTree_Secret_LoginPassword_Delete struct {
 func (x *PipelineInitTree_Secret_LoginPassword_Delete) Reset() {
 	*x = PipelineInitTree_Secret_LoginPassword_Delete{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[17]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1009,7 +1102,7 @@ func (x *PipelineInitTree_Secret_LoginPassword_Delete) String() string {
 func (*PipelineInitTree_Secret_LoginPassword_Delete) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_LoginPassword_Delete) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[17]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1022,7 +1115,7 @@ func (x *PipelineInitTree_Secret_LoginPassword_Delete) ProtoReflect() protorefle
 
 // Deprecated: Use PipelineInitTree_Secret_LoginPassword_Delete.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_LoginPassword_Delete) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 1, 3}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 1, 3}
 }
 
 func (x *PipelineInitTree_Secret_LoginPassword_Delete) GetId() string {
@@ -1043,7 +1136,7 @@ type PipelineInitTree_Secret_CreditCard_Get struct {
 func (x *PipelineInitTree_Secret_CreditCard_Get) Reset() {
 	*x = PipelineInitTree_Secret_CreditCard_Get{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[18]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1056,7 +1149,7 @@ func (x *PipelineInitTree_Secret_CreditCard_Get) String() string {
 func (*PipelineInitTree_Secret_CreditCard_Get) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_CreditCard_Get) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[18]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1069,7 +1162,7 @@ func (x *PipelineInitTree_Secret_CreditCard_Get) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use PipelineInitTree_Secret_CreditCard_Get.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_CreditCard_Get) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 2, 0}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 2, 0}
 }
 
 func (x *PipelineInitTree_Secret_CreditCard_Get) GetId() string {
@@ -1093,7 +1186,7 @@ type PipelineInitTree_Secret_CreditCard_Create struct {
 func (x *PipelineInitTree_Secret_CreditCard_Create) Reset() {
 	*x = PipelineInitTree_Secret_CreditCard_Create{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[19]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1106,7 +1199,7 @@ func (x *PipelineInitTree_Secret_CreditCard_Create) String() string {
 func (*PipelineInitTree_Secret_CreditCard_Create) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_CreditCard_Create) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[19]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1119,7 +1212,7 @@ func (x *PipelineInitTree_Secret_CreditCard_Create) ProtoReflect() protoreflect.
 
 // Deprecated: Use PipelineInitTree_Secret_CreditCard_Create.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_CreditCard_Create) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 2, 1}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 2, 1}
 }
 
 func (x *PipelineInitTree_Secret_CreditCard_Create) GetCardNumber() string {
@@ -1165,7 +1258,7 @@ type PipelineInitTree_Secret_CreditCard_Update struct {
 func (x *PipelineInitTree_Secret_CreditCard_Update) Reset() {
 	*x = PipelineInitTree_Secret_CreditCard_Update{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[20]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1178,7 +1271,7 @@ func (x *PipelineInitTree_Secret_CreditCard_Update) String() string {
 func (*PipelineInitTree_Secret_CreditCard_Update) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_CreditCard_Update) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[20]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1191,7 +1284,7 @@ func (x *PipelineInitTree_Secret_CreditCard_Update) ProtoReflect() protoreflect.
 
 // Deprecated: Use PipelineInitTree_Secret_CreditCard_Update.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_CreditCard_Update) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 2, 2}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 2, 2}
 }
 
 func (x *PipelineInitTree_Secret_CreditCard_Update) GetId() string {
@@ -1240,7 +1333,7 @@ type PipelineInitTree_Secret_CreditCard_Delete struct {
 func (x *PipelineInitTree_Secret_CreditCard_Delete) Reset() {
 	*x = PipelineInitTree_Secret_CreditCard_Delete{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[21]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1253,7 +1346,7 @@ func (x *PipelineInitTree_Secret_CreditCard_Delete) String() string {
 func (*PipelineInitTree_Secret_CreditCard_Delete) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_CreditCard_Delete) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[21]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1266,7 +1359,7 @@ func (x *PipelineInitTree_Secret_CreditCard_Delete) ProtoReflect() protoreflect.
 
 // Deprecated: Use PipelineInitTree_Secret_CreditCard_Delete.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_CreditCard_Delete) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 2, 3}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 2, 3}
 }
 
 func (x *PipelineInitTree_Secret_CreditCard_Delete) GetId() string {
@@ -1288,7 +1381,7 @@ type PipelineInitTree_Secret_File_Download struct {
 func (x *PipelineInitTree_Secret_File_Download) Reset() {
 	*x = PipelineInitTree_Secret_File_Download{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[22]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1301,7 +1394,7 @@ func (x *PipelineInitTree_Secret_File_Download) String() string {
 func (*PipelineInitTree_Secret_File_Download) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_File_Download) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[22]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1314,7 +1407,7 @@ func (x *PipelineInitTree_Secret_File_Download) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use PipelineInitTree_Secret_File_Download.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_File_Download) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 3, 0}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 3, 0}
 }
 
 func (x *PipelineInitTree_Secret_File_Download) GetId() string {
@@ -1342,7 +1435,7 @@ type PipelineInitTree_Secret_File_Upload struct {
 func (x *PipelineInitTree_Secret_File_Upload) Reset() {
 	*x = PipelineInitTree_Secret_File_Upload{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[23]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1355,7 +1448,7 @@ func (x *PipelineInitTree_Secret_File_Upload) String() string {
 func (*PipelineInitTree_Secret_File_Upload) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_File_Upload) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[23]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1368,7 +1461,7 @@ func (x *PipelineInitTree_Secret_File_Upload) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use PipelineInitTree_Secret_File_Upload.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_File_Upload) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 3, 1}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 3, 1}
 }
 
 func (x *PipelineInitTree_Secret_File_Upload) GetFilePath() string {
@@ -1390,7 +1483,7 @@ type PipelineInitTree_Secret_File_Update struct {
 func (x *PipelineInitTree_Secret_File_Update) Reset() {
 	*x = PipelineInitTree_Secret_File_Update{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[24]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1403,7 +1496,7 @@ func (x *PipelineInitTree_Secret_File_Update) String() string {
 func (*PipelineInitTree_Secret_File_Update) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_File_Update) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[24]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1416,7 +1509,7 @@ func (x *PipelineInitTree_Secret_File_Update) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use PipelineInitTree_Secret_File_Update.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_File_Update) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 3, 2}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 3, 2}
 }
 
 func (x *PipelineInitTree_Secret_File_Update) GetId() string {
@@ -1444,7 +1537,7 @@ type PipelineInitTree_Secret_File_Delete struct {
 func (x *PipelineInitTree_Secret_File_Delete) Reset() {
 	*x = PipelineInitTree_Secret_File_Delete{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_pipeline_tree_proto_msgTypes[25]
+		mi := &file_proto_pipeline_tree_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1457,7 +1550,7 @@ func (x *PipelineInitTree_Secret_File_Delete) String() string {
 func (*PipelineInitTree_Secret_File_Delete) ProtoMessage() {}
 
 func (x *PipelineInitTree_Secret_File_Delete) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_pipeline_tree_proto_msgTypes[25]
+	mi := &file_proto_pipeline_tree_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1470,7 +1563,7 @@ func (x *PipelineInitTree_Secret_File_Delete) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use PipelineInitTree_Secret_File_Delete.ProtoReflect.Descriptor instead.
 func (*PipelineInitTree_Secret_File_Delete) Descriptor() ([]byte, []int) {
-	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 2, 3, 3}
+	return file_proto_pipeline_tree_proto_rawDescGZIP(), []int{0, 3, 3, 3}
 }
 
 func (x *PipelineInitTree_Secret_File_Delete) GetId() string {
@@ -1485,7 +1578,7 @@ var File_proto_pipeline_tree_proto protoreflect.FileDescriptor
 var file_proto_pipeline_tree_proto_rawDesc = []byte{
 	0x0a, 0x19, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x70, 0x69, 0x70, 0x65, 0x6c, 0x69, 0x6e, 0x65,
 	0x2f, 0x74, 0x72, 0x65, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x08, 0x70, 0x69, 0x70,
-	0x65, 0x6c, 0x69, 0x6e, 0x65, 0x22, 0xc2, 0x15, 0x0a, 0x10, 0x50, 0x69, 0x70, 0x65, 0x6c, 0x69,
+	0x65, 0x6c, 0x69, 0x6e, 0x65, 0x22, 0xc2, 0x16, 0x0a, 0x10, 0x50, 0x69, 0x70, 0x65, 0x6c, 0x69,
 	0x6e, 0x65, 0x49, 0x6e, 0x69, 0x74, 0x54, 0x72, 0x65, 0x65, 0x12, 0x3c, 0x0a, 0x07, 0x61, 0x63,
 	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x70, 0x69,
 	0x70, 0x65, 0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x50, 0x69, 0x70, 0x65, 0x6c, 0x69, 0x6e, 0x65, 0x49,
@@ -1498,7 +1591,15 @@ var file_proto_pipeline_tree_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x70, 0x69, 0x70, 0x65, 0x6c, 0x69, 0x6e, 0x65, 0x2e,
 	0x50, 0x69, 0x70, 0x65, 0x6c, 0x69, 0x6e, 0x65, 0x49, 0x6e, 0x69, 0x74, 0x54, 0x72, 0x65, 0x65,
 	0x2e, 0x56, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f,
-	0x6e, 0x1a, 0x09, 0x0a, 0x07, 0x56, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x1a, 0x90, 0x01, 0x0a,
+	0x6e, 0x12, 0x36, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x20, 0x2e, 0x70, 0x69, 0x70, 0x65, 0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x50, 0x69, 0x70, 0x65,
+	0x6c, 0x69, 0x6e, 0x65, 0x49, 0x6e, 0x69, 0x74, 0x54, 0x72, 0x65, 0x65, 0x2e, 0x54, 0x6f, 0x6b,
+	0x65, 0x6e, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x1a, 0x09, 0x0a, 0x07, 0x56, 0x65, 0x72,
+	0x73, 0x69, 0x6f, 0x6e, 0x1a, 0x46, 0x0a, 0x05, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x36, 0x0a,
+	0x03, 0x67, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x70, 0x69, 0x70,
+	0x65, 0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x50, 0x69, 0x70, 0x65, 0x6c, 0x69, 0x6e, 0x65, 0x49, 0x6e,
+	0x69, 0x74, 0x54, 0x72, 0x65, 0x65, 0x2e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x2e, 0x47, 0x65, 0x74,
+	0x52, 0x03, 0x67, 0x65, 0x74, 0x1a, 0x05, 0x0a, 0x03, 0x47, 0x65, 0x74, 0x1a, 0x90, 0x01, 0x0a,
 	0x07, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x47, 0x0a, 0x08, 0x72, 0x65, 0x67, 0x69,
 	0x73, 0x74, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x70, 0x69, 0x70,
 	0x65, 0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x50, 0x69, 0x70, 0x65, 0x6c, 0x69, 0x6e, 0x65, 0x49, 0x6e,
@@ -1676,66 +1777,70 @@ func file_proto_pipeline_tree_proto_rawDescGZIP() []byte {
 	return file_proto_pipeline_tree_proto_rawDescData
 }
 
-var file_proto_pipeline_tree_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_proto_pipeline_tree_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
 var file_proto_pipeline_tree_proto_goTypes = []interface{}{
 	(*PipelineInitTree)(nil),                             // 0: pipeline.PipelineInitTree
 	(*PipelineInitTree_Version)(nil),                     // 1: pipeline.PipelineInitTree.Version
-	(*PipelineInitTree_Account)(nil),                     // 2: pipeline.PipelineInitTree.Account
-	(*PipelineInitTree_Secret)(nil),                      // 3: pipeline.PipelineInitTree.Secret
-	(*PipelineInitTree_Account_Register)(nil),            // 4: pipeline.PipelineInitTree.Account.Register
-	(*PipelineInitTree_Secret_Text)(nil),                 // 5: pipeline.PipelineInitTree.Secret.Text
-	(*PipelineInitTree_Secret_LoginPassword)(nil),        // 6: pipeline.PipelineInitTree.Secret.LoginPassword
-	(*PipelineInitTree_Secret_CreditCard)(nil),           // 7: pipeline.PipelineInitTree.Secret.CreditCard
-	(*PipelineInitTree_Secret_File)(nil),                 // 8: pipeline.PipelineInitTree.Secret.File
-	(*PipelineInitTree_Secret_List)(nil),                 // 9: pipeline.PipelineInitTree.Secret.List
-	(*PipelineInitTree_Secret_Text_Get)(nil),             // 10: pipeline.PipelineInitTree.Secret.Text.Get
-	(*PipelineInitTree_Secret_Text_Create)(nil),          // 11: pipeline.PipelineInitTree.Secret.Text.Create
-	(*PipelineInitTree_Secret_Text_Update)(nil),          // 12: pipeline.PipelineInitTree.Secret.Text.Update
-	(*PipelineInitTree_Secret_Text_Delete)(nil),          // 13: pipeline.PipelineInitTree.Secret.Text.Delete
-	(*PipelineInitTree_Secret_LoginPassword_Get)(nil),    // 14: pipeline.PipelineInitTree.Secret.LoginPassword.Get
-	(*PipelineInitTree_Secret_LoginPassword_Create)(nil), // 15: pipeline.PipelineInitTree.Secret.LoginPassword.Create
-	(*PipelineInitTree_Secret_LoginPassword_Update)(nil), // 16: pipeline.PipelineInitTree.Secret.LoginPassword.Update
-	(*PipelineInitTree_Secret_LoginPassword_Delete)(nil), // 17: pipeline.PipelineInitTree.Secret.LoginPassword.Delete
-	(*PipelineInitTree_Secret_CreditCard_Get)(nil),       // 18: pipeline.PipelineInitTree.Secret.CreditCard.Get
-	(*PipelineInitTree_Secret_CreditCard_Create)(nil),    // 19: pipeline.PipelineInitTree.Secret.CreditCard.Create
-	(*PipelineInitTree_Secret_CreditCard_Update)(nil),    // 20: pipeline.PipelineInitTree.Secret.CreditCard.Update
-	(*PipelineInitTree_Secret_CreditCard_Delete)(nil),    // 21: pipeline.PipelineInitTree.Secret.CreditCard.Delete
-	(*PipelineInitTree_Secret_File_Download)(nil),        // 22: pipeline.PipelineInitTree.Secret.File.Download
-	(*PipelineInitTree_Secret_File_Upload)(nil),          // 23: pipeline.PipelineInitTree.Secret.File.Upload
-	(*PipelineInitTree_Secret_File_Update)(nil),          // 24: pipeline.PipelineInitTree.Secret.File.Update
-	(*PipelineInitTree_Secret_File_Delete)(nil),          // 25: pipeline.PipelineInitTree.Secret.File.Delete
+	(*PipelineInitTree_Token)(nil),                       // 2: pipeline.PipelineInitTree.Token
+	(*PipelineInitTree_Account)(nil),                     // 3: pipeline.PipelineInitTree.Account
+	(*PipelineInitTree_Secret)(nil),                      // 4: pipeline.PipelineInitTree.Secret
+	(*PipelineInitTree_Token_Get)(nil),                   // 5: pipeline.PipelineInitTree.Token.Get
+	(*PipelineInitTree_Account_Register)(nil),            // 6: pipeline.PipelineInitTree.Account.Register
+	(*PipelineInitTree_Secret_Text)(nil),                 // 7: pipeline.PipelineInitTree.Secret.Text
+	(*PipelineInitTree_Secret_LoginPassword)(nil),        // 8: pipeline.PipelineInitTree.Secret.LoginPassword
+	(*PipelineInitTree_Secret_CreditCard)(nil),           // 9: pipeline.PipelineInitTree.Secret.CreditCard
+	(*PipelineInitTree_Secret_File)(nil),                 // 10: pipeline.PipelineInitTree.Secret.File
+	(*PipelineInitTree_Secret_List)(nil),                 // 11: pipeline.PipelineInitTree.Secret.List
+	(*PipelineInitTree_Secret_Text_Get)(nil),             // 12: pipeline.PipelineInitTree.Secret.Text.Get
+	(*PipelineInitTree_Secret_Text_Create)(nil),          // 13: pipeline.PipelineInitTree.Secret.Text.Create
+	(*PipelineInitTree_Secret_Text_Update)(nil),          // 14: pipeline.PipelineInitTree.Secret.Text.Update
+	(*PipelineInitTree_Secret_Text_Delete)(nil),          // 15: pipeline.PipelineInitTree.Secret.Text.Delete
+	(*PipelineInitTree_Secret_LoginPassword_Get)(nil),    // 16: pipeline.PipelineInitTree.Secret.LoginPassword.Get
+	(*PipelineInitTree_Secret_LoginPassword_Create)(nil), // 17: pipeline.PipelineInitTree.Secret.LoginPassword.Create
+	(*PipelineInitTree_Secret_LoginPassword_Update)(nil), // 18: pipeline.PipelineInitTree.Secret.LoginPassword.Update
+	(*PipelineInitTree_Secret_LoginPassword_Delete)(nil), // 19: pipeline.PipelineInitTree.Secret.LoginPassword.Delete
+	(*PipelineInitTree_Secret_CreditCard_Get)(nil),       // 20: pipeline.PipelineInitTree.Secret.CreditCard.Get
+	(*PipelineInitTree_Secret_CreditCard_Create)(nil),    // 21: pipeline.PipelineInitTree.Secret.CreditCard.Create
+	(*PipelineInitTree_Secret_CreditCard_Update)(nil),    // 22: pipeline.PipelineInitTree.Secret.CreditCard.Update
+	(*PipelineInitTree_Secret_CreditCard_Delete)(nil),    // 23: pipeline.PipelineInitTree.Secret.CreditCard.Delete
+	(*PipelineInitTree_Secret_File_Download)(nil),        // 24: pipeline.PipelineInitTree.Secret.File.Download
+	(*PipelineInitTree_Secret_File_Upload)(nil),          // 25: pipeline.PipelineInitTree.Secret.File.Upload
+	(*PipelineInitTree_Secret_File_Update)(nil),          // 26: pipeline.PipelineInitTree.Secret.File.Update
+	(*PipelineInitTree_Secret_File_Delete)(nil),          // 27: pipeline.PipelineInitTree.Secret.File.Delete
 }
 var file_proto_pipeline_tree_proto_depIdxs = []int32{
-	2,  // 0: pipeline.PipelineInitTree.account:type_name -> pipeline.PipelineInitTree.Account
-	3,  // 1: pipeline.PipelineInitTree.secret:type_name -> pipeline.PipelineInitTree.Secret
+	3,  // 0: pipeline.PipelineInitTree.account:type_name -> pipeline.PipelineInitTree.Account
+	4,  // 1: pipeline.PipelineInitTree.secret:type_name -> pipeline.PipelineInitTree.Secret
 	1,  // 2: pipeline.PipelineInitTree.version:type_name -> pipeline.PipelineInitTree.Version
-	4,  // 3: pipeline.PipelineInitTree.Account.register:type_name -> pipeline.PipelineInitTree.Account.Register
-	5,  // 4: pipeline.PipelineInitTree.Secret.text:type_name -> pipeline.PipelineInitTree.Secret.Text
-	6,  // 5: pipeline.PipelineInitTree.Secret.login_password:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword
-	7,  // 6: pipeline.PipelineInitTree.Secret.credit_card:type_name -> pipeline.PipelineInitTree.Secret.CreditCard
-	8,  // 7: pipeline.PipelineInitTree.Secret.file:type_name -> pipeline.PipelineInitTree.Secret.File
-	9,  // 8: pipeline.PipelineInitTree.Secret.list:type_name -> pipeline.PipelineInitTree.Secret.List
-	10, // 9: pipeline.PipelineInitTree.Secret.Text.get:type_name -> pipeline.PipelineInitTree.Secret.Text.Get
-	11, // 10: pipeline.PipelineInitTree.Secret.Text.create:type_name -> pipeline.PipelineInitTree.Secret.Text.Create
-	12, // 11: pipeline.PipelineInitTree.Secret.Text.update:type_name -> pipeline.PipelineInitTree.Secret.Text.Update
-	13, // 12: pipeline.PipelineInitTree.Secret.Text.delete:type_name -> pipeline.PipelineInitTree.Secret.Text.Delete
-	14, // 13: pipeline.PipelineInitTree.Secret.LoginPassword.get:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword.Get
-	15, // 14: pipeline.PipelineInitTree.Secret.LoginPassword.create:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword.Create
-	16, // 15: pipeline.PipelineInitTree.Secret.LoginPassword.update:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword.Update
-	17, // 16: pipeline.PipelineInitTree.Secret.LoginPassword.delete:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword.Delete
-	18, // 17: pipeline.PipelineInitTree.Secret.CreditCard.get:type_name -> pipeline.PipelineInitTree.Secret.CreditCard.Get
-	19, // 18: pipeline.PipelineInitTree.Secret.CreditCard.create:type_name -> pipeline.PipelineInitTree.Secret.CreditCard.Create
-	20, // 19: pipeline.PipelineInitTree.Secret.CreditCard.update:type_name -> pipeline.PipelineInitTree.Secret.CreditCard.Update
-	21, // 20: pipeline.PipelineInitTree.Secret.CreditCard.delete:type_name -> pipeline.PipelineInitTree.Secret.CreditCard.Delete
-	22, // 21: pipeline.PipelineInitTree.Secret.File.download:type_name -> pipeline.PipelineInitTree.Secret.File.Download
-	23, // 22: pipeline.PipelineInitTree.Secret.File.upload:type_name -> pipeline.PipelineInitTree.Secret.File.Upload
-	24, // 23: pipeline.PipelineInitTree.Secret.File.update:type_name -> pipeline.PipelineInitTree.Secret.File.Update
-	25, // 24: pipeline.PipelineInitTree.Secret.File.delete:type_name -> pipeline.PipelineInitTree.Secret.File.Delete
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	2,  // 3: pipeline.PipelineInitTree.token:type_name -> pipeline.PipelineInitTree.Token
+	5,  // 4: pipeline.PipelineInitTree.Token.get:type_name -> pipeline.PipelineInitTree.Token.Get
+	6,  // 5: pipeline.PipelineInitTree.Account.register:type_name -> pipeline.PipelineInitTree.Account.Register
+	7,  // 6: pipeline.PipelineInitTree.Secret.text:type_name -> pipeline.PipelineInitTree.Secret.Text
+	8,  // 7: pipeline.PipelineInitTree.Secret.login_password:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword
+	9,  // 8: pipeline.PipelineInitTree.Secret.credit_card:type_name -> pipeline.PipelineInitTree.Secret.CreditCard
+	10, // 9: pipeline.PipelineInitTree.Secret.file:type_name -> pipeline.PipelineInitTree.Secret.File
+	11, // 10: pipeline.PipelineInitTree.Secret.list:type_name -> pipeline.PipelineInitTree.Secret.List
+	12, // 11: pipeline.PipelineInitTree.Secret.Text.get:type_name -> pipeline.PipelineInitTree.Secret.Text.Get
+	13, // 12: pipeline.PipelineInitTree.Secret.Text.create:type_name -> pipeline.PipelineInitTree.Secret.Text.Create
+	14, // 13: pipeline.PipelineInitTree.Secret.Text.update:type_name -> pipeline.PipelineInitTree.Secret.Text.Update
+	15, // 14: pipeline.PipelineInitTree.Secret.Text.delete:type_name -> pipeline.PipelineInitTree.Secret.Text.Delete
+	16, // 15: pipeline.PipelineInitTree.Secret.LoginPassword.get:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword.Get
+	17, // 16: pipeline.PipelineInitTree.Secret.LoginPassword.create:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword.Create
+	18, // 17: pipeline.PipelineInitTree.Secret.LoginPassword.update:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword.Update
+	19, // 18: pipeline.PipelineInitTree.Secret.LoginPassword.delete:type_name -> pipeline.PipelineInitTree.Secret.LoginPassword.Delete
+	20, // 19: pipeline.PipelineInitTree.Secret.CreditCard.get:type_name -> pipeline.PipelineInitTree.Secret.CreditCard.Get
+	21, // 20: pipeline.PipelineInitTree.Secret.CreditCard.create:type_name -> pipeline.PipelineInitTree.Secret.CreditCard.Create
+	22, // 21: pipeline.PipelineInitTree.Secret.CreditCard.update:type_name -> pipeline.PipelineInitTree.Secret.CreditCard.Update
+	23, // 22: pipeline.PipelineInitTree.Secret.CreditCard.delete:type_name -> pipeline.PipelineInitTree.Secret.CreditCard.Delete
+	24, // 23: pipeline.PipelineInitTree.Secret.File.download:type_name -> pipeline.PipelineInitTree.Secret.File.Download
+	25, // 24: pipeline.PipelineInitTree.Secret.File.upload:type_name -> pipeline.PipelineInitTree.Secret.File.Upload
+	26, // 25: pipeline.PipelineInitTree.Secret.File.update:type_name -> pipeline.PipelineInitTree.Secret.File.Update
+	27, // 26: pipeline.PipelineInitTree.Secret.File.delete:type_name -> pipeline.PipelineInitTree.Secret.File.Delete
+	27, // [27:27] is the sub-list for method output_type
+	27, // [27:27] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_proto_pipeline_tree_proto_init() }
@@ -1769,7 +1874,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Account); i {
+			switch v := v.(*PipelineInitTree_Token); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1781,7 +1886,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret); i {
+			switch v := v.(*PipelineInitTree_Account); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1793,7 +1898,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Account_Register); i {
+			switch v := v.(*PipelineInitTree_Secret); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1805,7 +1910,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_Text); i {
+			switch v := v.(*PipelineInitTree_Token_Get); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1817,7 +1922,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_LoginPassword); i {
+			switch v := v.(*PipelineInitTree_Account_Register); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1829,7 +1934,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_CreditCard); i {
+			switch v := v.(*PipelineInitTree_Secret_Text); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1841,7 +1946,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_File); i {
+			switch v := v.(*PipelineInitTree_Secret_LoginPassword); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1853,7 +1958,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_List); i {
+			switch v := v.(*PipelineInitTree_Secret_CreditCard); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1865,7 +1970,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_Text_Get); i {
+			switch v := v.(*PipelineInitTree_Secret_File); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1877,7 +1982,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_Text_Create); i {
+			switch v := v.(*PipelineInitTree_Secret_List); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1889,7 +1994,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_Text_Update); i {
+			switch v := v.(*PipelineInitTree_Secret_Text_Get); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1901,7 +2006,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_Text_Delete); i {
+			switch v := v.(*PipelineInitTree_Secret_Text_Create); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1913,7 +2018,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_LoginPassword_Get); i {
+			switch v := v.(*PipelineInitTree_Secret_Text_Update); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1925,7 +2030,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_LoginPassword_Create); i {
+			switch v := v.(*PipelineInitTree_Secret_Text_Delete); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1937,7 +2042,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_LoginPassword_Update); i {
+			switch v := v.(*PipelineInitTree_Secret_LoginPassword_Get); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1949,7 +2054,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_LoginPassword_Delete); i {
+			switch v := v.(*PipelineInitTree_Secret_LoginPassword_Create); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1961,7 +2066,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_CreditCard_Get); i {
+			switch v := v.(*PipelineInitTree_Secret_LoginPassword_Update); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1973,7 +2078,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_CreditCard_Create); i {
+			switch v := v.(*PipelineInitTree_Secret_LoginPassword_Delete); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1985,7 +2090,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_CreditCard_Update); i {
+			switch v := v.(*PipelineInitTree_Secret_CreditCard_Get); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1997,7 +2102,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_CreditCard_Delete); i {
+			switch v := v.(*PipelineInitTree_Secret_CreditCard_Create); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2009,7 +2114,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_File_Download); i {
+			switch v := v.(*PipelineInitTree_Secret_CreditCard_Update); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2021,7 +2126,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_File_Upload); i {
+			switch v := v.(*PipelineInitTree_Secret_CreditCard_Delete); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2033,7 +2138,7 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PipelineInitTree_Secret_File_Update); i {
+			switch v := v.(*PipelineInitTree_Secret_File_Download); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2045,6 +2150,30 @@ func file_proto_pipeline_tree_proto_init() {
 			}
 		}
 		file_proto_pipeline_tree_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PipelineInitTree_Secret_File_Upload); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_pipeline_tree_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PipelineInitTree_Secret_File_Update); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_pipeline_tree_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PipelineInitTree_Secret_File_Delete); i {
 			case 0:
 				return &v.state
@@ -2063,7 +2192,7 @@ func file_proto_pipeline_tree_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_pipeline_tree_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   26,
+			NumMessages:   28,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

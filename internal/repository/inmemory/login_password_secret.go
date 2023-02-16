@@ -3,6 +3,7 @@ package inmemory
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/internal/repository/repositoryerrors"
+	"github.com/aligang/Gophkeeper/internal/repository/transaction"
 	"github.com/aligang/Gophkeeper/internal/secret/instance"
 )
 
@@ -37,7 +38,7 @@ func convertLoginPasswordSecretRecord(r *SecretRecord) *instance.LoginPasswordSe
 	}
 }
 
-func (r *Repository) AddLoginPasswordSecret(ctx context.Context, s *instance.LoginPasswordSecret) error {
+func (r *Repository) AddLoginPasswordSecret(ctx context.Context, s *instance.LoginPasswordSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("LoginPasswordSecret", "Add")
 	logger.Debug("Adding new secret %s", s.Id)
 	record := convertLoginPasswordSecretInstance(s)
@@ -50,7 +51,7 @@ func (r *Repository) AddLoginPasswordSecret(ctx context.Context, s *instance.Log
 	return nil
 }
 
-func (r *Repository) UpdateLoginPasswordSecret(ctx context.Context, s *instance.LoginPasswordSecret) error {
+func (r *Repository) UpdateLoginPasswordSecret(ctx context.Context, s *instance.LoginPasswordSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("LoginPasswordSecret", "Update")
 	logger.Debug("Updating secret %s", s.Id)
 	r.loginPasswordSecrets[s.Id] = convertLoginPasswordSecretInstance(s)
@@ -58,7 +59,7 @@ func (r *Repository) UpdateLoginPasswordSecret(ctx context.Context, s *instance.
 	return nil
 }
 
-func (r *Repository) ListLoginPasswordSecrets(ctx context.Context, accountID string) ([]*instance.LoginPasswordSecret, error) {
+func (r *Repository) ListLoginPasswordSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*instance.LoginPasswordSecret, error) {
 	logger := r.log.GetSubLogger("LoginPasswordSecret", "List")
 	logger.Debug("Listing secrets")
 	secrets := []*instance.LoginPasswordSecret{}
@@ -72,7 +73,7 @@ func (r *Repository) ListLoginPasswordSecrets(ctx context.Context, accountID str
 	return secrets, nil
 }
 
-func (r *Repository) GetLoginPasswordSecret(ctx context.Context, secretID string) (*instance.LoginPasswordSecret, error) {
+func (r *Repository) GetLoginPasswordSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*instance.LoginPasswordSecret, error) {
 	logger := r.log.GetSubLogger("LoginPasswordSecret", "Get")
 	logger.Debug("Fetching secret %s", secretID)
 	record, ok := r.loginPasswordSecrets[secretID]
@@ -84,7 +85,7 @@ func (r *Repository) GetLoginPasswordSecret(ctx context.Context, secretID string
 	return convertLoginPasswordSecretRecord(record), nil
 }
 
-func (r *Repository) DeleteLoginPasswordSecret(ctx context.Context, secretID string) error {
+func (r *Repository) DeleteLoginPasswordSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("LoginPasswordSecret", "Delete")
 	logger.Debug("Deleting secret %s", secretID)
 	accountID := r.loginPasswordSecrets[secretID].accountId

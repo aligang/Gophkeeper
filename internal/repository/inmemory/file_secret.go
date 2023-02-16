@@ -3,6 +3,7 @@ package inmemory
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/internal/repository/repositoryerrors"
+	"github.com/aligang/Gophkeeper/internal/repository/transaction"
 	"github.com/aligang/Gophkeeper/internal/secret/instance"
 	"time"
 )
@@ -33,7 +34,7 @@ func convertFileSecretRecord(r *SecretRecord) *instance.FileSecret {
 	}
 }
 
-func (r *Repository) AddFileSecret(ctx context.Context, s *instance.FileSecret) error {
+func (r *Repository) AddFileSecret(ctx context.Context, s *instance.FileSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("FileSecret", "Add")
 	logger.Debug("Adding new secret %s", s.Id)
 	r.fileSecrets[s.Id] = convertFileSecretInstance(s)
@@ -45,7 +46,7 @@ func (r *Repository) AddFileSecret(ctx context.Context, s *instance.FileSecret) 
 	return nil
 }
 
-func (r *Repository) UpdateFileSecret(ctx context.Context, s *instance.FileSecret) error {
+func (r *Repository) UpdateFileSecret(ctx context.Context, s *instance.FileSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("FileSecret", "Add")
 	logger.Debug("Updating existing secret %s", s.Id)
 	r.fileSecrets[s.Id] = convertFileSecretInstance(s)
@@ -53,7 +54,7 @@ func (r *Repository) UpdateFileSecret(ctx context.Context, s *instance.FileSecre
 	return nil
 }
 
-func (r *Repository) ListFileSecrets(ctx context.Context, accountID string) ([]*instance.FileSecret, error) {
+func (r *Repository) ListFileSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*instance.FileSecret, error) {
 	logger := r.log.GetSubLogger("FileSecret", "List")
 	logger.Debug("Listing secrets")
 	secrets := []*instance.FileSecret{}
@@ -69,7 +70,7 @@ func (r *Repository) ListFileSecrets(ctx context.Context, accountID string) ([]*
 	return secrets, nil
 }
 
-func (r *Repository) GetFileSecret(ctx context.Context, secretID string) (*instance.FileSecret, error) {
+func (r *Repository) GetFileSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*instance.FileSecret, error) {
 	logger := r.log.GetSubLogger("FileSecret", "Get")
 	logger.Debug("Fetching existing secret %s", secretID)
 	s, ok := r.fileSecrets[secretID]
@@ -81,7 +82,7 @@ func (r *Repository) GetFileSecret(ctx context.Context, secretID string) (*insta
 	return convertFileSecretRecord(s), nil
 }
 
-func (r *Repository) DeleteFileSecretFromDeletionQueue(ctx context.Context, secretID string) error {
+func (r *Repository) DeleteFileSecretFromDeletionQueue(ctx context.Context, secretID string, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("FileSecret", "DeleteObjectRecordFromDeletionQueue")
 	logger.Debug("Deleting file secret from deletion queue %s ", secretID)
 	delete(r.fileDeletionQueue, secretID)
@@ -89,7 +90,7 @@ func (r *Repository) DeleteFileSecretFromDeletionQueue(ctx context.Context, secr
 	return nil
 }
 
-func (r *Repository) MoveFileSecretToDeletionQueue(ctx context.Context, objectId string, ts time.Time) error {
+func (r *Repository) MoveFileSecretToDeletionQueue(ctx context.Context, objectId string, ts time.Time, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("FileSecret", "MoveObjectToDeletionQueue")
 	logger.Debug("Moving object to deletion queue: %s", objectId)
 	r.fileDeletionQueue[objectId] = ts
@@ -97,19 +98,19 @@ func (r *Repository) MoveFileSecretToDeletionQueue(ctx context.Context, objectId
 	return nil
 }
 
-func (r *Repository) ListFileDeletionQueue(ctx context.Context) ([]*instance.DeletionQueueElement, error) {
+func (r *Repository) ListFileDeletionQueue(ctx context.Context, tx *transaction.DBTransaction) ([]*instance.DeletionQueueElement, error) {
 	logger := r.log.GetSubLogger("FileSecret", "ListDeletionQueue")
 	logger.Debug("Listing elements of deletion queue")
 	q := []*instance.DeletionQueueElement{}
 	for id, ts := range r.fileDeletionQueue {
 		logger.Debug("Found %s ", id)
-		q = append(q, &instance.DeletionQueueElement{Id: id, Ts: ts})
+		q = append(q, &instance.DeletionQueueElement{ObjectId: id, DeletedAt: ts})
 	}
 	logger.Debug("Content of file deletion queue is successfully fetched: %d elements", len(q))
 	return q, nil
 }
 
-func (r *Repository) DeleteFileSecret(ctx context.Context, secretID string) error {
+func (r *Repository) DeleteFileSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("FileSecret", "Delete")
 	logger.Debug("Deleting secret %s", secretID)
 	accountID := r.fileSecrets[secretID].accountId

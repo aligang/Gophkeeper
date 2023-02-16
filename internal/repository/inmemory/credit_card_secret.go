@@ -3,6 +3,7 @@ package inmemory
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/internal/repository/repositoryerrors"
+	"github.com/aligang/Gophkeeper/internal/repository/transaction"
 	"github.com/aligang/Gophkeeper/internal/secret/instance"
 )
 
@@ -20,7 +21,7 @@ func convertCreditCardSecretInstance(instance *instance.CreditCardSecret) *Secre
 		createdAt:  instance.CreatedAt,
 		modifiedAt: instance.ModifiedAt,
 		creditCardRecord: creditCardRecord{
-			number:     instance.Number,
+			number:     instance.CardNumber,
 			cardholder: instance.CardHolder,
 			validTill:  instance.ValidTill,
 			cvc:        instance.Cvc,
@@ -36,14 +37,14 @@ func convertCreditCardSecretRecord(r *SecretRecord) *instance.CreditCardSecret {
 			CreatedAt:  r.createdAt,
 			ModifiedAt: r.modifiedAt,
 		},
-		Number:     r.creditCardRecord.number,
+		CardNumber: r.creditCardRecord.number,
 		CardHolder: r.creditCardRecord.cardholder,
 		ValidTill:  r.creditCardRecord.validTill,
 		Cvc:        r.creditCardRecord.cvc,
 	}
 }
 
-func (r *Repository) AddCreditCardSecret(ctx context.Context, s *instance.CreditCardSecret) error {
+func (r *Repository) AddCreditCardSecret(ctx context.Context, s *instance.CreditCardSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("CreditCardSecret", "Add")
 	logger.Debug("Adding new secret %s", s.Id)
 	record := convertCreditCardSecretInstance(s)
@@ -56,7 +57,7 @@ func (r *Repository) AddCreditCardSecret(ctx context.Context, s *instance.Credit
 	return nil
 }
 
-func (r *Repository) UpdateCreditCardSecret(ctx context.Context, s *instance.CreditCardSecret) error {
+func (r *Repository) UpdateCreditCardSecret(ctx context.Context, s *instance.CreditCardSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("CreditCardSecret", "Update")
 	logger.Debug("Updating secret %s", s.Id)
 	r.creditCardSecrets[s.Id] = convertCreditCardSecretInstance(s)
@@ -64,7 +65,7 @@ func (r *Repository) UpdateCreditCardSecret(ctx context.Context, s *instance.Cre
 	return nil
 }
 
-func (r *Repository) ListCreditCardSecrets(ctx context.Context, accountID string) ([]*instance.CreditCardSecret, error) {
+func (r *Repository) ListCreditCardSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*instance.CreditCardSecret, error) {
 	logger := r.log.GetSubLogger("CreditCardSecret", "List")
 	logger.Debug("Listing secrets")
 	secrets := []*instance.CreditCardSecret{}
@@ -78,7 +79,7 @@ func (r *Repository) ListCreditCardSecrets(ctx context.Context, accountID string
 	return secrets, nil
 }
 
-func (r *Repository) GetCreditCardSecret(ctx context.Context, secretID string) (*instance.CreditCardSecret, error) {
+func (r *Repository) GetCreditCardSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*instance.CreditCardSecret, error) {
 	logger := r.log.GetSubLogger("CreditCardSecret", "Get")
 	logger.Debug("Fetching secret %s", secretID)
 	record, ok := r.creditCardSecrets[secretID]
@@ -90,7 +91,7 @@ func (r *Repository) GetCreditCardSecret(ctx context.Context, secretID string) (
 	return convertCreditCardSecretRecord(record), nil
 }
 
-func (r *Repository) DeleteCreditCardSecret(ctx context.Context, secretID string) error {
+func (r *Repository) DeleteCreditCardSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("CreditCardSecret", "Delete")
 	logger.Debug("Deleting secret %s", secretID)
 	accountID := r.creditCardSecrets[secretID].accountId

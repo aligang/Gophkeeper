@@ -1,5 +1,7 @@
 package config
 
+import "os"
+
 func GetServerConfig() *ServerConfig {
 	var cfg *ServerConfig
 	cfg = getServerConfigFromEnv().merge(getServerConfigFromCli())
@@ -49,11 +51,11 @@ func (c *ServerConfig) merge(another *ServerConfig) *ServerConfig {
 func GetClientConfig() *ClientConfig {
 	var cfg *ClientConfig
 	cfg = getClientConfigFromEnv()
-	//cliCfg, pipelineTree := getClientConfigFromCli()
-	//cfg = cfg.merge(cliCfg)
-	//if cfg.ConfigFile != "" {
-	//	cfg = cfg.merge(getServerConfigFromYaml(cfg.ConfigFile))
-	//}
+	if cfg.ConfigFile != "" {
+		cfg = cfg.merge(getClientConfigFromYaml(cfg.ConfigFile))
+	} else if _, err := os.ReadFile(DEFAULT_CLIENT_CONFIG_FILE_LOCATION); err == nil {
+		cfg = cfg.merge(getClientConfigFromYaml(DEFAULT_CLIENT_CONFIG_FILE_LOCATION))
+	}
 	cfg = cfg.merge(getClientDefaultConfig())
 	return cfg
 }

@@ -16,7 +16,6 @@ func Register(client account.AccountServiceClient, cli *pipeline.PipelineInitTre
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	fmt.Printf("%s \n", response.Account.Id)
-	fmt.Printf("%s \n", response.Account.Login)
-	fmt.Printf("%s \n", response.Account.CreatedAt)
+	fmt.Printf("account %s created\n", response.Account.Id)
+	fmt.Printf("creation date: %s\n", response.Account.CreatedAt)
 }

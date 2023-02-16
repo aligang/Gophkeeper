@@ -4,6 +4,7 @@ import (
 	"fmt"
 	acccountProto "github.com/aligang/Gophkeeper/internal/account"
 	"github.com/aligang/Gophkeeper/internal/config"
+	"github.com/aligang/Gophkeeper/internal/logging"
 	"github.com/aligang/Gophkeeper/internal/pipeline"
 	"github.com/aligang/Gophkeeper/internal/pipeline/account"
 	"github.com/aligang/Gophkeeper/internal/pipeline/secret"
@@ -11,6 +12,7 @@ import (
 	"github.com/aligang/Gophkeeper/internal/pipeline/secret/file"
 	loginPassword "github.com/aligang/Gophkeeper/internal/pipeline/secret/loginpassword"
 	"github.com/aligang/Gophkeeper/internal/pipeline/secret/text"
+	token "github.com/aligang/Gophkeeper/internal/pipeline/token"
 	"github.com/aligang/Gophkeeper/internal/pipeline/version"
 	secretProto "github.com/aligang/Gophkeeper/internal/secret"
 	tokenGetter "github.com/aligang/Gophkeeper/internal/token/tokengetter"
@@ -21,12 +23,13 @@ import (
 )
 
 func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
-
+	logging.Debug("Connecting to %s", cfg.ServerAddress)
 	conn, err := grpc.Dial(cfg.ServerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	defer conn.Close()
+	logging.Debug("Connection succeeded")
 
 	tg := tokenGetter.New(conn, cfg)
 	secretClient := secretProto.NewSecretServiceClient(conn)
@@ -35,6 +38,14 @@ func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
 	switch {
 	case pipelineTree.Version != nil:
 		version.Print()
+	case pipelineTree.Token != nil:
+		tokenPipelineTree := pipelineTree.Token
+		switch {
+		case tokenPipelineTree.Get != nil:
+			token.Get(tg, pipelineTree)
+		default:
+			fmt.Fprintf(os.Stderr, "Token pipeline initialization error:\n")
+		}
 	case pipelineTree.Account != nil:
 		acc := pipelineTree.Account
 		switch {

@@ -14,7 +14,7 @@ func EncryptCreditCardSecret(plainSecret *secretInstance.CreditCardSecret,
 		},
 	}
 
-	encryptedSecret.Number, err = encrypt(plainSecret.Number, encryptionKey)
+	encryptedSecret.CardNumber, err = encrypt(plainSecret.CardNumber, encryptionKey)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func DecryptCreditCardSecret(encryptedSecret *secretInstance.CreditCardSecret,
 		},
 	}
 
-	plainSecret.Number, err = decrypt(encryptedSecret.Number, encryptionKey)
+	plainSecret.CardNumber, err = decrypt(encryptedSecret.CardNumber, encryptionKey)
 	if err != nil {
 		return nil, err
 	}

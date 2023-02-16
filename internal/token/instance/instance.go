@@ -11,19 +11,19 @@ import (
 const tokenLength = 20
 
 type Token struct {
-	Id       string
-	Value    string
-	Owner    string
-	IssuedAt time.Time
+	Id         string
+	TokenValue string
+	Owner      string
+	IssuedAt   time.Time
 }
 
 func New(owner string) *Token {
 	tokenValue, _ := genTokenValue(tokenLength)
 	return &Token{
-		Id:       uuid.New().String(),
-		Value:    tokenValue,
-		Owner:    owner,
-		IssuedAt: time.Now(),
+		Id:         uuid.New().String(),
+		TokenValue: tokenValue,
+		Owner:      owner,
+		IssuedAt:   time.Now(),
 	}
 }
 

@@ -33,7 +33,7 @@ func (gb *FileSystemGB) CleanStale(ctx context.Context) {
 	err := gb.storage.WithinTransaction(
 		ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
 			gb.logger.Debug("listing deletion queue")
-			deletionQueue, terr := gb.storage.ListFileDeletionQueue(ctx)
+			deletionQueue, terr := gb.storage.ListFileDeletionQueue(ctx, tx)
 			if terr != nil {
 				return terr
 			}
@@ -43,13 +43,13 @@ func (gb *FileSystemGB) CleanStale(ctx context.Context) {
 			}
 			counter := 0
 			for _, e := range deletionQueue {
-				if e.Ts.Add(time.Minute * time.Duration(gb.conf.GetFileStaleTimeMinutes())).Before(time.Now()) {
-					gb.logger.Debug("Deleting object %s", e.Id)
-					terr = gb.fileStorage.Delete(ctx, e.Id)
+				if e.DeletedAt.Add(time.Minute * time.Duration(gb.conf.GetFileStaleTimeMinutes())).Before(time.Now()) {
+					gb.logger.Debug("Deleting object %s", e.ObjectId)
+					terr = gb.fileStorage.Delete(ctx, e.ObjectId)
 					if terr != nil {
 						return terr
 					}
-					terr = gb.storage.DeleteFileSecretFromDeletionQueue(ctx, e.Id)
+					terr = gb.storage.DeleteFileSecretFromDeletionQueue(ctx, e.ObjectId, tx)
 					if terr != nil {
 						return terr
 					}

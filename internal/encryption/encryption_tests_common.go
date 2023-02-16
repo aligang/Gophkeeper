@@ -54,7 +54,7 @@ var (
 			CreatedAt:  referenceCreationTime,
 			ModifiedAt: referenceModificationTime,
 		},
-		Number:     referenceCardNumber,
+		CardNumber: referenceCardNumber,
 		CardHolder: referenceCardHolder,
 		ValidTill:  referenceValidTill,
 		Cvc:        referenceCvc,

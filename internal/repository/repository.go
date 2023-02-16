@@ -16,43 +16,43 @@ import (
 type Storage interface {
 	WithinTransaction(ctx context.Context, fn func(context.Context, *transaction.DBTransaction) error) error
 
-	Register(ctx context.Context, account *accountInstance.Account) error
-	GetAccountByLogin(ctx context.Context, login string) (*accountInstance.Account, error)
-	GetAccountById(ctx context.Context, accountID string) (*accountInstance.Account, error)
+	Register(ctx context.Context, account *accountInstance.Account, tx *transaction.DBTransaction) error
+	GetAccountByLogin(ctx context.Context, login string, tx *transaction.DBTransaction) (*accountInstance.Account, error)
+	GetAccountById(ctx context.Context, accountID string, tx *transaction.DBTransaction) (*accountInstance.Account, error)
 
-	GetToken(ctx context.Context, tokenValue string) (*tokenInstance.Token, error)
-	AddToken(ctx context.Context, t *tokenInstance.Token) error
-	ListAccountTokens(ctx context.Context, accountID string) ([]*tokenInstance.Token, error)
-	ListTokens(ctx context.Context) ([]*tokenInstance.Token, error)
-	DeleteToken(context.Context, *tokenInstance.Token) error
+	GetToken(ctx context.Context, tokenValue string, tx *transaction.DBTransaction) (*tokenInstance.Token, error)
+	AddToken(ctx context.Context, t *tokenInstance.Token, tx *transaction.DBTransaction) error
+	ListAccountTokens(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*tokenInstance.Token, error)
+	ListTokens(ctx context.Context, tx *transaction.DBTransaction) ([]*tokenInstance.Token, error)
+	DeleteToken(ctx context.Context, t *tokenInstance.Token, tx *transaction.DBTransaction) error
 
-	AddTextSecret(ctx context.Context, s *secretInstance.TextSecret) error
-	UpdateTextSecret(ctx context.Context, s *secretInstance.TextSecret) error
-	GetTextSecret(ctx context.Context, secretID string) (*secretInstance.TextSecret, error)
-	ListTextSecrets(ctx context.Context, accountID string) ([]*secretInstance.TextSecret, error)
-	DeleteTextSecret(ctx context.Context, secretID string) error
+	AddTextSecret(ctx context.Context, s *secretInstance.TextSecret, tx *transaction.DBTransaction) error
+	UpdateTextSecret(ctx context.Context, s *secretInstance.TextSecret, tx *transaction.DBTransaction) error
+	GetTextSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*secretInstance.TextSecret, error)
+	ListTextSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*secretInstance.TextSecret, error)
+	DeleteTextSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) error
 
-	AddLoginPasswordSecret(ctx context.Context, s *secretInstance.LoginPasswordSecret) error
-	UpdateLoginPasswordSecret(ctx context.Context, s *secretInstance.LoginPasswordSecret) error
-	GetLoginPasswordSecret(ctx context.Context, secretID string) (*secretInstance.LoginPasswordSecret, error)
-	ListLoginPasswordSecrets(ctx context.Context, accountID string) ([]*secretInstance.LoginPasswordSecret, error)
-	DeleteLoginPasswordSecret(ctx context.Context, secretID string) error
+	AddLoginPasswordSecret(ctx context.Context, s *secretInstance.LoginPasswordSecret, tx *transaction.DBTransaction) error
+	UpdateLoginPasswordSecret(ctx context.Context, s *secretInstance.LoginPasswordSecret, tx *transaction.DBTransaction) error
+	GetLoginPasswordSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*secretInstance.LoginPasswordSecret, error)
+	ListLoginPasswordSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*secretInstance.LoginPasswordSecret, error)
+	DeleteLoginPasswordSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) error
 
-	AddCreditCardSecret(ctx context.Context, s *secretInstance.CreditCardSecret) error
-	UpdateCreditCardSecret(ctx context.Context, s *secretInstance.CreditCardSecret) error
-	GetCreditCardSecret(ctx context.Context, secretID string) (*secretInstance.CreditCardSecret, error)
-	ListCreditCardSecrets(ctx context.Context, accountID string) ([]*secretInstance.CreditCardSecret, error)
-	DeleteCreditCardSecret(ctx context.Context, secretID string) error
+	AddCreditCardSecret(ctx context.Context, s *secretInstance.CreditCardSecret, tx *transaction.DBTransaction) error
+	UpdateCreditCardSecret(ctx context.Context, s *secretInstance.CreditCardSecret, tx *transaction.DBTransaction) error
+	GetCreditCardSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*secretInstance.CreditCardSecret, error)
+	ListCreditCardSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*secretInstance.CreditCardSecret, error)
+	DeleteCreditCardSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) error
 
-	AddFileSecret(ctx context.Context, s *secretInstance.FileSecret) error
-	UpdateFileSecret(ctx context.Context, s *secretInstance.FileSecret) error
-	GetFileSecret(ctx context.Context, secretID string) (*secretInstance.FileSecret, error)
-	ListFileSecrets(ctx context.Context, accountID string) ([]*secretInstance.FileSecret, error)
-	DeleteFileSecret(ctx context.Context, secretID string) error
+	AddFileSecret(ctx context.Context, s *secretInstance.FileSecret, tx *transaction.DBTransaction) error
+	UpdateFileSecret(ctx context.Context, s *secretInstance.FileSecret, tx *transaction.DBTransaction) error
+	GetFileSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*secretInstance.FileSecret, error)
+	ListFileSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*secretInstance.FileSecret, error)
+	DeleteFileSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) error
 
-	MoveFileSecretToDeletionQueue(ctx context.Context, objectId string, ts time.Time) error
-	ListFileDeletionQueue(ctx context.Context) ([]*secretInstance.DeletionQueueElement, error)
-	DeleteFileSecretFromDeletionQueue(ctx context.Context, secretID string) error
+	MoveFileSecretToDeletionQueue(ctx context.Context, objectId string, ts time.Time, tx *transaction.DBTransaction) error
+	ListFileDeletionQueue(ctx context.Context, tx *transaction.DBTransaction) ([]*secretInstance.DeletionQueueElement, error)
+	DeleteFileSecretFromDeletionQueue(ctx context.Context, secretID string, tx *transaction.DBTransaction) error
 }
 
 func New(serverConfig *config.ServerConfig) Storage {

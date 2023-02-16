@@ -32,7 +32,7 @@ func (h *GrpcHandler) AuthInterceptor(ctx context.Context, req interface{},
 		}
 		token = values[0]
 		logger.Debug("Getting token record using token value from header")
-		tokenRecord, err := h.storage.GetToken(ctx, token)
+		tokenRecord, err := h.storage.GetToken(ctx, token, nil)
 		if err != nil {
 			logger.Debug("Token is invalid or expired")
 			return nil, status.Errorf(codes.Unauthenticated, "Token is invalid or expired")

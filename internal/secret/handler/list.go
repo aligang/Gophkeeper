@@ -31,22 +31,22 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret.ListSecretRequest) (
 
 	response := &secret.ListSecretResponse{}
 
-	textSecrets, err := h.storage.ListTextSecrets(ctx, accountID)
+	textSecrets, err := h.storage.ListTextSecrets(ctx, accountID, nil)
 	if err != nil {
 		logger.Debug("Error during fetching text secrets")
 		return nil, status.Errorf(codes.Internal, "Error during fetching Text secrets")
 	}
-	loginPasswordSecrets, err := h.storage.ListLoginPasswordSecrets(ctx, accountID)
+	loginPasswordSecrets, err := h.storage.ListLoginPasswordSecrets(ctx, accountID, nil)
 	if err != nil {
 		logger.Debug("Error during fetching text secrets")
 		return nil, status.Errorf(codes.Internal, "Error during fetching Text secrets")
 	}
-	creditCardSecrets, err := h.storage.ListCreditCardSecrets(ctx, accountID)
+	creditCardSecrets, err := h.storage.ListCreditCardSecrets(ctx, accountID, nil)
 	if err != nil {
 		logger.Debug("Error during fetching text secrets")
 		return nil, status.Errorf(codes.Internal, "Error during fetching Text secrets")
 	}
-	fileSecrets, err := h.storage.ListFileSecrets(ctx, accountID)
+	fileSecrets, err := h.storage.ListFileSecrets(ctx, accountID, nil)
 	if err != nil {
 		logger.Debug("Error during fetching text secrets")
 		return nil, status.Errorf(codes.Internal, "Error during fetching File secrets")
@@ -71,7 +71,7 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret.ListSecretRequest) (
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
 				ModifiedAt: convertTime(s.ModifiedAt),
-				SecretType: secret.SecretType_TEXT,
+				SecretType: secret.SecretType_LOGIN_PASSWORD,
 			},
 		)
 	}
@@ -83,7 +83,7 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret.ListSecretRequest) (
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
 				ModifiedAt: convertTime(s.ModifiedAt),
-				SecretType: secret.SecretType_TEXT,
+				SecretType: secret.SecretType_CREDIT_CARD,
 			},
 		)
 	}

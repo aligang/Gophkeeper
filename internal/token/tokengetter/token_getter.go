@@ -5,6 +5,7 @@ import (
 	"github.com/aligang/Gophkeeper/internal/account"
 	"github.com/aligang/Gophkeeper/internal/config"
 	"github.com/aligang/Gophkeeper/internal/logging"
+	"github.com/aligang/Gophkeeper/internal/token"
 	"google.golang.org/grpc"
 	"log"
 )
@@ -14,18 +15,23 @@ type TokenGetter struct {
 	AuthServiceAddress string
 	Login              string
 	Password           string
-	GetToken           func() string
+	GetToken           func() *token.Token
 	Client             account.AccountServiceClient
 	logger             *logging.InternalLogger
 }
 
-func (t *TokenGetter) getStaticToken() string {
+func (t *TokenGetter) getStaticToken() *token.Token {
 	logger := t.logger.GetSubLogger("Static", "Token")
 	logger.Debug("Using predefined token")
-	return t.StaticToken
+	return &token.Token{
+		Id:         "Statically Defined Token",
+		TokenValue: t.StaticToken,
+		IssuedAt:   "N/A",
+	}
+
 }
 
-func (t *TokenGetter) getDynamicToken() string {
+func (t *TokenGetter) getDynamicToken() *token.Token {
 	logger := t.logger.GetSubLogger("Dynamic", "Token")
 	logger.Debug("Fetching token from AuthServer")
 	resp, err := t.Client.Authenticate(
@@ -37,7 +43,7 @@ func (t *TokenGetter) getDynamicToken() string {
 	}
 	logger.Debug("Using token received from Auth Service")
 	logger.Debug("token id %s, issued at %s", resp.Token.Id, resp.Token.IssuedAt)
-	return resp.Token.Value
+	return resp.Token
 }
 
 func New(conn grpc.ClientConnInterface, cfg *config.ClientConfig) *TokenGetter {

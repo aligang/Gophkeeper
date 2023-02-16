@@ -70,7 +70,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 		//fmt.Fprintf(os.Stderr, "-l 'login'.\n")
 		//fmt.Fprintf(os.Stderr, "-p 'password'.\n")
 		fmt.Fprintf(os.Stderr, "sub-command:\n")
-		fmt.Fprintf(os.Stderr, "account|secret|version'.\n")
+		fmt.Fprintf(os.Stderr, "account|secret|version|token'.\n")
 	}
 
 	flag.Parse()
@@ -85,9 +85,36 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 	switch subcommand {
 	case "version":
 		target.Version = &pipeline.PipelineInitTree_Version{}
+		subFlags := flag.NewFlagSet("client version", flag.ExitOnError)
+		subFlags.Parse(args)
+	case "token":
+		target.Token = &pipeline.PipelineInitTree_Token{}
+		subFlags := flag.NewFlagSet("client token", flag.ExitOnError)
+		subFlags.Usage = func() {
+			fmt.Fprintf(os.Stderr, "Usage: ./client token \n")
+			fmt.Fprintf(os.Stderr, "sub-command:\n")
+			fmt.Fprintf(os.Stderr, "    get\n")
+		}
+		if len(args) < 1 {
+			flag.Usage()
+			os.Exit(1)
+		}
+		subcommand = args[0]
+		args = args[1:]
+		switch subcommand {
+		case "get":
+			target.Token.Get = &pipeline.PipelineInitTree_Token_Get{}
+			subFlags = flag.NewFlagSet("client token get", flag.ExitOnError)
+			subFlags.Parse(args)
+		default:
+			fmt.Fprintf(os.Stderr, "Unsupported command: %s\n ", subcommand)
+			subFlags.Usage()
+			os.Exit(1)
+		}
+		subFlags.Parse(args)
 	case "account":
 		target.Account = &pipeline.PipelineInitTree_Account{}
-		subFlags := flag.NewFlagSet("client account", flag.ExitOnError)
+		subFlags := flag.NewFlagSet("\account", flag.ExitOnError)
 		subFlags.Usage = func() {
 			fmt.Fprintf(os.Stderr, "Usage: ./client account \n")
 			fmt.Fprintf(os.Stderr, "sub-command:\n")

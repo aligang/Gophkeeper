@@ -48,7 +48,7 @@ func convertCreditCardSecretInstance(instance *secretInstance.CreditCardSecret) 
 		AccountID: instance.AccountId,
 		Secret: &secret.Secret_CreditCard{
 			CreditCard: &secret.CreditCard{
-				Number:         instance.Number,
+				Number:         instance.CardNumber,
 				CardholderName: instance.CardHolder,
 				ValidTill:      instance.ValidTill,
 				Cvc:            instance.Cvc,

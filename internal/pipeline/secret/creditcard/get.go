@@ -18,7 +18,7 @@ func Get(client secret.SecretServiceClient, getter *tokengetter.TokenGetter, cli
 	req := &secret.GetSecretRequest{Id: get.Id, SecretType: secret.SecretType_CREDIT_CARD}
 
 	logger.Debug("Encoding token into Metadata")
-	ctx := metadata.NewOutgoingContext(context.Background(), metadata.New(map[string]string{"token": token}))
+	ctx := metadata.NewOutgoingContext(context.Background(), metadata.New(map[string]string{"token": token.TokenValue}))
 
 	logger.Debug("Sending request...")
 	s, err := client.Get(ctx, req)

@@ -23,49 +23,49 @@ func New(conf *config.ServerConfig) *Repository {
 		log: logging.Logger.GetSubLogger("Repository", "sql"),
 	}
 	_, err = s.DB.Exec(
-		"create table if not exists Accounts(Id text NOT NULL UNIQUE, Login text NOT NULL UNIQUE, Password text NOT NULL, Encryption_Key text, Create_dAt TIMESTAMP WITH TIME ZONE)",
+		"create table if not exists Accounts(Id text NOT NULL UNIQUE, Login text NOT NULL UNIQUE, Password text NOT NULL, EncryptionKey text, EncryptionEnabled bool, CreatedAt TIMESTAMP WITH TIME ZONE)",
 	)
 	if err != nil {
 		s.log.Crit("Failure during initialisation of accounts table: %s", err.Error())
 		panic(err.Error())
 	}
 	_, err = s.DB.Exec(
-		"create table if not exists Tokens(Id text NOT NULL UNIQUE, Token_Value text NOT NULL UNIQUE, Owner text NOT NULL, Issued_At TIMESTAMP WITH TIME ZONE NOT NULL)",
+		"create table if not exists Tokens(Id text NOT NULL UNIQUE, TokenValue text NOT NULL UNIQUE, Owner text NOT NULL, IssuedAt TIMESTAMP WITH TIME ZONE NOT NULL)",
 	)
 	if err != nil {
 		s.log.Crit("Failure during initialisation of tokens table: %s", err.Error())
 		panic(err.Error())
 	}
 	_, err = s.DB.Exec(
-		"create table if not exists Text_Secrets(Id text NOT NULL UNIQUE, Data text, Created_At TIMESTAMP WITH TIME ZONE NOT NULL, Modified_At TIMESTAMP WITH TIME ZONE)",
+		"create table if not exists Text_Secrets(Id text NOT NULL UNIQUE, AccountId text NOT NULL, Text text, CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL, ModifiedAt TIMESTAMP WITH TIME ZONE)",
 	)
 	if err != nil {
 		s.log.Crit("Failure during initialisation of text secrets table: %s", err.Error())
 		panic(err.Error())
 	}
 	_, err = s.DB.Exec(
-		"create table if not exists Login_Password_Secrets(Id text NOT NULL UNIQUE, Login text, Password text,  Created_At TIMESTAMP WITH TIME ZONE NOT NULL, Modified_At TIMESTAMP WITH TIME ZONE)",
+		"create table if not exists Login_Password_Secrets(Id text NOT NULL UNIQUE, AccountId text NOT NULL, Login text, Password text,  CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL, ModifiedAt TIMESTAMP WITH TIME ZONE)",
 	)
 	if err != nil {
 		s.log.Crit("Failure during initialisation of login password secrets table: %s", err.Error())
 		panic(err.Error())
 	}
 	_, err = s.DB.Exec(
-		"create table if not exists Credit_Card_Secrets(Id text NOT NULL UNIQUE, Card_Number text, Card_Holder text, Valid_Till text, Cvc text, Created_At TIMESTAMP WITH TIME ZONE NOT NULL, Modified_At TIMESTAMP WITH TIME ZONE)",
+		"create table if not exists Credit_Card_Secrets(Id text NOT NULL UNIQUE, AccountId text NOT NULL, CardNumber text, CardHolder text, ValidTill text, Cvc text, CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL, ModifiedAt TIMESTAMP WITH TIME ZONE)",
 	)
 	if err != nil {
 		s.log.Debug("Failure during initialisation of credit card secrets table: %s", err.Error())
 		panic(err.Error())
 	}
 	_, err = s.DB.Exec(
-		"create table if not exists File_Secrets(Id text NOT NULL UNIQUE, Object_ID text NOT NULL UNIQUE, Created_At TIMESTAMP WITH TIME ZONE NOT NULL, Modified_At TIMESTAMP WITH TIME ZONE)",
+		"create table if not exists File_Secrets(Id text NOT NULL UNIQUE, AccountId text NOT NULL, ObjectId text NOT NULL UNIQUE, CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL, ModifiedAt TIMESTAMP WITH TIME ZONE)",
 	)
 	if err != nil {
 		s.log.Debug("Failure during initialisation of file secrets table: %s", err.Error())
 		panic(err.Error())
 	}
 	_, err = s.DB.Exec(
-		"create table if not exists File_Deletion_Queue(ObjectId text NOT NULL UNIQUE, Deleted_At TIMESTAMP WITH TIME ZONE NOT NULL)",
+		"create table if not exists File_Deletion_Queue(ObjectId text NOT NULL UNIQUE, DeletedAt TIMESTAMP WITH TIME ZONE NOT NULL)",
 	)
 	if err != nil {
 		s.log.Debug("Failure during initialisation of deletion queue table: %s", err.Error())

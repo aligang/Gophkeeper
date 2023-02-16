@@ -38,8 +38,8 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 
 	switch req.Secret.(type) {
 	case *secret.UpdateSecretRequest_Text:
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			oldSecret, err := h.storage.GetTextSecret(ctx, req.Id)
+		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
+			oldSecret, err := h.storage.GetTextSecret(ctx, req.Id, tx)
 			if err != nil {
 				return err
 			}
@@ -61,12 +61,12 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
 			desc.ModifiedAt = s.ModifiedAt.Format(time.RFC3339)
 
-			return h.storage.UpdateTextSecret(ctx, s)
+			return h.storage.UpdateTextSecret(ctx, s, tx)
 		})
 
 	case *secret.UpdateSecretRequest_LoginPassword:
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			oldSecret, err := h.storage.GetLoginPasswordSecret(ctx, req.Id)
+		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
+			oldSecret, err := h.storage.GetLoginPasswordSecret(ctx, req.Id, tx)
 			if err != nil {
 				return err
 			}
@@ -88,11 +88,11 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 			desc.SecretType = secret.SecretType_LOGIN_PASSWORD
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
 			desc.ModifiedAt = s.ModifiedAt.Format(time.RFC3339)
-			return h.storage.UpdateLoginPasswordSecret(ctx, s)
+			return h.storage.UpdateLoginPasswordSecret(ctx, s, tx)
 		})
 	case *secret.UpdateSecretRequest_CreditCard:
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			oldSecret, err := h.storage.GetCreditCardSecret(ctx, req.Id)
+		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
+			oldSecret, err := h.storage.GetCreditCardSecret(ctx, req.Id, tx)
 			if err != nil {
 				return err
 			}
@@ -107,7 +107,7 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 					CreatedAt:  oldSecret.CreatedAt,
 					ModifiedAt: time.Now(),
 				},
-				Number:     req.GetCreditCard().GetNumber(),
+				CardNumber: req.GetCreditCard().GetNumber(),
 				CardHolder: req.GetCreditCard().GetCardholderName(),
 				ValidTill:  req.GetCreditCard().GetValidTill(),
 				Cvc:        req.GetCreditCard().GetCvc(),
@@ -116,11 +116,11 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 			desc.SecretType = secret.SecretType_CREDIT_CARD
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
 			desc.ModifiedAt = s.ModifiedAt.Format(time.RFC3339)
-			return h.storage.UpdateCreditCardSecret(ctx, s)
+			return h.storage.UpdateCreditCardSecret(ctx, s, tx)
 		})
 	case *secret.UpdateSecretRequest_File:
 		logger.Debug("Running secret precheck...")
-		oldSecret, err := h.storage.GetFileSecret(ctx, req.Id)
+		oldSecret, err := h.storage.GetFileSecret(ctx, req.Id, nil)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "Secret not found")
 		}
@@ -153,8 +153,8 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 			ObjectId: newObjectId,
 		}
 		logger.Debug("Updating object value to  %s", newObjectId)
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			_, terr := h.storage.GetFileSecret(ctx, s.Id)
+		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
+			_, terr := h.storage.GetFileSecret(ctx, s.Id, tx)
 			if terr != nil {
 				terr = h.fileStorage.Delete(ctx, s.ObjectId)
 				if terr != nil {
@@ -165,7 +165,7 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 				return terr
 			}
 
-			terr = h.storage.UpdateFileSecret(ctx, s)
+			terr = h.storage.UpdateFileSecret(ctx, s, tx)
 			if terr != nil {
 				terr = h.fileStorage.Delete(ctx, s.ObjectId)
 				if terr != nil {
@@ -176,7 +176,7 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 				return terr
 			}
 
-			terr = h.storage.MoveFileSecretToDeletionQueue(ctx, oldSecret.ObjectId, time.Now())
+			terr = h.storage.MoveFileSecretToDeletionQueue(ctx, oldSecret.ObjectId, time.Now(), tx)
 			if terr != nil {
 				if terr != nil {
 					logger.Debug(

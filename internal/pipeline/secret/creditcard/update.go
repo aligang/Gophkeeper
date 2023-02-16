@@ -27,7 +27,7 @@ func Update(client secret.SecretServiceClient, getter *tokengetter.TokenGetter, 
 		Id: update.Id,
 	}
 	logger.Debug("Encoding token into Metadata")
-	ctx := metadata.NewOutgoingContext(context.Background(), metadata.New(map[string]string{"token": token}))
+	ctx := metadata.NewOutgoingContext(context.Background(), metadata.New(map[string]string{"token": token.TokenValue}))
 
 	logger.Debug("Sending request...")
 	desc, err := client.Update(ctx, req)

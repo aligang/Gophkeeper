@@ -33,7 +33,7 @@ func (gc *TokenGC) CleanStale(ctx context.Context) {
 	err := gc.storage.WithinTransaction(
 		ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
 			gc.logger.Debug("Listing current tokens...")
-			tokens, terr := gc.storage.ListTokens(ctx)
+			tokens, terr := gc.storage.ListTokens(tCtx, tx)
 			if terr != nil {
 				return terr
 			}
@@ -41,9 +41,9 @@ func (gc *TokenGC) CleanStale(ctx context.Context) {
 			for _, token := range tokens {
 				logging.Debug("Checking token issued at: %s", token.IssuedAt.Format(time.RFC3339))
 				if token.IssuedAt.Add(time.Minute * time.Duration(gc.conf.TokenValidityTimeMinutes)).Before(time.Now()) {
-					terr = gc.storage.DeleteToken(ctx, token)
+					terr = gc.storage.DeleteToken(tCtx, token, tx)
 					if terr != nil {
-						gc.logger.Debug("Could not delete token %s: %s", token.Value, terr.Error())
+						gc.logger.Debug("Could not delete token %s: %s", token.TokenValue, terr.Error())
 					}
 					deletedTokenCounter = deletedTokenCounter + 1
 				}

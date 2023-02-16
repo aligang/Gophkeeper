@@ -42,6 +42,7 @@ func (h *GrpcHandler) Register(ctx context.Context, request *account.RegisterReq
 		Login:             request.Login,
 		Password:          request.Password,
 		EncryptionEnabled: true,
+		CreatedAt:         time.Now(),
 	}
 	logger.Debug("generating encryption key...")
 	instance.EncryptionKey, err = encryption.NewKey()
@@ -49,16 +50,17 @@ func (h *GrpcHandler) Register(ctx context.Context, request *account.RegisterReq
 
 	}
 
-	err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-		_, terr := h.storage.GetAccountByLogin(ctx, request.Login)
+	err = h.storage.WithinTransaction(ctx, func(tctx context.Context, tx *transaction.DBTransaction) error {
+		_, terr := h.storage.GetAccountByLogin(tctx, request.Login, tx)
 		if terr == nil {
 			return account.ErrRecordAlreadyExists
 		}
 
 		logger.Debug("generating encryption key succeeded")
 		terr = h.storage.Register(
-			ctx,
+			tctx,
 			instance,
+			tx,
 		)
 		if terr != nil {
 			return terr
@@ -84,7 +86,7 @@ func (h *GrpcHandler) Authenticate(ctx context.Context, request *account.Authent
 	logger.Debug("Received Authentication request")
 
 	logger.Debug("Getting account information from sql")
-	acc, err := h.storage.GetAccountByLogin(ctx, request.Login)
+	acc, err := h.storage.GetAccountByLogin(ctx, request.Login, nil)
 	if err != nil {
 		logger.Debug("account not found")
 		return nil, status.Errorf(codes.NotFound, err.Error())
@@ -97,14 +99,14 @@ func (h *GrpcHandler) Authenticate(ctx context.Context, request *account.Authent
 	}
 	logger.Debug("Authentication information is valid")
 	logger.Debug("Listing tokens for account: %s", acc.Id)
-	accountTokens, err := h.storage.ListAccountTokens(ctx, acc.Id)
+	accountTokens, err := h.storage.ListAccountTokens(ctx, acc.Id, nil)
 
 	if err != nil {
 		logger.Debug("Could not list tokens from database: %s", err.Error())
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 	if len(accountTokens) == 0 {
-		logger.Debug("No tokens were found within sql")
+		logger.Debug("No tokens were found within database")
 	}
 	var t *tokenInstance.Token
 	if len(accountTokens) > 0 && accountTokens[0].IssuedAt.Add(
@@ -114,9 +116,9 @@ func (h *GrpcHandler) Authenticate(ctx context.Context, request *account.Authent
 	} else {
 		logger.Debug("Creating new token record")
 		t = tokenInstance.New(acc.Id)
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
+		err = h.storage.WithinTransaction(ctx, func(tctx context.Context, tx *transaction.DBTransaction) error {
 			logger.Debug("Adding new token record to sql id: %s", t.Id)
-			return h.storage.AddToken(ctx, t)
+			return h.storage.AddToken(tctx, t, tx)
 		})
 		if err != nil {
 			logger.Debug("Failed Issuing new token")

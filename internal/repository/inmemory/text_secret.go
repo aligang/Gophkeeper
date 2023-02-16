@@ -3,6 +3,7 @@ package inmemory
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/internal/repository/repositoryerrors"
+	"github.com/aligang/Gophkeeper/internal/repository/transaction"
 	"github.com/aligang/Gophkeeper/internal/secret/instance"
 )
 
@@ -28,7 +29,7 @@ func convertTextSecretRecord(r *SecretRecord) *instance.TextSecret {
 	}
 }
 
-func (r *Repository) AddTextSecret(ctx context.Context, s *instance.TextSecret) error {
+func (r *Repository) AddTextSecret(ctx context.Context, s *instance.TextSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("TextSecret", "Add")
 	logger.Debug("Adding new secret %s", s.Id)
 	record := convertTextSecretInstance(s)
@@ -41,7 +42,7 @@ func (r *Repository) AddTextSecret(ctx context.Context, s *instance.TextSecret) 
 	return nil
 }
 
-func (r *Repository) UpdateTextSecret(ctx context.Context, s *instance.TextSecret) error {
+func (r *Repository) UpdateTextSecret(ctx context.Context, s *instance.TextSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("TextSecret", "Update")
 	logger.Debug("Updating secret %s", s.Id)
 	r.textSecrets[s.Id] = convertTextSecretInstance(s)
@@ -49,7 +50,7 @@ func (r *Repository) UpdateTextSecret(ctx context.Context, s *instance.TextSecre
 	return nil
 }
 
-func (r *Repository) ListTextSecrets(ctx context.Context, accountID string) ([]*instance.TextSecret, error) {
+func (r *Repository) ListTextSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*instance.TextSecret, error) {
 	logger := r.log.GetSubLogger("TextSecret", "List")
 	logger.Debug("Listing secrets")
 	secrets := []*instance.TextSecret{}
@@ -63,7 +64,7 @@ func (r *Repository) ListTextSecrets(ctx context.Context, accountID string) ([]*
 	return secrets, nil
 }
 
-func (r *Repository) GetTextSecret(ctx context.Context, secretID string) (*instance.TextSecret, error) {
+func (r *Repository) GetTextSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*instance.TextSecret, error) {
 	logger := r.log.GetSubLogger("TextSecret", "Get")
 	logger.Debug("Fetching secret %s", secretID)
 	record, ok := r.textSecrets[secretID]
@@ -75,7 +76,7 @@ func (r *Repository) GetTextSecret(ctx context.Context, secretID string) (*insta
 	return convertTextSecretRecord(record), nil
 }
 
-func (r *Repository) DeleteTextSecret(ctx context.Context, secretID string) error {
+func (r *Repository) DeleteTextSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("TextSecret", "Delete")
 	logger.Debug("Deleting secret %s", secretID)
 	accountID := r.textSecrets[secretID].accountId

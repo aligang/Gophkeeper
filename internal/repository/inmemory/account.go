@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	accountInstance "github.com/aligang/Gophkeeper/internal/account/instance"
+	"github.com/aligang/Gophkeeper/internal/repository/transaction"
 	"time"
 )
 
@@ -35,7 +36,7 @@ func convertAccountRecord(r *accountRecord) *accountInstance.Account {
 	}
 }
 
-func (r *Repository) Register(ctx context.Context, instance *accountInstance.Account) error {
+func (r *Repository) Register(ctx context.Context, instance *accountInstance.Account, tx *transaction.DBTransaction) error {
 	r.log.Debug("Registering New Account")
 	r.log.Debug("Account id: %s", instance.Id)
 	r.accounts[instance.Id] = convertAccountInstance(instance)
@@ -45,7 +46,7 @@ func (r *Repository) Register(ctx context.Context, instance *accountInstance.Acc
 	return nil
 }
 
-func (r *Repository) GetAccountByLogin(ctx context.Context, login string) (*accountInstance.Account, error) {
+func (r *Repository) GetAccountByLogin(ctx context.Context, login string, tx *transaction.DBTransaction) (*accountInstance.Account, error) {
 	r.log.Debug("Getting Account using Login: %s", login)
 	id, exists := r.loginToIdMapping[login]
 	if !exists {
@@ -53,10 +54,10 @@ func (r *Repository) GetAccountByLogin(ctx context.Context, login string) (*acco
 		return nil, errors.New("account does not exists")
 	}
 
-	return r.GetAccountById(ctx, id)
+	return r.GetAccountById(ctx, id, tx)
 }
 
-func (r *Repository) GetAccountById(ctx context.Context, accountID string) (*accountInstance.Account, error) {
+func (r *Repository) GetAccountById(ctx context.Context, accountID string, tx *transaction.DBTransaction) (*accountInstance.Account, error) {
 	r.log.Debug("Get Account by Id from filerepository: %s", accountID)
 	accountRecord, exists := r.accounts[accountID]
 	if !exists {

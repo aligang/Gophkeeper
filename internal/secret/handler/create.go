@@ -47,8 +47,8 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret.CreateSecretReques
 		//if h.cfg.SecretEncryptionEnabled {
 		//	s, err = encryption.EncryptTextSecret(s, " ")
 		//}
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			return h.storage.AddTextSecret(ctx, s)
+		err = h.storage.WithinTransaction(ctx, func(ctx context.Context, tx *transaction.DBTransaction) error {
+			return h.storage.AddTextSecret(ctx, s, tx)
 		})
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, err.Error())
@@ -66,8 +66,8 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret.CreateSecretReques
 			Login:    req.GetLoginPassword().GetLogin(),
 			Password: req.GetLoginPassword().GetPassword(),
 		}
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			return h.storage.AddLoginPasswordSecret(ctx, s)
+		err = h.storage.WithinTransaction(ctx, func(ctx context.Context, tx *transaction.DBTransaction) error {
+			return h.storage.AddLoginPasswordSecret(ctx, s, tx)
 		})
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, err.Error())
@@ -82,13 +82,13 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret.CreateSecretReques
 				AccountId: accountID,
 				CreatedAt: time.Now(),
 			},
-			Number:     req.GetCreditCard().GetNumber(),
+			CardNumber: req.GetCreditCard().GetNumber(),
 			CardHolder: req.GetCreditCard().GetCardholderName(),
 			ValidTill:  req.GetCreditCard().GetValidTill(),
 			Cvc:        req.GetCreditCard().GetCvc(),
 		}
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			return h.storage.AddCreditCardSecret(ctx, s)
+		err = h.storage.WithinTransaction(ctx, func(ctx context.Context, tx *transaction.DBTransaction) error {
+			return h.storage.AddCreditCardSecret(ctx, s, tx)
 		})
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, err.Error())
@@ -112,8 +112,8 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret.CreateSecretReques
 			return nil, status.Errorf(codes.Internal, "Failed to save file secret")
 		}
 		logger.Debug("File secret id=%s saved successfully ", s.Id)
-		err = h.storage.WithinTransaction(ctx, func(context.Context, *transaction.DBTransaction) error {
-			return h.storage.AddFileSecret(ctx, s)
+		err = h.storage.WithinTransaction(ctx, func(ctx context.Context, tx *transaction.DBTransaction) error {
+			return h.storage.AddFileSecret(ctx, s, tx)
 		})
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, err.Error())
