@@ -12,7 +12,7 @@ import (
 	"github.com/aligang/Gophkeeper/internal/pipeline/secret/file"
 	loginPassword "github.com/aligang/Gophkeeper/internal/pipeline/secret/loginpassword"
 	"github.com/aligang/Gophkeeper/internal/pipeline/secret/text"
-	token "github.com/aligang/Gophkeeper/internal/pipeline/token"
+	"github.com/aligang/Gophkeeper/internal/pipeline/token"
 	"github.com/aligang/Gophkeeper/internal/pipeline/version"
 	secretProto "github.com/aligang/Gophkeeper/internal/secret"
 	tokenGetter "github.com/aligang/Gophkeeper/internal/token/tokengetter"
@@ -23,6 +23,11 @@ import (
 )
 
 func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
+	if pipelineTree.BuildInfo != nil {
+		version.Print()
+		os.Exit(0)
+	}
+
 	logging.Debug("Connecting to %s", cfg.ServerAddress)
 	conn, err := grpc.Dial(cfg.ServerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -36,7 +41,7 @@ func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
 	accountClient := acccountProto.NewAccountServiceClient(conn)
 
 	switch {
-	case pipelineTree.Version != nil:
+	case pipelineTree.BuildInfo != nil:
 		version.Print()
 	case pipelineTree.Token != nil:
 		tokenPipelineTree := pipelineTree.Token

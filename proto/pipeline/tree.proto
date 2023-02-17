@@ -6,11 +6,11 @@ option go_package = "github.com/aligang/Gophkeeper/internal/pipeline";
 
 
 message PipelineInitTree {
-  message Version {}
+  message BuildInfo {}
 
   message Token {
       message Get {}
-    
+
       Get get = 1;
   }
 
@@ -121,8 +121,8 @@ message PipelineInitTree {
     List list = 99;
   }
 
-  Account account = 1;
-  Secret  secret  = 2;
-  Version version = 3;
-  Token   token   = 4;
+  Account   account = 1;
+  Secret    secret  = 2;
+  BuildInfo build_info = 3;
+  Token     token   = 4;
 }

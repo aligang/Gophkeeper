@@ -84,7 +84,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 	args = args[1:]
 	switch subcommand {
 	case "version":
-		target.Version = &pipeline.PipelineInitTree_Version{}
+		target.BuildInfo = &pipeline.PipelineInitTree_BuildInfo{}
 		subFlags := flag.NewFlagSet("client version", flag.ExitOnError)
 		subFlags.Parse(args)
 	case "token":

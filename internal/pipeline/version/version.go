@@ -1,7 +1,11 @@
 package version
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/aligang/Gophkeeper/internal/buildinfo"
+)
 
 func Print() {
-	fmt.Println("Some Version")
+	fmt.Printf("Build Version : %s \n", buildinfo.Version)
+	fmt.Printf("Build Time    : %s \n", buildinfo.BuildTime)
 }
