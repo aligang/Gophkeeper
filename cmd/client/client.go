@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/aligang/Gophkeeper/internal/config"
-	"github.com/aligang/Gophkeeper/internal/logging"
-	"github.com/aligang/Gophkeeper/internal/pipeline/dispatcher"
+	"github.com/aligang/Gophkeeper/pkg/client/config"
+	"github.com/aligang/Gophkeeper/pkg/client/pipeline/dispatcher"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
 	"github.com/rs/zerolog"
 	"os"
 )
@@ -11,8 +11,7 @@ import (
 func main() {
 	logging.Configure(os.Stdout, zerolog.DebugLevel)
 	logging.Debug("Starting GophKeeper client")
-	clientCfg := config.GetClientConfig()
+	clientCfg := config.GetConfig()
 	pipelineCfg := config.GetClientPipelineConfigFromCli()
 	dispatcher.Start(clientCfg, pipelineCfg)
-	//fmt.Println(clientCfg)
 }
