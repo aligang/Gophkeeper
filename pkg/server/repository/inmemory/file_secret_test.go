@@ -2,8 +2,8 @@ package inmemory
 
 import (
 	"context"
-	"github.com/aligang/Gophkeeper/pkg/fixtures"
-	secretInstance "github.com/aligang/Gophkeeper/pkg/secret/instance"
+	"github.com/aligang/Gophkeeper/pkg/common/secret/instance"
+	"github.com/aligang/Gophkeeper/pkg/server/fixtures"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/repositoryerrors"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -737,8 +737,8 @@ func TestFileSecretWritableOperation(t *testing.T) {
 			},
 			run: func(r *Repository) error {
 
-				return r.UpdateFileSecret(ctx, &secretInstance.FileSecret{
-					BaseSecret: secretInstance.BaseSecret{
+				return r.UpdateFileSecret(ctx, &instance.FileSecret{
+					BaseSecret: instance.BaseSecret{
 						Id:         fixtures.ReferenceSecretId11,
 						AccountId:  fixtures.ReferenceAccountId1,
 						CreatedAt:  fixtures.ReferenceSecretCreationTime11,
@@ -1501,13 +1501,13 @@ func TestFileSecretReadOperations(t *testing.T) {
 	t.Run("list all secrets", func(t *testing.T) {
 		list, err := repo.ListFileSecrets(ctx, fixtures.ReferenceAccountId1)
 		assert.Equal(t, nil, err)
-		resultMap := map[string]*secretInstance.FileSecret{}
+		resultMap := map[string]*instance.FileSecret{}
 		for _, e := range list {
 			resultMap[e.Id] = e
 		}
 		assert.Equal(
 			t,
-			map[string]*secretInstance.FileSecret{
+			map[string]*instance.FileSecret{
 				fixtures.ReferenceSecretId1:  fixtures.ReferenceFileSecretInstance1,
 				fixtures.ReferenceSecretId11: fixtures.ReferenceFileSecretInstance11,
 			},
@@ -1524,22 +1524,22 @@ func TestFileSecretReadOperations(t *testing.T) {
 	t.Run("list all objects in deletion queue", func(t *testing.T) {
 		list, err := repo.ListFileDeletionQueue(ctx)
 		assert.Equal(t, nil, err)
-		resultMap := map[string]*secretInstance.DeletionQueueElement{}
+		resultMap := map[string]*instance.DeletionQueueElement{}
 		for _, e := range list {
 			resultMap[e.Id] = e
 		}
 		assert.Equal(
 			t,
-			map[string]*secretInstance.DeletionQueueElement{
-				fixtures.ReferenceObjectId1: &secretInstance.DeletionQueueElement{
+			map[string]*instance.DeletionQueueElement{
+				fixtures.ReferenceObjectId1: &instance.DeletionQueueElement{
 					Id: fixtures.ReferenceObjectId1,
 					Ts: fixtures.ReferenceSecretDeletionTime1,
 				},
-				fixtures.ReferenceObjectId11: &secretInstance.DeletionQueueElement{
+				fixtures.ReferenceObjectId11: &instance.DeletionQueueElement{
 					Id: fixtures.ReferenceObjectId11,
 					Ts: fixtures.ReferenceSecretDeletionTime11,
 				},
-				fixtures.ReferenceObjectId2: &secretInstance.DeletionQueueElement{
+				fixtures.ReferenceObjectId2: &instance.DeletionQueueElement{
 					Id: fixtures.ReferenceObjectId2,
 					Ts: fixtures.ReferenceSecretDeletionTime2,
 				},

@@ -2,27 +2,27 @@ package dispatcher
 
 import (
 	"fmt"
-	acccountProto "github.com/aligang/Gophkeeper/pkg/account"
+	"github.com/aligang/Gophkeeper/pkg/client/config"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline/account"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline/secret"
-	loginpassword2 "github.com/aligang/Gophkeeper/pkg/client/pipeline/secret/creditcard"
-	file2 "github.com/aligang/Gophkeeper/pkg/client/pipeline/secret/file"
-	"github.com/aligang/Gophkeeper/pkg/client/pipeline/secret/loginpassword"
-	text2 "github.com/aligang/Gophkeeper/pkg/client/pipeline/secret/text"
+	creditCard "github.com/aligang/Gophkeeper/pkg/client/pipeline/secret/creditcard"
+	"github.com/aligang/Gophkeeper/pkg/client/pipeline/secret/file"
+	loginPassword "github.com/aligang/Gophkeeper/pkg/client/pipeline/secret/loginpassword"
+	"github.com/aligang/Gophkeeper/pkg/client/pipeline/secret/text"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline/token"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline/version"
-	"github.com/aligang/Gophkeeper/pkg/config"
-	"github.com/aligang/Gophkeeper/pkg/logging"
-	secretProto "github.com/aligang/Gophkeeper/pkg/secret"
-	tokenGetter "github.com/aligang/Gophkeeper/pkg/token/tokengetter"
+	tokenGetter "github.com/aligang/Gophkeeper/pkg/client/token/tokengetter"
+	accountProto "github.com/aligang/Gophkeeper/pkg/common/account"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	secretProto "github.com/aligang/Gophkeeper/pkg/common/secret"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"os"
 )
 
-func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
+func Start(cfg *config.Config, pipelineTree *pipeline.PipelineInitTree) {
 	if pipelineTree.BuildInfo != nil {
 		version.Print()
 		os.Exit(0)
@@ -38,7 +38,7 @@ func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
 
 	tg := tokenGetter.New(conn, cfg)
 	secretClient := secretProto.NewSecretServiceClient(conn)
-	accountClient := acccountProto.NewAccountServiceClient(conn)
+	accountClient := accountProto.NewAccountServiceClient(conn)
 
 	switch {
 	case pipelineTree.BuildInfo != nil:
@@ -67,13 +67,13 @@ func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
 			t := secretPipelineTree.Text
 			switch {
 			case t.Create != nil:
-				text2.Create(secretClient, tg, pipelineTree)
+				text.Create(secretClient, tg, pipelineTree)
 			case t.Update != nil:
-				text2.Update(secretClient, tg, pipelineTree)
+				text.Update(secretClient, tg, pipelineTree)
 			case t.Delete != nil:
-				text2.Delete(secretClient, tg, pipelineTree)
+				text.Delete(secretClient, tg, pipelineTree)
 			case t.Get != nil:
-				text2.Get(secretClient, tg, pipelineTree)
+				text.Get(secretClient, tg, pipelineTree)
 			default:
 				fmt.Fprintf(os.Stderr, "Secret Text pipeline initialization error:\n")
 			}
@@ -81,13 +81,13 @@ func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
 			l := secretPipelineTree.LoginPassword
 			switch {
 			case l.Create != nil:
-				loginpassword.Create(secretClient, tg, pipelineTree)
+				loginPassword.Create(secretClient, tg, pipelineTree)
 			case l.Update != nil:
-				loginpassword.Update(secretClient, tg, pipelineTree)
+				loginPassword.Update(secretClient, tg, pipelineTree)
 			case l.Delete != nil:
-				loginpassword.Delete(secretClient, tg, pipelineTree)
+				loginPassword.Delete(secretClient, tg, pipelineTree)
 			case l.Get != nil:
-				loginpassword.Get(secretClient, tg, pipelineTree)
+				loginPassword.Get(secretClient, tg, pipelineTree)
 			default:
 				fmt.Fprintf(os.Stderr, "Secret Login-Password pipeline initialization error:\n")
 			}
@@ -95,13 +95,13 @@ func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
 			cc := secretPipelineTree.CreditCard
 			switch {
 			case cc.Create != nil:
-				loginpassword2.Create(secretClient, tg, pipelineTree)
+				creditCard.Create(secretClient, tg, pipelineTree)
 			case cc.Update != nil:
-				loginpassword2.Update(secretClient, tg, pipelineTree)
+				creditCard.Update(secretClient, tg, pipelineTree)
 			case cc.Delete != nil:
-				loginpassword2.Delete(secretClient, tg, pipelineTree)
+				creditCard.Delete(secretClient, tg, pipelineTree)
 			case cc.Get != nil:
-				loginpassword2.Get(secretClient, tg, pipelineTree)
+				creditCard.Get(secretClient, tg, pipelineTree)
 			default:
 				fmt.Fprintf(os.Stderr, "Secret CreditCard pipeline initialization error:\n")
 			}
@@ -109,13 +109,13 @@ func Start(cfg *config.ClientConfig, pipelineTree *pipeline.PipelineInitTree) {
 			f := secretPipelineTree.File
 			switch {
 			case f.Upload != nil:
-				file2.Upload(secretClient, tg, pipelineTree)
+				file.Upload(secretClient, tg, pipelineTree)
 			case f.Update != nil:
-				file2.Update(secretClient, tg, pipelineTree)
+				file.Update(secretClient, tg, pipelineTree)
 			case f.Delete != nil:
-				file2.Delete(secretClient, tg, pipelineTree)
+				file.Delete(secretClient, tg, pipelineTree)
 			case f.Download != nil:
-				file2.Download(secretClient, tg, pipelineTree)
+				file.Download(secretClient, tg, pipelineTree)
 			default:
 				fmt.Fprintf(os.Stderr, "Secret CreditCard pipeline initialization error:\n")
 			}

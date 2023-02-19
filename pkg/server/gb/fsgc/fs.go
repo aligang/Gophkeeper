@@ -2,8 +2,8 @@ package fsgc
 
 import (
 	"context"
-	"github.com/aligang/Gophkeeper/pkg/config"
-	"github.com/aligang/Gophkeeper/pkg/logging"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	"github.com/aligang/Gophkeeper/pkg/server/config"
 	"github.com/aligang/Gophkeeper/pkg/server/repository"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/fs"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
@@ -11,14 +11,14 @@ import (
 )
 
 type FileSystemGB struct {
-	conf        *config.ServerConfig
+	conf        *config.Config
 	storage     repository.Storage
 	fileStorage *fs.FileRepository
 	logger      *logging.InternalLogger
 }
 
 func New(
-	conf *config.ServerConfig, storage repository.Storage,
+	conf *config.Config, storage repository.Storage,
 	fileStorage *fs.FileRepository) *FileSystemGB {
 	return &FileSystemGB{
 		conf:        conf,

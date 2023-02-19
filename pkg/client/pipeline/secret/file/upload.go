@@ -3,14 +3,14 @@ package file
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
-	"github.com/aligang/Gophkeeper/pkg/logging"
-	"github.com/aligang/Gophkeeper/pkg/secret"
+	"github.com/aligang/Gophkeeper/pkg/client/token/tokengetter"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	secret2 "github.com/aligang/Gophkeeper/pkg/common/secret"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/fs"
-	"github.com/aligang/Gophkeeper/pkg/token/tokengetter"
 	"google.golang.org/grpc/metadata"
 )
 
-func Upload(client secret.SecretServiceClient, getter *tokengetter.TokenGetter, cli *pipeline.PipelineInitTree) {
+func Upload(client secret2.SecretServiceClient, getter *tokengetter.TokenGetter, cli *pipeline.PipelineInitTree) {
 	logger := logging.Logger.GetSubLogger("client pipeline", "Upload File")
 	logger.Debug("Starting Pipeline execution")
 
@@ -23,9 +23,9 @@ func Upload(client secret.SecretServiceClient, getter *tokengetter.TokenGetter, 
 		return
 	}
 
-	req := &secret.CreateSecretRequest{
-		Secret: &secret.CreateSecretRequest_File{
-			File: &secret.File{
+	req := &secret2.CreateSecretRequest{
+		Secret: &secret2.CreateSecretRequest_File{
+			File: &secret2.File{
 				Data: data,
 			},
 		},

@@ -3,8 +3,8 @@ package fs
 import (
 	"context"
 	"crypto/md5"
-	"github.com/aligang/Gophkeeper/pkg/config"
-	"github.com/aligang/Gophkeeper/pkg/logging"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	"github.com/aligang/Gophkeeper/pkg/server/config"
 	"os"
 )
 
@@ -13,7 +13,7 @@ type FileRepository struct {
 	logger *logging.InternalLogger
 }
 
-func New(s *config.ServerConfig) *FileRepository {
+func New(s *config.Config) *FileRepository {
 	repo := &FileRepository{
 		root:   s.FileStorage,
 		logger: logging.Logger.GetSubLogger("FileRepository", "file"),

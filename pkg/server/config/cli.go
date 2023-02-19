@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func getServerConfigFromCli() *ServerConfig {
-	conf := &ServerConfig{}
+func getConfigFromCli() *Config {
+	conf := &Config{}
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of ./server: server [options] in-memory|sql \n")
 		fmt.Fprintf(os.Stderr, "options:\n")
@@ -55,4 +55,3 @@ func getServerConfigFromCli() *ServerConfig {
 	//fmt.Println(conf)
 	return conf
 }
-

@@ -2,7 +2,7 @@ package inmemory
 
 import (
 	"context"
-	"github.com/aligang/Gophkeeper/pkg/secret/instance"
+	instance2 "github.com/aligang/Gophkeeper/pkg/common/secret/instance"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/repositoryerrors"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
 	"time"
@@ -12,7 +12,7 @@ type fileRecord struct {
 	objectId string
 }
 
-func convertFileSecretInstance(r *instance.FileSecret) *SecretRecord {
+func convertFileSecretInstance(r *instance2.FileSecret) *SecretRecord {
 	return &SecretRecord{
 		id:         r.Id,
 		accountId:  r.AccountId,
@@ -22,9 +22,9 @@ func convertFileSecretInstance(r *instance.FileSecret) *SecretRecord {
 	}
 }
 
-func convertFileSecretRecord(r *SecretRecord) *instance.FileSecret {
-	return &instance.FileSecret{
-		BaseSecret: instance.BaseSecret{
+func convertFileSecretRecord(r *SecretRecord) *instance2.FileSecret {
+	return &instance2.FileSecret{
+		BaseSecret: instance2.BaseSecret{
 			Id:         r.id,
 			AccountId:  r.accountId,
 			CreatedAt:  r.createdAt,
@@ -34,7 +34,7 @@ func convertFileSecretRecord(r *SecretRecord) *instance.FileSecret {
 	}
 }
 
-func (r *Repository) AddFileSecret(ctx context.Context, s *instance.FileSecret, tx *transaction.DBTransaction) error {
+func (r *Repository) AddFileSecret(ctx context.Context, s *instance2.FileSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("FileSecret", "Add")
 	logger.Debug("Adding new secret %s", s.Id)
 	r.fileSecrets[s.Id] = convertFileSecretInstance(s)
@@ -46,7 +46,7 @@ func (r *Repository) AddFileSecret(ctx context.Context, s *instance.FileSecret, 
 	return nil
 }
 
-func (r *Repository) UpdateFileSecret(ctx context.Context, s *instance.FileSecret, tx *transaction.DBTransaction) error {
+func (r *Repository) UpdateFileSecret(ctx context.Context, s *instance2.FileSecret, tx *transaction.DBTransaction) error {
 	logger := r.log.GetSubLogger("FileSecret", "Add")
 	logger.Debug("Updating existing secret %s", s.Id)
 	r.fileSecrets[s.Id] = convertFileSecretInstance(s)
@@ -54,10 +54,10 @@ func (r *Repository) UpdateFileSecret(ctx context.Context, s *instance.FileSecre
 	return nil
 }
 
-func (r *Repository) ListFileSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*instance.FileSecret, error) {
+func (r *Repository) ListFileSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*instance2.FileSecret, error) {
 	logger := r.log.GetSubLogger("FileSecret", "List")
 	logger.Debug("Listing secrets")
-	secrets := []*instance.FileSecret{}
+	secrets := []*instance2.FileSecret{}
 	secretIDs, exists := r.accountFileSecrets[accountID]
 	if !exists {
 		logger.Debug("No records were found")
@@ -70,7 +70,7 @@ func (r *Repository) ListFileSecrets(ctx context.Context, accountID string, tx *
 	return secrets, nil
 }
 
-func (r *Repository) GetFileSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*instance.FileSecret, error) {
+func (r *Repository) GetFileSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*instance2.FileSecret, error) {
 	logger := r.log.GetSubLogger("FileSecret", "Get")
 	logger.Debug("Fetching existing secret %s", secretID)
 	s, ok := r.fileSecrets[secretID]
@@ -98,13 +98,13 @@ func (r *Repository) MoveFileSecretToDeletionQueue(ctx context.Context, objectId
 	return nil
 }
 
-func (r *Repository) ListFileDeletionQueue(ctx context.Context, tx *transaction.DBTransaction) ([]*instance.DeletionQueueElement, error) {
+func (r *Repository) ListFileDeletionQueue(ctx context.Context, tx *transaction.DBTransaction) ([]*instance2.DeletionQueueElement, error) {
 	logger := r.log.GetSubLogger("FileSecret", "ListDeletionQueue")
 	logger.Debug("Listing elements of deletion queue")
-	q := []*instance.DeletionQueueElement{}
+	q := []*instance2.DeletionQueueElement{}
 	for id, ts := range r.fileDeletionQueue {
 		logger.Debug("Found %s ", id)
-		q = append(q, &instance.DeletionQueueElement{ObjectId: id, DeletedAt: ts})
+		q = append(q, &instance2.DeletionQueueElement{ObjectId: id, DeletedAt: ts})
 	}
 	logger.Debug("Content of file deletion queue is successfully fetched: %d elements", len(q))
 	return q, nil

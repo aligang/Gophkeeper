@@ -2,7 +2,7 @@ package inmemory
 
 import (
 	"context"
-	"github.com/aligang/Gophkeeper/pkg/fixtures"
+	"github.com/aligang/Gophkeeper/pkg/server/fixtures"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package pipeline;
 
-option go_package = "github.com/aligang/Gophkeeper/internal/pipeline";
+option go_package = "github.com/aligang/Gophkeeper/pkg/client/pipeline";
 
 
 message PipelineInitTree {

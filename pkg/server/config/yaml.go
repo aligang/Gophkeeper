@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func getServerConfigFromYaml(filePath string) *ServerConfig {
+func getConfigFromYaml(filePath string) *Config {
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0400)
 
 	if err != nil {
@@ -25,7 +25,7 @@ func getServerConfigFromYaml(filePath string) *ServerConfig {
 		panic(err)
 	}
 	jsonBytes, err := json.Marshal(configMap)
-	s := &ServerConfig{}
+	s := &Config{}
 	err = protojson.Unmarshal(jsonBytes, s)
 	if err != nil {
 		panic(err)

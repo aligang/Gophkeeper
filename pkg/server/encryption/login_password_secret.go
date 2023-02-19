@@ -1,6 +1,8 @@
 package encryption
 
-import secretInstance "github.com/aligang/Gophkeeper/pkg/secret/instance"
+import (
+	secretInstance "github.com/aligang/Gophkeeper/pkg/common/secret/instance"
+)
 
 func EncryptLoginPasswordSecret(plainSecret *secretInstance.LoginPasswordSecret,
 	encryptionKey string) (*secretInstance.LoginPasswordSecret, error) {

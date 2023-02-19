@@ -2,8 +2,8 @@ package inmemory
 
 import (
 	"context"
-	"github.com/aligang/Gophkeeper/pkg/fixtures"
-	secretInstance "github.com/aligang/Gophkeeper/pkg/secret/instance"
+	secretInstance "github.com/aligang/Gophkeeper/pkg/common/secret/instance"
+	"github.com/aligang/Gophkeeper/pkg/server/fixtures"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/repositoryerrors"
 	"github.com/stretchr/testify/assert"
 	"testing"

@@ -1,9 +1,9 @@
 package fixtures
 
 import (
-	accountInstance "github.com/aligang/Gophkeeper/pkg/account/instance"
-	secretInstance "github.com/aligang/Gophkeeper/pkg/secret/instance"
-	tokenInstance "github.com/aligang/Gophkeeper/pkg/token/instance"
+	accountInstance "github.com/aligang/Gophkeeper/pkg/common/account/instance"
+	secretInstance "github.com/aligang/Gophkeeper/pkg/common/secret/instance"
+	tokenInstance "github.com/aligang/Gophkeeper/pkg/common/token/instance"
 	"time"
 )
 

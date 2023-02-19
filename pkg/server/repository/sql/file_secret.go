@@ -4,13 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"github.com/aligang/Gophkeeper/pkg/secret/instance"
+	instance2 "github.com/aligang/Gophkeeper/pkg/common/secret/instance"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/repositoryerrors"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
 	"time"
 )
 
-func (r *Repository) AddFileSecret(ctx context.Context, s *instance.FileSecret, tx *transaction.DBTransaction) error {
+func (r *Repository) AddFileSecret(ctx context.Context, s *instance2.FileSecret, tx *transaction.DBTransaction) error {
 	query := "INSERT INTO file_secrets (Id, AccountId, CreatedAt, ModifiedAt, ObjectId) VALUES($1, $2, $3, $4, $5)"
 	args := []any{s.Id, s.AccountId, s.CreatedAt, s.ModifiedAt, s.ObjectId}
 
@@ -19,7 +19,7 @@ func (r *Repository) AddFileSecret(ctx context.Context, s *instance.FileSecret, 
 	return r.addSecret(ctx, secretType, query, args, tx)
 }
 
-func (r *Repository) UpdateFileSecret(ctx context.Context, s *instance.FileSecret, tx *transaction.DBTransaction) error {
+func (r *Repository) UpdateFileSecret(ctx context.Context, s *instance2.FileSecret, tx *transaction.DBTransaction) error {
 	query := "UPDATE file_secrets SET Id = $1, AccountId = $2, CreatedAt = $3, ModifiedAt = $4, ObjectId = $5 WHERE Id = $6"
 	args := []any{s.Id, s.AccountId, s.CreatedAt, s.ModifiedAt, s.ObjectId, s.Id}
 	secretType := "file"
@@ -27,12 +27,12 @@ func (r *Repository) UpdateFileSecret(ctx context.Context, s *instance.FileSecre
 	return r.updateSecret(ctx, secretType, query, args, tx)
 }
 
-func (r *Repository) GetFileSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*instance.FileSecret, error) {
+func (r *Repository) GetFileSecret(ctx context.Context, secretID string, tx *transaction.DBTransaction) (*instance2.FileSecret, error) {
 	query := "SELECT * FROM file_secrets WHERE id = $1"
 	var args = []interface{}{secretID}
 	r.log.Debug("Preparing statement to fetch login password from Repository: ")
 	statement, err := r.prepareStatement(ctx, query, tx)
-	s := &instance.FileSecret{}
+	s := &instance2.FileSecret{}
 
 	r.log.Debug("Executing statement to login password secret  from Repository")
 	err = statement.GetContext(ctx, s, args...)
@@ -48,13 +48,13 @@ func (r *Repository) GetFileSecret(ctx context.Context, secretID string, tx *tra
 	}
 }
 
-func (r *Repository) ListFileSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*instance.FileSecret, error) {
+func (r *Repository) ListFileSecrets(ctx context.Context, accountID string, tx *transaction.DBTransaction) ([]*instance2.FileSecret, error) {
 	r.log.Debug("Preparing statement to fetch account file secrets from Repository")
 	query := "SELECT * FROM file_secrets WHERE accountId = $1"
 	args := []interface{}{accountID}
 	statement, err := r.prepareStatement(ctx, query, tx)
 
-	var secrets []*instance.FileSecret
+	var secrets []*instance2.FileSecret
 	r.log.Debug("Executing statement to fetch account file secrets from Repository")
 	err = statement.SelectContext(ctx, &secrets, args...)
 	if err != nil {
@@ -87,13 +87,13 @@ func (r *Repository) MoveFileSecretToDeletionQueue(ctx context.Context, objectId
 	return nil
 }
 
-func (r *Repository) ListFileDeletionQueue(ctx context.Context, tx *transaction.DBTransaction) ([]*instance.DeletionQueueElement, error) {
+func (r *Repository) ListFileDeletionQueue(ctx context.Context, tx *transaction.DBTransaction) ([]*instance2.DeletionQueueElement, error) {
 	r.log.Debug("Preparing statement to fetch account file secrets from Repository")
 	query := "SELECT ObjectId, DeletedAt FROM file_deletion_queue"
 	args := []interface{}{}
 	statement, err := r.prepareStatement(ctx, query, tx)
 
-	var filesToDelete []*instance.DeletionQueueElement
+	var filesToDelete []*instance2.DeletionQueueElement
 	r.log.Debug("Executing statement to fetch file secret from Repository")
 	err = statement.SelectContext(ctx, &filesToDelete, args...)
 	if err != nil {

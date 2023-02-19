@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	accountInstance "github.com/aligang/Gophkeeper/pkg/account/instance"
+	accountInstance "github.com/aligang/Gophkeeper/pkg/common/account/instance"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/repositoryerrors"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
 	"github.com/jmoiron/sqlx"

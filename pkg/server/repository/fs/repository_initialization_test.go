@@ -1,8 +1,8 @@
 package fs
 
 import (
-	"github.com/aligang/Gophkeeper/pkg/config"
-	"github.com/aligang/Gophkeeper/pkg/fixtures"
+	"github.com/aligang/Gophkeeper/pkg/server/config"
+	"github.com/aligang/Gophkeeper/pkg/server/fixtures"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"

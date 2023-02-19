@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	tokenInstance "github.com/aligang/Gophkeeper/pkg/common/token/instance"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/repositoryerrors"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
-	tokenInstance "github.com/aligang/Gophkeeper/pkg/token/instance"
 	"github.com/jmoiron/sqlx"
 )
 

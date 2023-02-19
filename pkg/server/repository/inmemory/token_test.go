@@ -2,9 +2,9 @@ package inmemory
 
 import (
 	"context"
-	"github.com/aligang/Gophkeeper/pkg/fixtures"
+	tokenInstance "github.com/aligang/Gophkeeper/pkg/common/token/instance"
+	"github.com/aligang/Gophkeeper/pkg/server/fixtures"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/repositoryerrors"
-	tokenInstance "github.com/aligang/Gophkeeper/pkg/token/instance"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

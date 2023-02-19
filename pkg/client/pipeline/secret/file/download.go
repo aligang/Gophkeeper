@@ -3,20 +3,20 @@ package file
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
-	"github.com/aligang/Gophkeeper/pkg/logging"
-	"github.com/aligang/Gophkeeper/pkg/secret"
+	"github.com/aligang/Gophkeeper/pkg/client/token/tokengetter"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	secret2 "github.com/aligang/Gophkeeper/pkg/common/secret"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/fs"
-	"github.com/aligang/Gophkeeper/pkg/token/tokengetter"
 	"google.golang.org/grpc/metadata"
 )
 
-func Download(client secret.SecretServiceClient, getter *tokengetter.TokenGetter, cli *pipeline.PipelineInitTree) {
+func Download(client secret2.SecretServiceClient, getter *tokengetter.TokenGetter, cli *pipeline.PipelineInitTree) {
 	logger := logging.Logger.GetSubLogger("client pipeline", "Download File")
 	logger.Debug("Starting Pipeline execution")
 
 	token := getter.GetToken()
 	download := cli.Secret.File.Download
-	req := &secret.GetSecretRequest{Id: download.Id, SecretType: secret.SecretType_FILE}
+	req := &secret2.GetSecretRequest{Id: download.Id, SecretType: secret2.SecretType_FILE}
 
 	logger.Debug("Encoding token into Metadata")
 	ctx := metadata.NewOutgoingContext(context.Background(), metadata.New(map[string]string{"token": token.TokenValue}))
@@ -27,7 +27,7 @@ func Download(client secret.SecretServiceClient, getter *tokengetter.TokenGetter
 		logger.Debug("Failed to Download Secret: %s", err.Error())
 		return
 	}
-	data := resp.Secret.(*secret.Secret_File).File.Data
+	data := resp.Secret.(*secret2.Secret_File).File.Data
 	err = fs.SaveFile(context.Background(), download.FilePath, data)
 	if err != nil {
 		logger.Debug("Failed to save file: %s", err.Error())

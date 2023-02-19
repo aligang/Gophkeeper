@@ -3,21 +3,21 @@ package loginpassword
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
-	"github.com/aligang/Gophkeeper/pkg/logging"
-	"github.com/aligang/Gophkeeper/pkg/secret"
-	"github.com/aligang/Gophkeeper/pkg/token/tokengetter"
+	"github.com/aligang/Gophkeeper/pkg/client/token/tokengetter"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	secret2 "github.com/aligang/Gophkeeper/pkg/common/secret"
 	"google.golang.org/grpc/metadata"
 )
 
-func Update(client secret.SecretServiceClient, getter *tokengetter.TokenGetter, cli *pipeline.PipelineInitTree) {
+func Update(client secret2.SecretServiceClient, getter *tokengetter.TokenGetter, cli *pipeline.PipelineInitTree) {
 	logger := logging.Logger.GetSubLogger("client pipeline", "Update Credit Card")
 	logger.Debug("Starting Pipeline execution")
 
 	token := getter.GetToken()
 	update := cli.Secret.CreditCard.Update
-	req := &secret.UpdateSecretRequest{
-		Secret: &secret.UpdateSecretRequest_CreditCard{
-			CreditCard: &secret.CreditCard{
+	req := &secret2.UpdateSecretRequest{
+		Secret: &secret2.UpdateSecretRequest_CreditCard{
+			CreditCard: &secret2.CreditCard{
 				Number:         update.CardNumber,
 				CardholderName: update.CardHolder,
 				ValidTill:      update.ValidTill,

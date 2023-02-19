@@ -2,7 +2,7 @@ package inmemory
 
 import (
 	"fmt"
-	"github.com/aligang/Gophkeeper/pkg/logging"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
 	"reflect"
 	"sync"
 	"time"

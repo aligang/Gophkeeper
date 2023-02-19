@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-func getServerConfigFromEnv() *ServerConfig {
+func getConfigFromEnv() *Config {
 	repoType := os.Getenv("REPOSITORY_TYPE")
 	TokenValidityTime, err := strconv.ParseInt(os.Getenv("TOKEN_VALIDITY_TIME"), 10, 32)
 	if err != nil {
@@ -24,7 +24,7 @@ func getServerConfigFromEnv() *ServerConfig {
 		EnableSecretEncryption = false
 	}
 
-	s := ServerConfig{
+	s := Config{
 		Address:                  os.Getenv("ADDRESS"),
 		RepositoryType:           getRepoValueFromName(&repoType),
 		FileStorage:              os.Getenv("FILE_STORAGE"),
@@ -35,7 +35,7 @@ func getServerConfigFromEnv() *ServerConfig {
 		SecretEncryptionEnabled:  EnableSecretEncryption,
 	}
 	if s.RepositoryType == RepositoryType_SQL {
-		//s.OptionalDatabaseUri = &ServerConfig_DatabaseUri{DatabaseUri: os.Getenv("DATABASE_URI")}
+		//s.OptionalDatabaseUri = &Config_DatabaseUri{DatabaseUri: os.Getenv("DATABASE_URI")}
 		s.DatabaseDsn = os.Getenv("DATABASE_DSN")
 	}
 	return &s

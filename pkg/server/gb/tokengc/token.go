@@ -2,20 +2,20 @@ package tokengc
 
 import (
 	"context"
-	"github.com/aligang/Gophkeeper/pkg/config"
-	"github.com/aligang/Gophkeeper/pkg/logging"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	"github.com/aligang/Gophkeeper/pkg/server/config"
 	"github.com/aligang/Gophkeeper/pkg/server/repository"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
 	"time"
 )
 
 type TokenGC struct {
-	conf    *config.ServerConfig
+	conf    *config.Config
 	storage repository.Storage
 	logger  *logging.InternalLogger
 }
 
-func New(conf *config.ServerConfig, storage repository.Storage) *TokenGC {
+func New(conf *config.Config, storage repository.Storage) *TokenGC {
 	logger := logging.Logger.GetSubLogger("GarbageCollector", "Token")
 	logging.Debug("Instantiating Token Garbage Collector")
 	t := &TokenGC{

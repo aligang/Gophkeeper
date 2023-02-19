@@ -3,7 +3,7 @@ package inmemory
 import (
 	"context"
 	"errors"
-	accountInstance "github.com/aligang/Gophkeeper/pkg/account/instance"
+	accountInstance "github.com/aligang/Gophkeeper/pkg/common/account/instance"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
 	"time"
 )

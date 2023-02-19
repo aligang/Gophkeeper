@@ -1,8 +1,8 @@
 package sql
 
 import (
-	"github.com/aligang/Gophkeeper/pkg/config"
-	"github.com/aligang/Gophkeeper/pkg/logging"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	"github.com/aligang/Gophkeeper/pkg/server/config"
 	"github.com/jmoiron/sqlx"
 )
 import _ "github.com/jackc/pgx/v4/stdlib"
@@ -12,7 +12,7 @@ type Repository struct {
 	log *logging.InternalLogger
 }
 
-func New(conf *config.ServerConfig) *Repository {
+func New(conf *config.Config) *Repository {
 	logging.Debug("Initializing SQL Repository")
 	db, err := sqlx.Open("pgx", conf.DatabaseDsn)
 	if err != nil {

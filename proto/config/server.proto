@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package config;
+package config.server;
 
 option go_package = "github.com/aligang/Gophkeeper/pkg/server/config";
 
@@ -12,7 +12,7 @@ enum RepositoryType {
 }
 
 
-message ServerConfig {
+message Config {
   string address = 1;
 
   RepositoryType repository_type = 11;

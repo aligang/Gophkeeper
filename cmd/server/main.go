@@ -3,16 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/aligang/Gophkeeper/internal/account"
-	accountHandler "github.com/aligang/Gophkeeper/internal/account/handler"
-	"github.com/aligang/Gophkeeper/internal/config"
-	"github.com/aligang/Gophkeeper/internal/gb/fsgc"
-	"github.com/aligang/Gophkeeper/internal/gb/tokengc"
-	"github.com/aligang/Gophkeeper/internal/logging"
-	"github.com/aligang/Gophkeeper/internal/repository"
-	"github.com/aligang/Gophkeeper/internal/repository/fs"
-	"github.com/aligang/Gophkeeper/internal/secret"
-	secretHandler "github.com/aligang/Gophkeeper/internal/secret/handler"
+	"github.com/aligang/Gophkeeper/pkg/common/account"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	"github.com/aligang/Gophkeeper/pkg/common/secret"
+	accountHandler "github.com/aligang/Gophkeeper/pkg/server/account/handler"
+	"github.com/aligang/Gophkeeper/pkg/server/config"
+	"github.com/aligang/Gophkeeper/pkg/server/gb/fsgc"
+	"github.com/aligang/Gophkeeper/pkg/server/gb/tokengc"
+	"github.com/aligang/Gophkeeper/pkg/server/repository"
+	"github.com/aligang/Gophkeeper/pkg/server/repository/fs"
+	secretHandler "github.com/aligang/Gophkeeper/pkg/server/secret/handler"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 	"log"
@@ -30,7 +30,7 @@ func main() {
 	signal.Notify(exitSignal, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	wg := sync.WaitGroup{}
 
-	cfg := config.GetServerConfig()
+	cfg := config.GetConfig()
 	fmt.Println(cfg)
 	storage := repository.New(cfg)
 	fileStorage := fs.New(cfg)

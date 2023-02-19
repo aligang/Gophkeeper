@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	secret2 "github.com/aligang/Gophkeeper/pkg/common/secret"
-	"github.com/aligang/Gophkeeper/pkg/config"
+	"github.com/aligang/Gophkeeper/pkg/server/config"
 	fixtures2 "github.com/aligang/Gophkeeper/pkg/server/fixtures"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/fs"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/inmemory"

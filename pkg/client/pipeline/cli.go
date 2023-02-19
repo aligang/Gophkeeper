@@ -1,64 +1,13 @@
-package config
+package pipeline
 
 import (
 	"flag"
 	"fmt"
-	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
 	"os"
-	"strings"
 )
 
-func getServerConfigFromCli() *ServerConfig {
-	conf := &ServerConfig{}
-	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage of ./server: server [options] in-memory|sql \n")
-		fmt.Fprintf(os.Stderr, "options:\n")
-		fmt.Fprintf(os.Stderr, "		-a 'host to listen on'.\n")
-		fmt.Fprintf(os.Stderr, "		-f 'file Storage Path'.\n")
-		fmt.Fprintf(os.Stderr, "		-c 'config File Path'.\n")
-		fmt.Fprintf(os.Stderr, "		-tv 'token validity time'.\n")
-		fmt.Fprintf(os.Stderr, "		-tr 'token renewal time'.\n")
-		fmt.Fprintf(os.Stderr, "		-fs 'file stale time'.\n")
-		fmt.Fprintf(os.Stderr, "		-e 'enable secret encryption'.\n")
-	}
-
-	flag.StringVar(&conf.Address, "a", "", "host to listen on")
-	flag.StringVar(&conf.FileStorage, "f", "", "File Storage Path")
-	flag.StringVar(&conf.ConfigFile, "c", "", "Config File Path")
-	flag.Int64Var(&conf.TokenValidityTimeMinutes, "tv", -1, "token")
-	flag.Int64Var(&conf.TokenRenewalTimeMinutes, "tr", -1, "File Storage Path")
-	flag.Int64Var(&conf.FileStaleTimeMinutes, "fs", -1, "Config File Path")
-	flag.BoolVar(&conf.SecretEncryptionEnabled, "e", false, "Enable encryption")
-	flag.Parse()
-	parsedRepoType := flag.Arg(0)
-	//if parsedRepoType != "in-memory" && parsedRepoType != "sql" {
-	//	return conf
-	//}
-
-	repoType := strings.ReplaceAll(strings.ToUpper(parsedRepoType), "-", "_")
-	conf.RepositoryType = getRepoValueFromName(&repoType)
-	if conf.RepositoryType == RepositoryType_SQL {
-		if len(flag.Args()) == 2 {
-			conf.DatabaseDsn = flag.Arg(1)
-		} else if len(flag.Args()) == 1 {
-			fmt.Fprintf(
-				os.Stderr,
-				"Incomplete command: ./server %s. Use ./server sql {datebase_dsn} \n",
-				strings.Join(flag.Args(), " "))
-		} else {
-			fmt.Fprintf(
-				os.Stderr,
-				"Excessive command arguments: %s in ./server %s. Use ./server sql {datebase_dsn} \n",
-				strings.Join(flag.Args()[2:], " "),
-				strings.Join(flag.Args(), " "))
-		}
-	}
-	//fmt.Println(conf)
-	return conf
-}
-
-func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
-	target := &pipeline.PipelineInitTree{}
+func GetClientPipelineParamsFromCli() *PipelineInitTree {
+	target := &PipelineInitTree{}
 
 	//flag.StringVar(&conf.ServerAddress, "a", "", "host to listen on")
 	//flag.StringVar(&conf.Login, "l", "", "File Storage Path")
@@ -84,11 +33,11 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 	args = args[1:]
 	switch subcommand {
 	case "version":
-		target.BuildInfo = &pipeline.PipelineInitTree_BuildInfo{}
+		target.BuildInfo = &PipelineInitTree_BuildInfo{}
 		subFlags := flag.NewFlagSet("client version", flag.ExitOnError)
 		subFlags.Parse(args)
 	case "token":
-		target.Token = &pipeline.PipelineInitTree_Token{}
+		target.Token = &PipelineInitTree_Token{}
 		subFlags := flag.NewFlagSet("client token", flag.ExitOnError)
 		subFlags.Usage = func() {
 			fmt.Fprintf(os.Stderr, "Usage: ./client token \n")
@@ -103,7 +52,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 		args = args[1:]
 		switch subcommand {
 		case "get":
-			target.Token.Get = &pipeline.PipelineInitTree_Token_Get{}
+			target.Token.Get = &PipelineInitTree_Token_Get{}
 			subFlags = flag.NewFlagSet("client token get", flag.ExitOnError)
 			subFlags.Parse(args)
 		default:
@@ -113,7 +62,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 		}
 		subFlags.Parse(args)
 	case "account":
-		target.Account = &pipeline.PipelineInitTree_Account{}
+		target.Account = &PipelineInitTree_Account{}
 		subFlags := flag.NewFlagSet("\account", flag.ExitOnError)
 		subFlags.Usage = func() {
 			fmt.Fprintf(os.Stderr, "Usage: ./client account \n")
@@ -128,7 +77,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 		args = args[1:]
 		switch subcommand {
 		case "register":
-			target.Account.Register = &pipeline.PipelineInitTree_Account_Register{}
+			target.Account.Register = &PipelineInitTree_Account_Register{}
 			subFlags = flag.NewFlagSet("client account register", flag.ExitOnError)
 			subFlags.StringVar(&target.Account.Register.Login, "login", "", "login for new account")
 			subFlags.StringVar(
@@ -145,7 +94,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 		}
 		subFlags.Parse(args)
 	case "secret":
-		target.Secret = &pipeline.PipelineInitTree_Secret{}
+		target.Secret = &PipelineInitTree_Secret{}
 		subFlags := flag.NewFlagSet("secret", flag.ExitOnError)
 		subFlags.Usage = func() {
 			fmt.Fprintf(os.Stderr, "Usage: ./client secret \n")
@@ -164,7 +113,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 		args = args[1:]
 		switch subcommand {
 		case "text":
-			target.Secret.Text = &pipeline.PipelineInitTree_Secret_Text{}
+			target.Secret.Text = &PipelineInitTree_Secret_Text{}
 			subFlags := flag.NewFlagSet("text", flag.ExitOnError)
 			subFlags.Usage = func() {
 				fmt.Fprintf(os.Stderr, "Usage: ./client secret text\n")
@@ -183,7 +132,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 			args = args[1:]
 			switch subcommand {
 			case "get":
-				target.Secret.Text.Get = &pipeline.PipelineInitTree_Secret_Text_Get{}
+				target.Secret.Text.Get = &PipelineInitTree_Secret_Text_Get{}
 				subFlags = flag.NewFlagSet("client secret text get", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.Text.Get.Id, "id", "", "text secret id")
 				subFlags.Parse(args)
@@ -192,7 +141,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 					os.Exit(1)
 				}
 			case "create":
-				target.Secret.Text.Create = &pipeline.PipelineInitTree_Secret_Text_Create{}
+				target.Secret.Text.Create = &PipelineInitTree_Secret_Text_Create{}
 				subFlags = flag.NewFlagSet("client secret text create", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.Text.Create.Data, "data", "", "text secret data")
 				subFlags.Parse(args)
@@ -201,7 +150,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 					os.Exit(1)
 				}
 			case "delete":
-				target.Secret.Text.Delete = &pipeline.PipelineInitTree_Secret_Text_Delete{}
+				target.Secret.Text.Delete = &PipelineInitTree_Secret_Text_Delete{}
 				subFlags = flag.NewFlagSet("client secret text delete", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.Text.Delete.Id, "id", "", "text secret id")
 				subFlags.Parse(args)
@@ -211,7 +160,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 				}
 
 			case "update":
-				target.Secret.Text.Update = &pipeline.PipelineInitTree_Secret_Text_Update{}
+				target.Secret.Text.Update = &PipelineInitTree_Secret_Text_Update{}
 				subFlags = flag.NewFlagSet("client secret text update", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.Text.Update.Id, "id", "", "text secret id")
 				subFlags.StringVar(&target.Secret.Text.Update.Data, "data", "", "text secret data")
@@ -225,7 +174,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 				os.Exit(1)
 			}
 		case "login-password":
-			target.Secret.LoginPassword = &pipeline.PipelineInitTree_Secret_LoginPassword{}
+			target.Secret.LoginPassword = &PipelineInitTree_Secret_LoginPassword{}
 			subFlags := flag.NewFlagSet("login-password", flag.ExitOnError)
 			subFlags.Usage = func() {
 				fmt.Fprintf(os.Stderr, "Usage: ./client secret text\n")
@@ -244,7 +193,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 			args = args[1:]
 			switch subcommand {
 			case "get":
-				target.Secret.LoginPassword.Get = &pipeline.PipelineInitTree_Secret_LoginPassword_Get{}
+				target.Secret.LoginPassword.Get = &PipelineInitTree_Secret_LoginPassword_Get{}
 				subFlags = flag.NewFlagSet("client secret login-password get", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.LoginPassword.Get.Id, "id", "", "login-password secret id")
 				subFlags.Parse(args)
@@ -253,7 +202,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 					os.Exit(1)
 				}
 			case "create":
-				target.Secret.LoginPassword.Create = &pipeline.PipelineInitTree_Secret_LoginPassword_Create{}
+				target.Secret.LoginPassword.Create = &PipelineInitTree_Secret_LoginPassword_Create{}
 				subFlags = flag.NewFlagSet("client secret login password create", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.LoginPassword.Create.Login, "login", "", "login-password secret login")
 				subFlags.StringVar(&target.Secret.LoginPassword.Create.Password, "password", "", "login-password secret password")
@@ -263,7 +212,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 					os.Exit(1)
 				}
 			case "delete":
-				target.Secret.LoginPassword.Delete = &pipeline.PipelineInitTree_Secret_LoginPassword_Delete{}
+				target.Secret.LoginPassword.Delete = &PipelineInitTree_Secret_LoginPassword_Delete{}
 				subFlags = flag.NewFlagSet("client secret login password delete", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.LoginPassword.Delete.Id, "id", "", "text secret id")
 				subFlags.Parse(args)
@@ -273,7 +222,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 				}
 
 			case "update":
-				target.Secret.LoginPassword.Update = &pipeline.PipelineInitTree_Secret_LoginPassword_Update{}
+				target.Secret.LoginPassword.Update = &PipelineInitTree_Secret_LoginPassword_Update{}
 				subFlags = flag.NewFlagSet("client secret login password update", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.LoginPassword.Update.Id, "id", "", "login password secret id")
 				subFlags.StringVar(&target.Secret.LoginPassword.Update.Login, "login", "", "login secret data")
@@ -290,7 +239,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 				os.Exit(1)
 			}
 		case "credit-card":
-			target.Secret.CreditCard = &pipeline.PipelineInitTree_Secret_CreditCard{}
+			target.Secret.CreditCard = &PipelineInitTree_Secret_CreditCard{}
 			subFlags := flag.NewFlagSet("credit-card", flag.ExitOnError)
 			subFlags.Usage = func() {
 				fmt.Fprintf(os.Stderr, "Usage: ./client secret credit-card\n")
@@ -309,7 +258,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 			args = args[1:]
 			switch subcommand {
 			case "get":
-				target.Secret.CreditCard.Get = &pipeline.PipelineInitTree_Secret_CreditCard_Get{}
+				target.Secret.CreditCard.Get = &PipelineInitTree_Secret_CreditCard_Get{}
 				subFlags = flag.NewFlagSet("client secret credit-card get", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.CreditCard.Get.Id, "id", "", "credit card secret id")
 				subFlags.Parse(args)
@@ -318,7 +267,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 					os.Exit(1)
 				}
 			case "create":
-				target.Secret.CreditCard.Create = &pipeline.PipelineInitTree_Secret_CreditCard_Create{}
+				target.Secret.CreditCard.Create = &PipelineInitTree_Secret_CreditCard_Create{}
 				subFlags = flag.NewFlagSet("client secret credit card create", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.CreditCard.Create.CardNumber, "number", "", "credit card number")
 				subFlags.StringVar(&target.Secret.CreditCard.Create.CardHolder, "owner", "", "credit card owner")
@@ -333,7 +282,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 					os.Exit(1)
 				}
 			case "delete":
-				target.Secret.CreditCard.Delete = &pipeline.PipelineInitTree_Secret_CreditCard_Delete{}
+				target.Secret.CreditCard.Delete = &PipelineInitTree_Secret_CreditCard_Delete{}
 				subFlags = flag.NewFlagSet("client secret credit card delete", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.CreditCard.Delete.Id, "id", "", "credit card secret id")
 				subFlags.Parse(args)
@@ -343,7 +292,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 				}
 
 			case "update":
-				target.Secret.CreditCard.Update = &pipeline.PipelineInitTree_Secret_CreditCard_Update{}
+				target.Secret.CreditCard.Update = &PipelineInitTree_Secret_CreditCard_Update{}
 				subFlags = flag.NewFlagSet("client secret credit card update", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.CreditCard.Update.Id,
 					"id", "", "credit card secret id")
@@ -368,7 +317,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 				os.Exit(1)
 			}
 		case "file":
-			target.Secret.File = &pipeline.PipelineInitTree_Secret_File{}
+			target.Secret.File = &PipelineInitTree_Secret_File{}
 			subFlags = flag.NewFlagSet("file", flag.ExitOnError)
 			subFlags.Usage = func() {
 				fmt.Fprintf(os.Stderr, "Usage: ./client secret file\n")
@@ -387,7 +336,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 			args = args[1:]
 			switch subcommand {
 			case "download":
-				target.Secret.File.Download = &pipeline.PipelineInitTree_Secret_File_Download{}
+				target.Secret.File.Download = &PipelineInitTree_Secret_File_Download{}
 				subFlags = flag.NewFlagSet("client secret file download", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.File.Download.Id, "id", "", "file secret id")
 				subFlags.StringVar(&target.Secret.File.Download.FilePath, "path", "", "file secret id")
@@ -397,7 +346,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 					os.Exit(1)
 				}
 			case "upload":
-				target.Secret.File.Upload = &pipeline.PipelineInitTree_Secret_File_Upload{}
+				target.Secret.File.Upload = &PipelineInitTree_Secret_File_Upload{}
 				subFlags = flag.NewFlagSet("client secret file upload", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.File.Upload.FilePath, "path", "", "file secret id")
 				subFlags.Parse(args)
@@ -406,7 +355,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 					os.Exit(1)
 				}
 			case "delete":
-				target.Secret.File.Delete = &pipeline.PipelineInitTree_Secret_File_Delete{}
+				target.Secret.File.Delete = &PipelineInitTree_Secret_File_Delete{}
 				subFlags = flag.NewFlagSet("client secret file delete", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.File.Delete.Id, "id", "", "file secret id")
 				subFlags.Parse(args)
@@ -415,7 +364,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 					os.Exit(1)
 				}
 			case "update":
-				target.Secret.File.Update = &pipeline.PipelineInitTree_Secret_File_Update{}
+				target.Secret.File.Update = &PipelineInitTree_Secret_File_Update{}
 				subFlags = flag.NewFlagSet("client secret file update", flag.ExitOnError)
 				subFlags.StringVar(&target.Secret.File.Update.Id, "id", "", "file secret id")
 				subFlags.StringVar(&target.Secret.File.Update.FilePath, "path", "", "file secret id")
@@ -429,7 +378,7 @@ func GetClientPipelineConfigFromCli() *pipeline.PipelineInitTree {
 				os.Exit(1)
 			}
 		case "list":
-			target.Secret.List = &pipeline.PipelineInitTree_Secret_List{}
+			target.Secret.List = &PipelineInitTree_Secret_List{}
 			subFlags = flag.NewFlagSet("file", flag.ExitOnError)
 			subFlags.Usage = func() {
 				fmt.Fprintf(os.Stderr, "Usage: ./client secret list\n")

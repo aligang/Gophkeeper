@@ -2,10 +2,10 @@ package tokengetter
 
 import (
 	"context"
-	account2 "github.com/aligang/Gophkeeper/pkg/common/account"
+	"github.com/aligang/Gophkeeper/pkg/client/config"
+	"github.com/aligang/Gophkeeper/pkg/common/account"
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
-	"github.com/aligang/Gophkeeper/pkg/config"
-	"github.com/aligang/Gophkeeper/pkg/token"
+	"github.com/aligang/Gophkeeper/pkg/common/token"
 	"google.golang.org/grpc"
 	"log"
 )
@@ -15,9 +15,9 @@ type TokenGetter struct {
 	AuthServiceAddress string
 	Login              string
 	Password           string
-	GetToken func() *token.Token
-	Client   account2.AccountServiceClient
-	logger   *logging.InternalLogger
+	GetToken           func() *token.Token
+	Client             account.AccountServiceClient
+	logger             *logging.InternalLogger
 }
 
 func (t *TokenGetter) getStaticToken() *token.Token {
@@ -36,7 +36,7 @@ func (t *TokenGetter) getDynamicToken() *token.Token {
 	logger.Debug("Fetching token from AuthServer")
 	resp, err := t.Client.Authenticate(
 		context.Background(),
-		&account2.AuthenticationRequest{Login: t.Login, Password: t.Password})
+		&account.AuthenticationRequest{Login: t.Login, Password: t.Password})
 	if err != nil {
 		logger.Debug("Could not fetch token from AuthServer")
 		log.Fatal(err.Error())
@@ -46,7 +46,7 @@ func (t *TokenGetter) getDynamicToken() *token.Token {
 	return resp.Token
 }
 
-func New(conn grpc.ClientConnInterface, cfg *config.ClientConfig) *TokenGetter {
+func New(conn grpc.ClientConnInterface, cfg *config.Config) *TokenGetter {
 	var t *TokenGetter
 	if cfg.StaticToken != "" {
 		t = &TokenGetter{
@@ -61,7 +61,7 @@ func New(conn grpc.ClientConnInterface, cfg *config.ClientConfig) *TokenGetter {
 		AuthServiceAddress: cfg.ServerAddress,
 		Login:              cfg.Login,
 		Password:           cfg.Password,
-		Client:             account2.NewAccountServiceClient(conn),
+		Client:             account.NewAccountServiceClient(conn),
 		logger:             logging.Logger.GetSubLogger("Dynamic", "Token"),
 	}
 	t.GetToken = t.getDynamicToken

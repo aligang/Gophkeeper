@@ -1,16 +1,16 @@
 package config
 
-func GetServerConfig() *ServerConfig {
-	var cfg *ServerConfig
-	cfg = getServerConfigFromEnv().merge(getServerConfigFromCli())
+func GetConfig() *Config {
+	var cfg *Config
+	cfg = getConfigFromEnv().merge(getConfigFromCli())
 	if cfg.ConfigFile != "" {
-		cfg = cfg.merge(getServerConfigFromYaml(cfg.ConfigFile))
+		cfg = cfg.merge(getConfigFromYaml(cfg.ConfigFile))
 	}
 	cfg = cfg.merge(getServerDefaultConfig())
 	return cfg
 }
 
-func (c *ServerConfig) merge(another *ServerConfig) *ServerConfig {
+func (c *Config) merge(another *Config) *Config {
 	if c.Address == "" && another.Address != "" {
 		c.Address = another.Address
 	}
@@ -45,7 +45,6 @@ func (c *ServerConfig) merge(another *ServerConfig) *ServerConfig {
 	}
 	return c
 }
-
 
 func getRepoValueFromName(n *string) RepositoryType {
 	if repoType, ok := RepositoryType_value[*n]; ok {

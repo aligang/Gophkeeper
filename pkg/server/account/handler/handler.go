@@ -6,11 +6,11 @@ import (
 	account2 "github.com/aligang/Gophkeeper/pkg/common/account"
 	instance2 "github.com/aligang/Gophkeeper/pkg/common/account/instance"
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
-	"github.com/aligang/Gophkeeper/pkg/config"
+	"github.com/aligang/Gophkeeper/pkg/common/token/instance"
+	"github.com/aligang/Gophkeeper/pkg/server/config"
 	"github.com/aligang/Gophkeeper/pkg/server/encryption"
 	"github.com/aligang/Gophkeeper/pkg/server/repository"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
-	tokenInstance "github.com/aligang/Gophkeeper/pkg/token/instance"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -20,10 +20,10 @@ import (
 type GrpcHandler struct {
 	account2.UnimplementedAccountServiceServer
 	storage repository.Storage
-	conf    *config.ServerConfig
+	conf    *config.Config
 }
 
-func New(storage repository.Storage, config *config.ServerConfig) *GrpcHandler {
+func New(storage repository.Storage, config *config.Config) *GrpcHandler {
 	return &GrpcHandler{
 		storage: storage,
 		conf:    config,
@@ -108,14 +108,14 @@ func (h *GrpcHandler) Authenticate(ctx context.Context, request *account2.Authen
 	if len(accountTokens) == 0 {
 		logger.Debug("No tokens were found within database")
 	}
-	var t *tokenInstance.Token
+	var t *instance.Token
 	if len(accountTokens) > 0 && accountTokens[0].IssuedAt.Add(
 		time.Minute*time.Duration(h.conf.TokenRenewalTimeMinutes)).After(time.Now()) {
 		logger.Debug("Using existing token")
 		t = accountTokens[0]
 	} else {
 		logger.Debug("Creating new token record")
-		t = tokenInstance.New(acc.Id)
+		t = instance.New(acc.Id)
 		err = h.storage.WithinTransaction(ctx, func(tctx context.Context, tx *transaction.DBTransaction) error {
 			logger.Debug("Adding new token record to sql id: %s", t.Id)
 			return h.storage.AddToken(tctx, t, tx)
@@ -127,5 +127,5 @@ func (h *GrpcHandler) Authenticate(ctx context.Context, request *account2.Authen
 	}
 
 	logger.Debug("Sending token to client")
-	return &account2.AuthenticationResponse{Token: tokenInstance.ConvertTokenInstance(t)}, nil
+	return &account2.AuthenticationResponse{Token: instance.ConvertTokenInstance(t)}, nil
 }

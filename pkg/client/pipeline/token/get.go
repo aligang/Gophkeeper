@@ -2,8 +2,8 @@ package token
 
 import (
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
-	"github.com/aligang/Gophkeeper/pkg/logging"
-	"github.com/aligang/Gophkeeper/pkg/token/tokengetter"
+	"github.com/aligang/Gophkeeper/pkg/client/token/tokengetter"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
 )
 
 func Get(getter *tokengetter.TokenGetter, cli *pipeline.PipelineInitTree) {
