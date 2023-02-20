@@ -3,3 +3,4 @@ file_storage: "/tmp/gophkeeper"
 repository_type: IN_MEMORY
 database_dsn: "postgres://gophkeeper:gophkeeper@127.0.0.1:5432/gophkeeper"
 log_level: "WARNING"
+secret_encryption_enabled: true

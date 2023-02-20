@@ -47,24 +47,24 @@ var ReferenceTokenCreationTime11, _ = time.Parse(time.RFC3339, "3023-02-07T15:00
 var ReferenceTokenCreationTime2, _ = time.Parse(time.RFC3339, "3023-02-07T14:00:02+03:00")
 
 var ReferenceTokenInstance1 = &tokenInstance.Token{
-	Id:       ReferenceTokenId1,
-	Value:    ReferenceTokenValue1,
-	Owner:    ReferenceAccountId1,
-	IssuedAt: ReferenceTokenCreationTime1,
+	Id:         ReferenceTokenId1,
+	TokenValue: ReferenceTokenValue1,
+	Owner:      ReferenceAccountId1,
+	IssuedAt:   ReferenceTokenCreationTime1,
 }
 
 var ReferenceTokenInstance11 = &tokenInstance.Token{
-	Id:       ReferenceTokenId11,
-	Value:    ReferenceTokenValue11,
-	Owner:    ReferenceAccountId1,
-	IssuedAt: ReferenceTokenCreationTime11,
+	Id:         ReferenceTokenId11,
+	TokenValue: ReferenceTokenValue11,
+	Owner:      ReferenceAccountId1,
+	IssuedAt:   ReferenceTokenCreationTime11,
 }
 
 var ReferenceTokenInstance2 = &tokenInstance.Token{
-	Id:       ReferenceTokenId2,
-	Value:    ReferenceTokenValue2,
-	Owner:    ReferenceAccountId2,
-	IssuedAt: ReferenceTokenCreationTime2,
+	Id:         ReferenceTokenId2,
+	TokenValue: ReferenceTokenValue2,
+	Owner:      ReferenceAccountId2,
+	IssuedAt:   ReferenceTokenCreationTime2,
 }
 
 const ReferenceSecretId1 = "test-text-id1"
@@ -173,7 +173,7 @@ var ReferenceCreditCardSecretInstance1 = &secretInstance.CreditCardSecret{
 		CreatedAt:  ReferenceSecretCreationTime1,
 		ModifiedAt: ReferenceSecretModificationTime1,
 	},
-	Number:     ReferenceCreditCardSecretCardNumber1,
+	CardNumber: ReferenceCreditCardSecretCardNumber1,
 	CardHolder: ReferenceCreditCardSecretCardHolder1,
 	ValidTill:  ReferenceCreditCardSecretValidTill1,
 	Cvc:        ReferenceCreditCardSecretCvc1,
@@ -186,7 +186,7 @@ var ReferenceCreditCardSecretInstance11 = &secretInstance.CreditCardSecret{
 		CreatedAt:  ReferenceSecretCreationTime11,
 		ModifiedAt: ReferenceSecretModificationTime11,
 	},
-	Number:     ReferenceCreditCardSecretCardNumber11,
+	CardNumber: ReferenceCreditCardSecretCardNumber11,
 	CardHolder: ReferenceCreditCardSecretCardHolder11,
 	ValidTill:  ReferenceCreditCardSecretValidTill11,
 	Cvc:        ReferenceCreditCardSecretCvc11,
@@ -199,7 +199,7 @@ var ReferenceCreditCardSecretInstance2 = &secretInstance.CreditCardSecret{
 		CreatedAt:  ReferenceSecretCreationTime2,
 		ModifiedAt: ReferenceSecretModificationTime2,
 	},
-	Number:     ReferenceCreditCardSecretCardNumber2,
+	CardNumber: ReferenceCreditCardSecretCardNumber2,
 	CardHolder: ReferenceCreditCardSecretCardHolder2,
 	ValidTill:  ReferenceCreditCardSecretValidTill2,
 	Cvc:        ReferenceCreditCardSecretCvc2,

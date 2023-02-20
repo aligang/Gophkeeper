@@ -21,3 +21,7 @@ func New(storage repository.Storage, fileStorage *fs.FileRepository, cfg *config
 		cfg:         cfg,
 	}
 }
+
+func (h *GrpcHandler) isSecretEncryptionEnabled() bool {
+	return h.cfg.SecretEncryptionEnabled
+}

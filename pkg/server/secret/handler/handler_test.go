@@ -2,9 +2,9 @@ package handler
 
 import (
 	"context"
-	secret2 "github.com/aligang/Gophkeeper/pkg/common/secret"
+	"github.com/aligang/Gophkeeper/pkg/common/secret"
 	"github.com/aligang/Gophkeeper/pkg/server/config"
-	fixtures2 "github.com/aligang/Gophkeeper/pkg/server/fixtures"
+	"github.com/aligang/Gophkeeper/pkg/server/fixtures"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/fs"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/inmemory"
 	"github.com/stretchr/testify/assert"
@@ -36,10 +36,10 @@ type handlerTestInput struct {
 }
 
 type handlerTestExpected struct {
-	expectedRunResponse   *secret2.SecretDescription
+	expectedRunResponse   *secret.SecretDescription
 	expectedRunErrorMsg   error
-	expectedSecretType    secret2.SecretType
-	secret                secret2.Secret
+	expectedSecretType    secret.SecretType
+	secret                secret.Secret
 	expectedCheckErrorMsg error
 	creationTime          string
 	modificationTime      string
@@ -50,34 +50,34 @@ func TestWritableOperation(t *testing.T) {
 
 	tests := []struct {
 		name     string
-		run      func(ctx context.Context, r *GrpcHandler) (*secret2.SecretDescription, error)
+		run      func(ctx context.Context, r *GrpcHandler) (*secret.SecretDescription, error)
 		Expected handlerTestExpected
 		Input    handlerTestInput
 	}{
 		{
 			name: "Create First Text Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_TEXT,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_PlainText{
-						PlainText: &secret2.PlainText{
-							Data: fixtures2.ReferenceTextSecretValue1,
+				expectedSecretType:    secret.SecretType_TEXT,
+				secret: secret.Secret{
+					Secret: &secret.Secret_PlainText{
+						PlainText: &secret.PlainText{
+							Data: fixtures.ReferenceTextSecretValue1,
 						},
 					},
 				},
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: "",
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				desc, err := h.Create(ctx, &secret2.CreateSecretRequest{
-					Secret: &secret2.CreateSecretRequest_Text{
-						Text: &secret2.PlainText{
-							Data: fixtures2.ReferenceTextSecretValue1,
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				desc, err := h.Create(ctx, &secret.CreateSecretRequest{
+					Secret: &secret.CreateSecretRequest_Text{
+						Text: &secret.PlainText{
+							Data: fixtures.ReferenceTextSecretValue1,
 						},
 					},
 				})
@@ -88,27 +88,27 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Create Second Text Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_TEXT,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_PlainText{
-						PlainText: &secret2.PlainText{
-							Data: fixtures2.ReferenceTextSecretValue11,
+				expectedSecretType:    secret.SecretType_TEXT,
+				secret: secret.Secret{
+					Secret: &secret.Secret_PlainText{
+						PlainText: &secret.PlainText{
+							Data: fixtures.ReferenceTextSecretValue11,
 						},
 					},
 				},
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: "",
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				desc, err := h.Create(ctx, &secret2.CreateSecretRequest{
-					Secret: &secret2.CreateSecretRequest_Text{
-						Text: &secret2.PlainText{
-							Data: fixtures2.ReferenceTextSecretValue11,
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				desc, err := h.Create(ctx, &secret.CreateSecretRequest{
+					Secret: &secret.CreateSecretRequest_Text{
+						Text: &secret.PlainText{
+							Data: fixtures.ReferenceTextSecretValue11,
 						},
 					},
 				})
@@ -119,27 +119,27 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Create Text Secret For another account",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId2,
+				accountId: fixtures.ReferenceAccountId2,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_TEXT,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_PlainText{
-						PlainText: &secret2.PlainText{
-							Data: fixtures2.ReferenceTextSecretValue2,
+				expectedSecretType:    secret.SecretType_TEXT,
+				secret: secret.Secret{
+					Secret: &secret.Secret_PlainText{
+						PlainText: &secret.PlainText{
+							Data: fixtures.ReferenceTextSecretValue2,
 						},
 					},
 				},
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: "",
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				desc, err := h.Create(ctx, &secret2.CreateSecretRequest{
-					Secret: &secret2.CreateSecretRequest_Text{
-						Text: &secret2.PlainText{
-							Data: fixtures2.ReferenceTextSecretValue2,
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				desc, err := h.Create(ctx, &secret.CreateSecretRequest{
+					Secret: &secret.CreateSecretRequest_Text{
+						Text: &secret.PlainText{
+							Data: fixtures.ReferenceTextSecretValue2,
 						},
 					},
 				})
@@ -150,15 +150,15 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Update Existing Text Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_TEXT,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_PlainText{
-						PlainText: &secret2.PlainText{
+				expectedSecretType:    secret.SecretType_TEXT,
+				secret: secret.Secret{
+					Secret: &secret.Secret_PlainText{
+						PlainText: &secret.PlainText{
 							Data: "UpdatedTextSecret",
 						},
 					},
@@ -166,10 +166,10 @@ func TestWritableOperation(t *testing.T) {
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: time.Now().Format(time.RFC3339),
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				return h.Update(ctx, &secret2.UpdateSecretRequest{
-					Secret: &secret2.UpdateSecretRequest_Text{
-						Text: &secret2.PlainText{
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				return h.Update(ctx, &secret.UpdateSecretRequest{
+					Secret: &secret.UpdateSecretRequest_Text{
+						Text: &secret.PlainText{
 							Data: "UpdatedTextSecret",
 						},
 					},
@@ -180,33 +180,33 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Delete Existing Text Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: status.Errorf(codes.NotFound, "Secret not found"),
-				expectedSecretType:    secret2.SecretType_TEXT,
+				expectedSecretType:    secret.SecretType_TEXT,
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				_, err := h.Delete(ctx, &secret2.DeleteSecretRequest{
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				_, err := h.Delete(ctx, &secret.DeleteSecretRequest{
 					Id:         ReferenceTextSecretId1,
-					SecretType: secret2.SecretType_TEXT,
+					SecretType: secret.SecretType_TEXT,
 				})
-				return &secret2.SecretDescription{Id: ReferenceTextSecretId1}, err
+				return &secret.SecretDescription{Id: ReferenceTextSecretId1}, err
 			},
 		},
 		{
 			name: "Update NonExisting Text Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   status.Errorf(codes.Unavailable, "Could not update secret"),
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_TEXT,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_PlainText{
-						PlainText: &secret2.PlainText{
+				expectedSecretType:    secret.SecretType_TEXT,
+				secret: secret.Secret{
+					Secret: &secret.Secret_PlainText{
+						PlainText: &secret.PlainText{
 							Data: "UpdatedTextSecret",
 						},
 					},
@@ -214,10 +214,10 @@ func TestWritableOperation(t *testing.T) {
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: time.Now().Format(time.RFC3339),
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				return h.Update(ctx, &secret2.UpdateSecretRequest{
-					Secret: &secret2.UpdateSecretRequest_Text{
-						Text: &secret2.PlainText{
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				return h.Update(ctx, &secret.UpdateSecretRequest{
+					Secret: &secret.UpdateSecretRequest_Text{
+						Text: &secret.PlainText{
 							Data: "UpdatedTextSecret",
 						},
 					},
@@ -228,45 +228,45 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Delete Non-Existing Text Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   status.Errorf(codes.NotFound, "Could not delete secret"),
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_TEXT,
+				expectedSecretType:    secret.SecretType_TEXT,
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				_, err := h.Delete(ctx, &secret2.DeleteSecretRequest{
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				_, err := h.Delete(ctx, &secret.DeleteSecretRequest{
 					Id:         ReferenceTextSecretId1,
-					SecretType: secret2.SecretType_TEXT,
+					SecretType: secret.SecretType_TEXT,
 				})
-				return &secret2.SecretDescription{Id: ReferenceTextSecretId1}, err
+				return &secret.SecretDescription{Id: ReferenceTextSecretId1}, err
 			},
 		},
 		{
 			name: "Create First File Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_FILE,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_File{
-						File: &secret2.File{
-							Data: fixtures2.ReferenceFileContent1,
+				expectedSecretType:    secret.SecretType_FILE,
+				secret: secret.Secret{
+					Secret: &secret.Secret_File{
+						File: &secret.File{
+							Data: fixtures.ReferenceFileContent1,
 						},
 					},
 				},
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: "",
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				desc, err := h.Create(ctx, &secret2.CreateSecretRequest{
-					Secret: &secret2.CreateSecretRequest_File{
-						File: &secret2.File{
-							Data: fixtures2.ReferenceFileContent1,
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				desc, err := h.Create(ctx, &secret.CreateSecretRequest{
+					Secret: &secret.CreateSecretRequest_File{
+						File: &secret.File{
+							Data: fixtures.ReferenceFileContent1,
 						},
 					},
 				})
@@ -277,27 +277,27 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Create Second File Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_FILE,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_File{
-						File: &secret2.File{
-							Data: fixtures2.ReferenceFileContent11,
+				expectedSecretType:    secret.SecretType_FILE,
+				secret: secret.Secret{
+					Secret: &secret.Secret_File{
+						File: &secret.File{
+							Data: fixtures.ReferenceFileContent11,
 						},
 					},
 				},
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: "",
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				desc, err := h.Create(ctx, &secret2.CreateSecretRequest{
-					Secret: &secret2.CreateSecretRequest_File{
-						File: &secret2.File{
-							Data: fixtures2.ReferenceFileContent11,
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				desc, err := h.Create(ctx, &secret.CreateSecretRequest{
+					Secret: &secret.CreateSecretRequest_File{
+						File: &secret.File{
+							Data: fixtures.ReferenceFileContent11,
 						},
 					},
 				})
@@ -308,27 +308,27 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Create File Secret For Another Account",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId2,
+				accountId: fixtures.ReferenceAccountId2,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_FILE,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_File{
-						File: &secret2.File{
-							Data: fixtures2.ReferenceFileContent2,
+				expectedSecretType:    secret.SecretType_FILE,
+				secret: secret.Secret{
+					Secret: &secret.Secret_File{
+						File: &secret.File{
+							Data: fixtures.ReferenceFileContent2,
 						},
 					},
 				},
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: "",
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				desc, err := h.Create(ctx, &secret2.CreateSecretRequest{
-					Secret: &secret2.CreateSecretRequest_File{
-						File: &secret2.File{
-							Data: fixtures2.ReferenceFileContent2,
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				desc, err := h.Create(ctx, &secret.CreateSecretRequest{
+					Secret: &secret.CreateSecretRequest_File{
+						File: &secret.File{
+							Data: fixtures.ReferenceFileContent2,
 						},
 					},
 				})
@@ -339,15 +339,15 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Update  File Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_FILE,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_File{
-						File: &secret2.File{
+				expectedSecretType:    secret.SecretType_FILE,
+				secret: secret.Secret{
+					Secret: &secret.Secret_File{
+						File: &secret.File{
 							Data: []byte("NewlyUpdatedFileSecret"),
 						},
 					},
@@ -355,10 +355,10 @@ func TestWritableOperation(t *testing.T) {
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: time.Now().Format(time.RFC3339),
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				return h.Update(ctx, &secret2.UpdateSecretRequest{
-					Secret: &secret2.UpdateSecretRequest_File{
-						File: &secret2.File{
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				return h.Update(ctx, &secret.UpdateSecretRequest{
+					Secret: &secret.UpdateSecretRequest_File{
+						File: &secret.File{
 							Data: []byte("NewlyUpdatedFileSecret"),
 						},
 					},
@@ -370,33 +370,33 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Delete Existing File Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   nil,
 				expectedCheckErrorMsg: status.Errorf(codes.NotFound, "Secret not found"),
-				expectedSecretType:    secret2.SecretType_FILE,
+				expectedSecretType:    secret.SecretType_FILE,
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				_, err := h.Delete(ctx, &secret2.DeleteSecretRequest{
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				_, err := h.Delete(ctx, &secret.DeleteSecretRequest{
 					Id:         ReferenceFileSecretId1,
-					SecretType: secret2.SecretType_FILE,
+					SecretType: secret.SecretType_FILE,
 				})
-				return &secret2.SecretDescription{Id: ReferenceFileSecretId1}, err
+				return &secret.SecretDescription{Id: ReferenceFileSecretId1}, err
 			},
 		},
 		{
 			name: "Update NonExisting File Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   status.Errorf(codes.Unavailable, "Could not update secret"),
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_FILE,
-				secret: secret2.Secret{
-					Secret: &secret2.Secret_File{
-						File: &secret2.File{
+				expectedSecretType:    secret.SecretType_FILE,
+				secret: secret.Secret{
+					Secret: &secret.Secret_File{
+						File: &secret.File{
 							Data: []byte("UpdatedTextSecret"),
 						},
 					},
@@ -404,10 +404,10 @@ func TestWritableOperation(t *testing.T) {
 				creationTime:     time.Now().Format(time.RFC3339),
 				modificationTime: time.Now().Format(time.RFC3339),
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				return h.Update(ctx, &secret2.UpdateSecretRequest{
-					Secret: &secret2.UpdateSecretRequest_Text{
-						Text: &secret2.PlainText{
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				return h.Update(ctx, &secret.UpdateSecretRequest{
+					Secret: &secret.UpdateSecretRequest_Text{
+						Text: &secret.PlainText{
 							Data: "UpdatedTextSecret",
 						},
 					},
@@ -418,35 +418,35 @@ func TestWritableOperation(t *testing.T) {
 		{
 			name: "Delete Non-Existing Text Secret",
 			Input: handlerTestInput{
-				accountId: fixtures2.ReferenceAccountId1,
+				accountId: fixtures.ReferenceAccountId1,
 			},
 			Expected: handlerTestExpected{
 				expectedRunErrorMsg:   status.Errorf(codes.NotFound, "Could not delete secret"),
 				expectedCheckErrorMsg: nil,
-				expectedSecretType:    secret2.SecretType_FILE,
+				expectedSecretType:    secret.SecretType_FILE,
 			},
-			run: func(ctx context.Context, h *GrpcHandler) (*secret2.SecretDescription, error) {
-				_, err := h.Delete(ctx, &secret2.DeleteSecretRequest{
+			run: func(ctx context.Context, h *GrpcHandler) (*secret.SecretDescription, error) {
+				_, err := h.Delete(ctx, &secret.DeleteSecretRequest{
 					Id:         ReferenceTextSecretId1,
-					SecretType: secret2.SecretType_FILE,
+					SecretType: secret.SecretType_FILE,
 				})
-				return &secret2.SecretDescription{Id: ReferenceFileSecretId1}, err
+				return &secret.SecretDescription{Id: ReferenceFileSecretId1}, err
 			},
 		},
 	}
 
 	storage := func() *inmemory.Repository {
 		r := inmemory.New()
-		_ = r.Register(ctx, fixtures2.ReferenceAccountInstance1)
-		_ = r.Register(ctx, fixtures2.ReferenceAccountInstance2)
-		_ = r.AddToken(ctx, fixtures2.ReferenceTokenInstance1)
-		_ = r.AddToken(ctx, fixtures2.ReferenceTokenInstance11)
-		_ = r.AddToken(ctx, fixtures2.ReferenceTokenInstance2)
+		_ = r.Register(ctx, fixtures.ReferenceAccountInstance1, nil)
+		_ = r.Register(ctx, fixtures.ReferenceAccountInstance2, nil)
+		_ = r.AddToken(ctx, fixtures.ReferenceTokenInstance1, nil)
+		_ = r.AddToken(ctx, fixtures.ReferenceTokenInstance11, nil)
+		_ = r.AddToken(ctx, fixtures.ReferenceTokenInstance2, nil)
 		return r
 	}()
 
-	fileStorage := fs.New(&config.ServerConfig{FileStorage: "/tmp/" + fixtures2.PathFixture()})
-	handler := New(storage, fileStorage, &config.ServerConfig{SecretEncryptionEnabled: false})
+	fileStorage := fs.New(&config.Config{FileStorage: "/tmp/" + fixtures.PathFixture()})
+	handler := New(storage, fileStorage, &config.Config{SecretEncryptionEnabled: false})
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -458,7 +458,7 @@ func TestWritableOperation(t *testing.T) {
 			runResp, err := test.run(ctx, handler)
 			assert.Equal(t, test.Expected.expectedRunErrorMsg, err)
 			if err == nil {
-				checkResp, err := handler.Get(ctx, &secret2.GetSecretRequest{
+				checkResp, err := handler.Get(ctx, &secret.GetSecretRequest{
 					Id:         runResp.Id,
 					SecretType: test.Expected.expectedSecretType,
 				})
@@ -472,17 +472,17 @@ func TestWritableOperation(t *testing.T) {
 					assert.Equal(t, test.Expected.creationTime, checkResp.CreatedAt)
 					assert.Equal(t, test.Expected.modificationTime, checkResp.ModifiedAt)
 					switch test.Expected.expectedSecretType {
-					case secret2.SecretType_TEXT:
+					case secret.SecretType_TEXT:
 						assert.Equal(t, test.Expected.secret.GetPlainText().GetData(), checkResp.GetPlainText().GetData())
-					case secret2.SecretType_LOGIN_PASSWORD:
-						assert.Equal(t, fixtures2.ReferenceLoginPasswordSecretLogin1, checkResp.GetLoginPassword().GetLogin())
-						assert.Equal(t, fixtures2.ReferenceLoginPasswordSecretPassword1, checkResp.GetLoginPassword().GetPassword())
-					case secret2.SecretType_CREDIT_CARD:
-						assert.Equal(t, fixtures2.ReferenceCreditCardSecretCardNumber1, checkResp.GetCreditCard().GetNumber())
-						assert.Equal(t, fixtures2.ReferenceCreditCardSecretCardHolder1, checkResp.GetCreditCard().GetCardholderName())
-						assert.Equal(t, fixtures2.ReferenceCreditCardSecretValidTill1, checkResp.GetCreditCard().GetValidTill())
-						assert.Equal(t, fixtures2.ReferenceCreditCardSecretCvc11, checkResp.GetCreditCard().GetCvc())
-					case secret2.SecretType_FILE:
+					case secret.SecretType_LOGIN_PASSWORD:
+						assert.Equal(t, fixtures.ReferenceLoginPasswordSecretLogin1, checkResp.GetLoginPassword().GetLogin())
+						assert.Equal(t, fixtures.ReferenceLoginPasswordSecretPassword1, checkResp.GetLoginPassword().GetPassword())
+					case secret.SecretType_CREDIT_CARD:
+						assert.Equal(t, fixtures.ReferenceCreditCardSecretCardNumber1, checkResp.GetCreditCard().GetNumber())
+						assert.Equal(t, fixtures.ReferenceCreditCardSecretCardHolder1, checkResp.GetCreditCard().GetCardholderName())
+						assert.Equal(t, fixtures.ReferenceCreditCardSecretValidTill1, checkResp.GetCreditCard().GetValidTill())
+						assert.Equal(t, fixtures.ReferenceCreditCardSecretCvc11, checkResp.GetCreditCard().GetCvc())
+					case secret.SecretType_FILE:
 						assert.Equal(t, test.Expected.secret.GetFile().GetData(), checkResp.GetFile().GetData())
 					}
 				}

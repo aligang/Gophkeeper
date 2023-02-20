@@ -5,6 +5,7 @@ import (
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
 	secret "github.com/aligang/Gophkeeper/pkg/common/secret"
 	"github.com/aligang/Gophkeeper/pkg/common/secret/instance"
+	"github.com/aligang/Gophkeeper/pkg/server/encryption"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -48,6 +49,18 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret.CreateSecretReques
 		}
 
 		err = h.storage.WithinTransaction(ctx, func(ctx context.Context, tx *transaction.DBTransaction) error {
+			acc, terr := h.storage.GetAccountById(ctx, accountID, tx)
+			if terr != nil {
+				logger.Crit("Could not fetch account information from database for account %s", accountID)
+				return terr
+			}
+			if h.isSecretEncryptionEnabled() {
+				s, terr = encryption.EncryptTextSecret(s, acc.EncryptionKey)
+				if err != nil {
+					logger.Crit("Could not encrypt secret %s for account %s: %s", secretId, accountID, err.Error())
+					return terr
+				}
+			}
 			return h.storage.AddTextSecret(ctx, s, tx)
 		})
 		if err != nil {
@@ -67,6 +80,18 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret.CreateSecretReques
 			Password: req.GetLoginPassword().GetPassword(),
 		}
 		err = h.storage.WithinTransaction(ctx, func(ctx context.Context, tx *transaction.DBTransaction) error {
+			acc, terr := h.storage.GetAccountById(ctx, accountID, tx)
+			if terr != nil {
+				logger.Crit("Could not fetch account information from database for account %s", accountID)
+				return terr
+			}
+			if h.isSecretEncryptionEnabled() {
+				s, terr = encryption.EncryptLoginPasswordSecret(s, acc.EncryptionKey)
+				if err != nil {
+					logger.Crit("Could not encrypt secret %s for account %s: %s", secretId, accountID, err.Error())
+					return terr
+				}
+			}
 			return h.storage.AddLoginPasswordSecret(ctx, s, tx)
 		})
 		if err != nil {
@@ -88,6 +113,19 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret.CreateSecretReques
 			Cvc:        req.GetCreditCard().GetCvc(),
 		}
 		err = h.storage.WithinTransaction(ctx, func(ctx context.Context, tx *transaction.DBTransaction) error {
+			acc, terr := h.storage.GetAccountById(ctx, accountID, tx)
+			if terr != nil {
+				logger.Crit("Could not fetch account information from database for account %s", accountID)
+				return terr
+			}
+			if h.isSecretEncryptionEnabled() {
+				s, terr = encryption.EncryptCreditCardSecret(s, acc.EncryptionKey)
+				if err != nil {
+					logger.Crit("Could not encrypt secret %s for account %s: %s", secretId, accountID, err.Error())
+					return terr
+				}
+
+			}
 			return h.storage.AddCreditCardSecret(ctx, s, tx)
 		})
 		if err != nil {

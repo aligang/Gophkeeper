@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
 	"github.com/aligang/Gophkeeper/pkg/common/secret"
+	"github.com/aligang/Gophkeeper/pkg/server/encryption"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
@@ -29,14 +30,29 @@ func (h *GrpcHandler) Get(ctx context.Context, req *secret.GetSecretRequest) (*s
 
 	var resp *secret.Secret
 	logger.Info("Fetching secret %s for account %s", req.Id, accountID)
+
+	acc, err := h.storage.GetAccountById(ctx, accountID, nil)
+	if err != nil {
+		logger.Crit("Could not fetch account information from database for account %s", accountID)
+		return nil, status.Errorf(codes.Internal, "Account data not found")
+	}
+
 	switch req.SecretType {
 	case secret.SecretType_TEXT:
 		s, err := h.storage.GetTextSecret(ctx, req.Id, nil)
+
 		if err != nil {
 			return nil, status.Errorf(codes.NotFound, "Secret not found")
 		}
 		if err = CheckOwnership(s.AccountId, accountID); err != nil {
 			return nil, status.Errorf(codes.Unavailable, "Access prohibited")
+		}
+		if h.isSecretEncryptionEnabled() {
+			s, err = encryption.DecryptTextSecret(s, acc.EncryptionKey)
+			if err != nil {
+				logger.Crit("Could not decrypt secret %s for account %s: %s", req.Id, accountID, err.Error())
+				return nil, status.Errorf(codes.Internal, "Could not decrypt secret")
+			}
 		}
 		resp = convertTextSecretInstance(s)
 	case secret.SecretType_LOGIN_PASSWORD:
@@ -47,6 +63,13 @@ func (h *GrpcHandler) Get(ctx context.Context, req *secret.GetSecretRequest) (*s
 		if err = CheckOwnership(s.AccountId, accountID); err != nil {
 			return nil, status.Errorf(codes.Unavailable, "Access prohibited")
 		}
+		if h.isSecretEncryptionEnabled() {
+			s, err = encryption.DecryptLoginPasswordSecret(s, acc.EncryptionKey)
+			if err != nil {
+				logger.Crit("Could not decrypt secret %s for account %s: %s", req.Id, accountID, err.Error())
+				return nil, status.Errorf(codes.Internal, "Could not decrypt secret")
+			}
+		}
 		resp = convertLoginPasswordSecretInstance(s)
 	case secret.SecretType_CREDIT_CARD:
 		s, err := h.storage.GetCreditCardSecret(ctx, req.Id, nil)
@@ -55,6 +78,13 @@ func (h *GrpcHandler) Get(ctx context.Context, req *secret.GetSecretRequest) (*s
 		}
 		if err = CheckOwnership(s.AccountId, accountID); err != nil {
 			return nil, status.Errorf(codes.Unavailable, "Access prohibited")
+		}
+		if h.isSecretEncryptionEnabled() {
+			s, err = encryption.DecryptCreditCardSecret(s, acc.EncryptionKey)
+			if err != nil {
+				logger.Crit("Could not decrypt secret %s for account %s: %s", req.Id, accountID, err.Error())
+				return nil, status.Errorf(codes.Internal, "Could not decrypt secret")
+			}
 		}
 		resp = convertCreditCardSecretInstance(s)
 	case secret.SecretType_FILE:

@@ -5,6 +5,7 @@ import (
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
 	"github.com/aligang/Gophkeeper/pkg/common/secret"
 	"github.com/aligang/Gophkeeper/pkg/common/secret/instance"
+	"github.com/aligang/Gophkeeper/pkg/server/encryption"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -57,6 +58,20 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 				},
 				Text: req.GetText().GetData(),
 			}
+
+			acc, terr := h.storage.GetAccountById(ctx, accountID, tx)
+			if terr != nil {
+				logger.Crit("Could not fetch account information from database for account %s", accountID)
+				return terr
+			}
+			if h.isSecretEncryptionEnabled() {
+				s, terr = encryption.EncryptTextSecret(s, acc.EncryptionKey)
+				if err != nil {
+					logger.Crit("Could not encrypt secret %s for account %s: %s", s.Id, accountID, err.Error())
+					return terr
+				}
+			}
+
 			desc.Id = s.Id
 			desc.SecretType = secret.SecretType_TEXT
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
@@ -85,6 +100,20 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 				Login:    req.GetLoginPassword().GetLogin(),
 				Password: req.GetLoginPassword().GetPassword(),
 			}
+
+			acc, terr := h.storage.GetAccountById(ctx, accountID, tx)
+			if terr != nil {
+				logger.Crit("Could not fetch account information from database for account %s", accountID)
+				return terr
+			}
+			if h.isSecretEncryptionEnabled() {
+				s, terr = encryption.EncryptLoginPasswordSecret(s, acc.EncryptionKey)
+				if err != nil {
+					logger.Crit("Could not encrypt secret %s for account %s: %s", s.Id, accountID, err.Error())
+					return terr
+				}
+			}
+
 			desc.Id = s.Id
 			desc.SecretType = secret.SecretType_LOGIN_PASSWORD
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
@@ -113,6 +142,20 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretReques
 				ValidTill:  req.GetCreditCard().GetValidTill(),
 				Cvc:        req.GetCreditCard().GetCvc(),
 			}
+
+			acc, terr := h.storage.GetAccountById(ctx, accountID, tx)
+			if terr != nil {
+				logger.Crit("Could not fetch account information from database for account %s", accountID)
+				return terr
+			}
+			if h.isSecretEncryptionEnabled() {
+				s, terr = encryption.EncryptCreditCardSecret(s, acc.EncryptionKey)
+				if err != nil {
+					logger.Crit("Could not encrypt secret %s for account %s: %s", s.Id, accountID, err.Error())
+					return terr
+				}
+			}
+
 			desc.Id = s.Id
 			desc.SecretType = secret.SecretType_CREDIT_CARD
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
