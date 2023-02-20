@@ -20,6 +20,8 @@ func getConfigFromCli() *Config {
 		fmt.Fprintf(os.Stderr, "		-tr 'token renewal time'.\n")
 		fmt.Fprintf(os.Stderr, "		-fs 'file stale time'.\n")
 		fmt.Fprintf(os.Stderr, "		-e 'enable secret encryption'.\n")
+		fmt.Fprintf(os.Stderr, "		-cert 'certificate file path'.\n")
+		fmt.Fprintf(os.Stderr, "		-cert_key 'certificate key file  path'.\n")
 	}
 
 	flag.StringVar(&conf.Address, "a", "", "host to listen on")
@@ -29,6 +31,8 @@ func getConfigFromCli() *Config {
 	flag.Int64Var(&conf.TokenRenewalTimeMinutes, "tr", -1, "File Storage Path")
 	flag.Int64Var(&conf.FileStaleTimeMinutes, "fs", -1, "Config File Path")
 	flag.BoolVar(&conf.SecretEncryptionEnabled, "e", false, "Enable encryption")
+	flag.StringVar(&conf.TlsCertPath, "cert", "", "Tls Cert File Path")
+	flag.StringVar(&conf.TlsKeyPath, "cert_key", "", "Tls Cert Key Path")
 
 	var logLevel string
 	flag.StringVar(&logLevel, "log-level", "", "Loggin level")

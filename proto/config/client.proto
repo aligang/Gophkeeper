@@ -12,6 +12,9 @@ message Config {
   string password = 3;
   string static_token = 4;
 
+  bool   enable_tls_encryption = 5;
+  string ca_cert_path = 6;
+
   log_level.LogLevel log_level = 10;
 
   string config_file = 99;

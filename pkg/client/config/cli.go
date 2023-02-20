@@ -11,10 +11,13 @@ import (
 func getCliConfig(pipelineCfg *pipeline.PipelineInitTree) *Config {
 	cfg := &Config{}
 	var logLevel string
+	flag.StringVar(&cfg.ConfigFile, "c", "", "configuration file location. Default : /etc//etc/gophkeeper/client.yaml")
 	flag.StringVar(&cfg.ServerAddress, "a", "", "host to listen on")
 	flag.StringVar(&cfg.Login, "l", "", "File Storage Path")
 	flag.StringVar(&cfg.Password, "p", "", "Config File Path")
 	flag.StringVar(&logLevel, "log-level", "", "Logging level")
+	flag.StringVar(&cfg.CaCertPath, "ca-cert", "", "CA certificate File Path")
+	flag.BoolVar(&cfg.EnableTlsEncryption, "enable-channel-encryption", false, "Enable TLS Encryption for channel")
 
 	if pipelineCfg != nil {
 		pipeline.GetPipeline(pipelineCfg, func() {

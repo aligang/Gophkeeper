@@ -31,5 +31,11 @@ func (c *Config) merge(another *Config) *Config {
 	if c.LogLevel == logging.LogLevel_LOGLEVEL_UNSPECIFIED && another.LogLevel != logging.LogLevel_LOGLEVEL_UNSPECIFIED {
 		c.LogLevel = another.LogLevel
 	}
+	if c.EnableTlsEncryption == false && another.EnableTlsEncryption == true {
+		c.EnableTlsEncryption = true
+	}
+	if c.CaCertPath == "" && another.CaCertPath != "" {
+		c.CaCertPath = another.CaCertPath
+	}
 	return c
 }

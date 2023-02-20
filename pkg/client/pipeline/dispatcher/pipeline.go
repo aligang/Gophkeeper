@@ -1,6 +1,8 @@
 package dispatcher
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"github.com/aligang/Gophkeeper/pkg/client/config"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
@@ -17,6 +19,7 @@ import (
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
 	secretProto "github.com/aligang/Gophkeeper/pkg/common/secret"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
 )
@@ -27,8 +30,32 @@ func RunPipeline(cfg *config.Config, pipelineTree *pipeline.PipelineInitTree) {
 		os.Exit(0)
 	}
 
+	dialOpts := []grpc.DialOption{}
+	switch {
+	case cfg.EnableTlsEncryption && cfg.CaCertPath != "":
+		b, err := os.ReadFile(cfg.CaCertPath)
+		if err != nil {
+			logging.Fatal("Could not read  CA certificate file: %s", err.Error())
+		}
+		cp := x509.NewCertPool()
+		if !cp.AppendCertsFromPEM(b) {
+			logging.Fatal("Could not add CA certificate to certificate pool")
+		}
+
+		dialOpts = append(dialOpts, grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{
+			InsecureSkipVerify: false,
+			RootCAs:            cp,
+		})))
+	case cfg.EnableTlsEncryption:
+		dialOpts = append(dialOpts, grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{
+			InsecureSkipVerify: true,
+		})))
+	default:
+		dialOpts = append(dialOpts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	}
+
 	logging.Debug("Connecting to %s", cfg.ServerAddress)
-	conn, err := grpc.Dial(cfg.ServerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(cfg.ServerAddress, dialOpts...)
 	if err != nil {
 		logging.Crit(err.Error())
 	}

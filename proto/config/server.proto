@@ -16,6 +16,8 @@ enum RepositoryType {
 message Config {
   string address = 1;
   log_level.LogLevel log_level = 2;
+  string tls_cert_path = 3;
+  string tls_key_path = 4;
 
   RepositoryType repository_type = 11;
   string database_dsn = 12;

@@ -47,6 +47,14 @@ func (c *Config) merge(another *Config) *Config {
 		c.LogLevel = another.LogLevel
 	}
 
+	if c.TlsCertPath == "" && another.TlsCertPath != "" {
+		c.TlsCertPath = another.TlsCertPath
+	}
+
+	if c.TlsKeyPath == "" && another.TlsKeyPath != "" {
+		c.TlsKeyPath = another.TlsKeyPath
+	}
+
 	if c.ConfigFile == "" && another.ConfigFile != "" {
 		c.ConfigFile = another.ConfigFile
 	}

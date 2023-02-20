@@ -13,6 +13,7 @@ import (
 	"github.com/aligang/Gophkeeper/pkg/server/repository/fs"
 	secretHandler "github.com/aligang/Gophkeeper/pkg/server/secret/handler"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"net"
 	"os"
 	"os/signal"
@@ -69,7 +70,17 @@ func main() {
 		}
 		accountHandler := accountHandler.New(storage, cfg)
 		secretHandler := secretHandler.New(storage, fileStorage, cfg)
-		s := grpc.NewServer(grpc.ChainUnaryInterceptor(accountHandler.AuthInterceptor))
+
+		serverOpts := []grpc.ServerOption{grpc.ChainUnaryInterceptor(accountHandler.AuthInterceptor)}
+		if cfg.TlsCertPath != "" && cfg.TlsKeyPath != "" {
+			creds, err := credentials.NewServerTLSFromFile(cfg.TlsCertPath, cfg.TlsKeyPath)
+			if err != nil {
+				logging.Fatal("Could not read Certificate file: %s", err.Error())
+			}
+			serverOpts = append(serverOpts, grpc.Creds(creds))
+		}
+
+		s := grpc.NewServer(serverOpts...)
 
 		account.RegisterAccountServiceServer(s, accountHandler)
 		secret.RegisterSecretServiceServer(s, secretHandler)

@@ -35,6 +35,8 @@ func getConfigFromEnv() *Config {
 		FileStaleTimeMinutes:     FileStaleTime,
 		SecretEncryptionEnabled:  EnableSecretEncryption,
 		LogLevel:                 logging.GetLogLevelFromString(os.Getenv("LOGLEVEL")),
+		TlsCertPath:              os.Getenv("TLS_CERT_PATH"),
+		TlsKeyPath:               os.Getenv("TLS_KEY_PATH"),
 	}
 	if s.RepositoryType == RepositoryType_SQL {
 		//s.OptionalDatabaseUri = &Config_DatabaseUri{DatabaseUri: os.Getenv("DATABASE_URI")}

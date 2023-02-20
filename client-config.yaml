@@ -1,0 +1,6 @@
+server_address: "127.0.0.1:8090"
+login: "login123"
+password: "password123"
+log_level: "WARNING"
+ca_cert_path: "/home/alex-limonov/repos/Gophkeeper/x509/ca.pem"
+enable_tls_encryption: true

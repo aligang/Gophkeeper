@@ -14,5 +14,7 @@ func getServerDefaultConfig() *Config {
 		FileStaleTimeMinutes:     1,
 		SecretEncryptionEnabled:  false,
 		LogLevel:                 logging.LogLevel_CRITICAL,
+		TlsCertPath:              "",
+		TlsKeyPath:               "",
 	}
 }
