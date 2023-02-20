@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
-	secret2 "github.com/aligang/Gophkeeper/pkg/common/secret"
+	secret "github.com/aligang/Gophkeeper/pkg/common/secret"
 	"github.com/aligang/Gophkeeper/pkg/common/secret/instance"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
 	"github.com/google/uuid"
@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func (h *GrpcHandler) Create(ctx context.Context, req *secret2.CreateSecretRequest) (*secret2.SecretDescription, error) {
+func (h *GrpcHandler) Create(ctx context.Context, req *secret.CreateSecretRequest) (*secret.SecretDescription, error) {
 	logger := logging.Logger.GetSubLogger("handler", "Create")
 	logger.Debug("Processing Create Secret Request")
 	md, ok := metadata.FromIncomingContext(ctx)
@@ -31,22 +31,22 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret2.CreateSecretReque
 	accountID = values[0]
 	logger.Debug("account id is: %s", accountID)
 
-	desc := &secret2.SecretDescription{}
+	desc := &secret.SecretDescription{}
 	var err error
+	secretId := uuid.New().String()
 
+	logger.Info("Saving secret %s for account %s", secretId, accountID)
 	switch req.Secret.(type) {
-	case *secret2.CreateSecretRequest_Text:
+	case *secret.CreateSecretRequest_Text:
 		s := &instance.TextSecret{
 			BaseSecret: instance.BaseSecret{
-				Id:        uuid.New().String(),
+				Id:        secretId,
 				AccountId: accountID,
 				CreatedAt: time.Now(),
 			},
 			Text: req.GetText().GetData(),
 		}
-		//if h.cfg.SecretEncryptionEnabled {
-		//	s, err = encryption.EncryptTextSecret(s, " ")
-		//}
+
 		err = h.storage.WithinTransaction(ctx, func(ctx context.Context, tx *transaction.DBTransaction) error {
 			return h.storage.AddTextSecret(ctx, s, tx)
 		})
@@ -54,12 +54,12 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret2.CreateSecretReque
 			return nil, status.Errorf(codes.Internal, err.Error())
 		}
 		desc.Id = s.Id
-		desc.SecretType = secret2.SecretType_TEXT
+		desc.SecretType = secret.SecretType_TEXT
 		desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
-	case *secret2.CreateSecretRequest_LoginPassword:
+	case *secret.CreateSecretRequest_LoginPassword:
 		s := &instance.LoginPasswordSecret{
 			BaseSecret: instance.BaseSecret{
-				Id:        uuid.New().String(),
+				Id:        secretId,
 				AccountId: accountID,
 				CreatedAt: time.Now(),
 			},
@@ -73,12 +73,12 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret2.CreateSecretReque
 			return nil, status.Errorf(codes.Internal, err.Error())
 		}
 		desc.Id = s.Id
-		desc.SecretType = secret2.SecretType_LOGIN_PASSWORD
+		desc.SecretType = secret.SecretType_LOGIN_PASSWORD
 		desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
-	case *secret2.CreateSecretRequest_CreditCard:
+	case *secret.CreateSecretRequest_CreditCard:
 		s := &instance.CreditCardSecret{
 			BaseSecret: instance.BaseSecret{
-				Id:        uuid.New().String(),
+				Id:        secretId,
 				AccountId: accountID,
 				CreatedAt: time.Now(),
 			},
@@ -94,12 +94,12 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret2.CreateSecretReque
 			return nil, status.Errorf(codes.Internal, err.Error())
 		}
 		desc.Id = s.Id
-		desc.SecretType = secret2.SecretType_CREDIT_CARD
+		desc.SecretType = secret.SecretType_CREDIT_CARD
 		desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
-	case *secret2.CreateSecretRequest_File:
+	case *secret.CreateSecretRequest_File:
 		s := &instance.FileSecret{
 			BaseSecret: instance.BaseSecret{
-				Id:        uuid.New().String(),
+				Id:        secretId,
 				AccountId: accountID,
 				CreatedAt: time.Now(),
 			},
@@ -119,11 +119,13 @@ func (h *GrpcHandler) Create(ctx context.Context, req *secret2.CreateSecretReque
 			return nil, status.Errorf(codes.Internal, err.Error())
 		}
 		desc.Id = s.Id
-		desc.SecretType = secret2.SecretType_FILE
+		desc.SecretType = secret.SecretType_FILE
 		desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
 	default:
+		logger.Warn("Could not save secret %s for account %s", secretId, accountID)
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
+	logger.Info("Secret %s for account %s successfully saved", secretId, accountID)
 	logger.Debug("Finished Processing Create Secret Request, Sending Response")
 	return desc, nil
 }

@@ -34,6 +34,8 @@ func (h *GrpcHandler) Delete(ctx context.Context, req *secret2.DeleteSecretReque
 
 	var err error
 
+	logger.Info("Deleting secret %s for account %s", req.Id, accountID)
+
 	switch req.SecretType {
 	case secret2.SecretType_TEXT:
 		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
@@ -91,8 +93,11 @@ func (h *GrpcHandler) Delete(ctx context.Context, req *secret2.DeleteSecretReque
 	default:
 		return nil, status.Errorf(codes.Internal, secret2.ErrUnsupportedSecretType.Error())
 	}
+
 	if err != nil {
+		logger.Warn("Could not Delete secret %s for account %s", req.Id, accountID)
 		return nil, status.Errorf(codes.NotFound, "Could not delete secret")
 	}
+	logger.Info("Successfully Deleted secret %s for account %s", req.Id, accountID)
 	return &emptypb.Empty{}, nil
 }

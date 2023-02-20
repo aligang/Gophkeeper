@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
-	secret2 "github.com/aligang/Gophkeeper/pkg/common/secret"
+	"github.com/aligang/Gophkeeper/pkg/common/secret"
 	"github.com/aligang/Gophkeeper/pkg/common/secret/instance"
 	"github.com/aligang/Gophkeeper/pkg/server/repository/transaction"
 	"github.com/google/uuid"
@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func (h *GrpcHandler) Update(ctx context.Context, req *secret2.UpdateSecretRequest) (*secret2.SecretDescription, error) {
+func (h *GrpcHandler) Update(ctx context.Context, req *secret.UpdateSecretRequest) (*secret.SecretDescription, error) {
 	logger := logging.Logger.GetSubLogger("handler", "Update")
 	logger.Debug("Processing Update Secret Request")
 	md, ok := metadata.FromIncomingContext(ctx)
@@ -34,10 +34,11 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret2.UpdateSecretReque
 
 	var err error
 
-	desc := &secret2.SecretDescription{}
+	desc := &secret.SecretDescription{}
+	logger.Info("Updating secret %s for account %s", req.Id, accountID)
 
 	switch req.Secret.(type) {
-	case *secret2.UpdateSecretRequest_Text:
+	case *secret.UpdateSecretRequest_Text:
 		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
 			oldSecret, err := h.storage.GetTextSecret(ctx, req.Id, tx)
 			if err != nil {
@@ -57,14 +58,14 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret2.UpdateSecretReque
 				Text: req.GetText().GetData(),
 			}
 			desc.Id = s.Id
-			desc.SecretType = secret2.SecretType_TEXT
+			desc.SecretType = secret.SecretType_TEXT
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
 			desc.ModifiedAt = s.ModifiedAt.Format(time.RFC3339)
 
 			return h.storage.UpdateTextSecret(ctx, s, tx)
 		})
 
-	case *secret2.UpdateSecretRequest_LoginPassword:
+	case *secret.UpdateSecretRequest_LoginPassword:
 		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
 			oldSecret, err := h.storage.GetLoginPasswordSecret(ctx, req.Id, tx)
 			if err != nil {
@@ -85,12 +86,12 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret2.UpdateSecretReque
 				Password: req.GetLoginPassword().GetPassword(),
 			}
 			desc.Id = s.Id
-			desc.SecretType = secret2.SecretType_LOGIN_PASSWORD
+			desc.SecretType = secret.SecretType_LOGIN_PASSWORD
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
 			desc.ModifiedAt = s.ModifiedAt.Format(time.RFC3339)
 			return h.storage.UpdateLoginPasswordSecret(ctx, s, tx)
 		})
-	case *secret2.UpdateSecretRequest_CreditCard:
+	case *secret.UpdateSecretRequest_CreditCard:
 		err = h.storage.WithinTransaction(ctx, func(tCtx context.Context, tx *transaction.DBTransaction) error {
 			oldSecret, err := h.storage.GetCreditCardSecret(ctx, req.Id, tx)
 			if err != nil {
@@ -113,12 +114,12 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret2.UpdateSecretReque
 				Cvc:        req.GetCreditCard().GetCvc(),
 			}
 			desc.Id = s.Id
-			desc.SecretType = secret2.SecretType_CREDIT_CARD
+			desc.SecretType = secret.SecretType_CREDIT_CARD
 			desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
 			desc.ModifiedAt = s.ModifiedAt.Format(time.RFC3339)
 			return h.storage.UpdateCreditCardSecret(ctx, s, tx)
 		})
-	case *secret2.UpdateSecretRequest_File:
+	case *secret.UpdateSecretRequest_File:
 		logger.Debug("Running secret precheck...")
 		oldSecret, err := h.storage.GetFileSecret(ctx, req.Id, nil)
 		if err != nil {
@@ -191,15 +192,16 @@ func (h *GrpcHandler) Update(ctx context.Context, req *secret2.UpdateSecretReque
 			return nil, status.Errorf(codes.Internal, err.Error())
 		}
 		desc.Id = s.Id
-		desc.SecretType = secret2.SecretType_FILE
+		desc.SecretType = secret.SecretType_FILE
 		desc.CreatedAt = s.CreatedAt.Format(time.RFC3339)
 		desc.ModifiedAt = s.ModifiedAt.Format(time.RFC3339)
 	default:
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 	if err != nil {
+		logger.Warn("Updating secret %s for account %s failed", req.Id, accountID)
 		return nil, status.Errorf(codes.Unavailable, "Could not update secret")
 	}
-
+	logger.Warn("Updating secret %s for account %s succeeded", req.Id, accountID)
 	return desc, nil
 }

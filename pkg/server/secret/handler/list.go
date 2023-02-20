@@ -3,14 +3,14 @@ package handler
 import (
 	"context"
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
-	secret2 "github.com/aligang/Gophkeeper/pkg/common/secret"
+	"github.com/aligang/Gophkeeper/pkg/common/secret"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"time"
 )
 
-func (h *GrpcHandler) List(ctx context.Context, req *secret2.ListSecretRequest) (*secret2.ListSecretResponse, error) {
+func (h *GrpcHandler) List(ctx context.Context, req *secret.ListSecretRequest) (*secret.ListSecretResponse, error) {
 	logger := logging.Logger.GetSubLogger("handler", "List")
 	logger.Debug("Processing List Secret Request")
 	md, ok := metadata.FromIncomingContext(ctx)
@@ -29,8 +29,8 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret2.ListSecretRequest) 
 	logger.Debug("%s", accountID)
 	logger.Debug("Finished Processing Create Secret Request, Sending Response")
 
-	response := &secret2.ListSecretResponse{}
-
+	response := &secret.ListSecretResponse{}
+	logger.Info("listing secrets for account %s", accountID)
 	textSecrets, err := h.storage.ListTextSecrets(ctx, accountID, nil)
 	if err != nil {
 		logger.Debug("Error during fetching text secrets")
@@ -55,11 +55,11 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret2.ListSecretRequest) 
 	for _, s := range textSecrets {
 		response.Secrets = append(
 			response.Secrets,
-			&secret2.SecretDescription{
+			&secret.SecretDescription{
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
 				ModifiedAt: convertTime(s.ModifiedAt),
-				SecretType: secret2.SecretType_TEXT,
+				SecretType: secret.SecretType_TEXT,
 			},
 		)
 	}
@@ -67,11 +67,11 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret2.ListSecretRequest) 
 	for _, s := range loginPasswordSecrets {
 		response.Secrets = append(
 			response.Secrets,
-			&secret2.SecretDescription{
+			&secret.SecretDescription{
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
 				ModifiedAt: convertTime(s.ModifiedAt),
-				SecretType: secret2.SecretType_LOGIN_PASSWORD,
+				SecretType: secret.SecretType_LOGIN_PASSWORD,
 			},
 		)
 	}
@@ -79,11 +79,11 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret2.ListSecretRequest) 
 	for _, s := range creditCardSecrets {
 		response.Secrets = append(
 			response.Secrets,
-			&secret2.SecretDescription{
+			&secret.SecretDescription{
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
 				ModifiedAt: convertTime(s.ModifiedAt),
-				SecretType: secret2.SecretType_CREDIT_CARD,
+				SecretType: secret.SecretType_CREDIT_CARD,
 			},
 		)
 	}
@@ -91,14 +91,14 @@ func (h *GrpcHandler) List(ctx context.Context, req *secret2.ListSecretRequest) 
 	for _, s := range fileSecrets {
 		response.Secrets = append(
 			response.Secrets,
-			&secret2.SecretDescription{
+			&secret.SecretDescription{
 				Id:         s.Id,
 				CreatedAt:  s.CreatedAt.Format(time.RFC3339),
 				ModifiedAt: convertTime(s.ModifiedAt),
-				SecretType: secret2.SecretType_FILE,
+				SecretType: secret.SecretType_FILE,
 			},
 		)
 	}
-
+	logger.Info("secrets for account %s successfully listed", accountID)
 	return response, nil
 }
