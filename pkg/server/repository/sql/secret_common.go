@@ -12,7 +12,7 @@ func (r *Repository) addSecret(ctx context.Context, secretType string, query str
 	r.log.Debug("Executing statement to create %s within Repository: %s", secretType, args[0])
 	_, err = statement.ExecContext(ctx, args...)
 	if err != nil {
-		r.log.Warn("Error During statement Execution for create %s secret with id:  %s", secretType, args[0])
+		r.log.Crit("Error During statement Execution for create %s secret with id:  %s", secretType, args[0])
 		return err
 	}
 	return nil
@@ -36,7 +36,7 @@ func (r *Repository) deleteSecret(ctx context.Context, secretType string, query 
 	r.log.Debug("Executing statement to delete %s secret from to Repository: %s", secretType, args[0])
 	_, err = statement.ExecContext(ctx, args...)
 	if err != nil {
-		r.log.Warn("Error During statement Execution %s with %s", query, args[0])
+		r.log.Crit("Error During statement Execution %s with %s", query, args[0])
 		return err
 	}
 	return nil
@@ -51,7 +51,7 @@ func (r *Repository) prepareStatement(ctx context.Context, query string, tx *tra
 		statement, err = r.DB.PreparexContext(ctx, query)
 	}
 	if err != nil {
-		r.log.Warn("Error During statement creation %s", query)
+		r.log.Crit("Error During statement creation %s", query)
 		return nil, err
 	}
 	return statement, nil

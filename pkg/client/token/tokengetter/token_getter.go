@@ -7,7 +7,6 @@ import (
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
 	"github.com/aligang/Gophkeeper/pkg/common/token"
 	"google.golang.org/grpc"
-	"log"
 )
 
 type TokenGetter struct {
@@ -22,7 +21,7 @@ type TokenGetter struct {
 
 func (t *TokenGetter) getStaticToken() *token.Token {
 	logger := t.logger.GetSubLogger("Static", "Token")
-	logger.Debug("Using predefined token")
+	logger.Info("Using predefined token")
 	return &token.Token{
 		Id:         "Statically Defined Token",
 		TokenValue: t.StaticToken,
@@ -33,15 +32,14 @@ func (t *TokenGetter) getStaticToken() *token.Token {
 
 func (t *TokenGetter) getDynamicToken() *token.Token {
 	logger := t.logger.GetSubLogger("Dynamic", "Token")
-	logger.Debug("Fetching token from AuthServer")
+	logger.Info("Fetching token from AuthServer")
 	resp, err := t.Client.Authenticate(
 		context.Background(),
 		&account.AuthenticationRequest{Login: t.Login, Password: t.Password})
 	if err != nil {
-		logger.Debug("Could not fetch token from AuthServer")
-		log.Fatal(err.Error())
+		logger.Fatal("Could not fetch token from AuthServer: %s", err.Error())
 	}
-	logger.Debug("Using token received from Auth Service")
+	logger.Info("Using token received from Auth Service")
 	logger.Debug("token id %s, issued at %s", resp.Token.Id, resp.Token.IssuedAt)
 	return resp.Token
 }

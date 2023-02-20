@@ -23,8 +23,7 @@ func Delete(client secret2.SecretServiceClient, getter *tokengetter.TokenGetter,
 	logger.Debug("Sending request...")
 	_, err := client.Delete(ctx, req)
 	if err != nil {
-		logger.Debug("Failed to Get Secret: %s", err.Error())
-		return
+		logger.Fatal("Failed to Get Secret: %s", err.Error())
 	}
 	logger.Debug("Finished Pipeline execution")
 }

@@ -23,8 +23,7 @@ func Get(client secret2.SecretServiceClient, getter *tokengetter.TokenGetter, cl
 	logger.Debug("Sending request...")
 	s, err := client.Get(ctx, req)
 	if err != nil {
-		logger.Debug("Failed to Get Secret: %s", err.Error())
-		return
+		logger.Fatal("Failed to Get Secret: %s", err.Error())
 	}
 	s.ToStdout()
 	logger.Debug("Finished Pipeline execution")

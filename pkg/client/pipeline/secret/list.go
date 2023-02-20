@@ -22,8 +22,7 @@ func List(client secret2.SecretServiceClient, getter *tokengetter.TokenGetter, c
 	logger.Debug("Sending request...")
 	secrets, err := client.List(ctx, req)
 	if err != nil {
-		logger.Debug("Failed to List Secrets: %s", err.Error())
-		return
+		logger.Fatal("Failed to List Secrets: %s", err.Error())
 	}
 	fmt.Print("[")
 	for _, secret := range secrets.Secrets {

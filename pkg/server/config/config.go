@@ -1,5 +1,9 @@
 package config
 
+import (
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+)
+
 func GetConfig() *Config {
 	var cfg *Config
 	cfg = getConfigFromEnv().merge(getConfigFromCli())
@@ -38,6 +42,9 @@ func (c *Config) merge(another *Config) *Config {
 
 	if c.SecretEncryptionEnabled == false && another.SecretEncryptionEnabled == true {
 		c.SecretEncryptionEnabled = true
+	}
+	if c.LogLevel == logging.LogLevel_LOGLEVEL_UNSPECIFIED && another.LogLevel != logging.LogLevel_LOGLEVEL_UNSPECIFIED {
+		c.LogLevel = another.LogLevel
 	}
 
 	if c.ConfigFile == "" && another.ConfigFile != "" {

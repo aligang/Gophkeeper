@@ -1,10 +1,14 @@
 package config
 
-import "os"
+import (
+	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	"os"
+)
 
-func GetConfig() *Config {
+func GetConfig(pipelineCfg *pipeline.PipelineInitTree) *Config {
 	var cfg *Config
-	cfg = getConfigFromEnv()
+	cfg = getConfigFromEnv().merge(getCliConfig(pipelineCfg))
 	if cfg.ConfigFile != "" {
 		cfg = cfg.merge(getConfigFromYaml(cfg.ConfigFile))
 	} else if _, err := os.ReadFile(DEFAULT_CLIENT_CONFIG_FILE_LOCATION); err == nil {
@@ -23,6 +27,9 @@ func (c *Config) merge(another *Config) *Config {
 	}
 	if c.Password == "" && another.Password != "" {
 		c.Password = another.Password
+	}
+	if c.LogLevel == logging.LogLevel_LOGLEVEL_UNSPECIFIED && another.LogLevel != logging.LogLevel_LOGLEVEL_UNSPECIFIED {
+		c.LogLevel = another.LogLevel
 	}
 	return c
 }

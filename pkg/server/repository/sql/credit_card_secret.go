@@ -40,7 +40,7 @@ func (r *Repository) GetCreditCardSecret(ctx context.Context, secretID string, t
 		r.log.Warn("Database response is empty")
 		return nil, repositoryerrors.ErrNoContent
 	case err != nil:
-		r.log.Warn("Error during decoding database response: %s", err.Error())
+		r.log.Crit("Error during decoding database response: %s", err.Error())
 		return nil, err
 	default:
 		return s, nil

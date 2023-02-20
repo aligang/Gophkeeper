@@ -5,14 +5,16 @@ import (
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
 	"github.com/aligang/Gophkeeper/pkg/client/pipeline/dispatcher"
 	"github.com/aligang/Gophkeeper/pkg/common/logging"
-	"github.com/rs/zerolog"
 	"os"
 )
 
 func main() {
-	logging.Configure(os.Stdout, zerolog.DebugLevel)
-	logging.Debug("Starting GophKeeper client")
-	clientCfg := config.GetConfig()
-	pipelineCfg := pipeline.GetClientPipelineParamsFromCli()
-	dispatcher.Start(clientCfg, pipelineCfg)
+	pipelineCfg := &pipeline.PipelineInitTree{}
+	clientCfg := config.GetConfig(pipelineCfg)
+	logging.Init(os.Stdout)
+	logging.SetLogLevel(clientCfg.LogLevel)
+	logging.Info("Starting GophKeeper client")
+
+	dispatcher.RunPipeline(clientCfg, pipelineCfg)
+	logging.Info("Shutting Down GophKeeper client")
 }

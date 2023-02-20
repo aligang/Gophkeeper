@@ -40,7 +40,7 @@ func (r *Repository) GetLoginPasswordSecret(ctx context.Context, secretID string
 		r.log.Warn("Database response is empty")
 		return nil, repositoryerrors.ErrNoContent
 	case err != nil:
-		r.log.Warn("Error during decoding database response: %s", err.Error())
+		r.log.Crit("Error during decoding database response: %s", err.Error())
 		return nil, err
 	default:
 		return s, nil
@@ -57,7 +57,7 @@ func (r *Repository) ListLoginPasswordSecrets(ctx context.Context, accountID str
 	r.log.Debug("Executing statement to fetch login-password secret from Repository")
 	err = statement.SelectContext(ctx, &secrets, args...)
 	if err != nil {
-		r.log.Warn("Error During statement Execution %s with %s", query, args[0])
+		r.log.Crit("Error During statement Execution %s with %s", query, args[0])
 		return secrets, err
 	}
 	return secrets, nil

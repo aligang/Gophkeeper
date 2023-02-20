@@ -18,20 +18,19 @@ import (
 	secretProto "github.com/aligang/Gophkeeper/pkg/common/secret"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
 	"os"
 )
 
-func Start(cfg *config.Config, pipelineTree *pipeline.PipelineInitTree) {
-	if pipelineTree.BuildInfo != nil {
-		version.Print()
-		os.Exit(0)
-	}
+func RunPipeline(cfg *config.Config, pipelineTree *pipeline.PipelineInitTree) {
+	//if pipelineTree.BuildInfo != nil {
+	//	version.Print()
+	//	os.Exit(0)
+	//}
 
 	logging.Debug("Connecting to %s", cfg.ServerAddress)
 	conn, err := grpc.Dial(cfg.ServerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatal(err.Error())
+		logging.Crit(err.Error())
 	}
 	defer conn.Close()
 	logging.Debug("Connection succeeded")

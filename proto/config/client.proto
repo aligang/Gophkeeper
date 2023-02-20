@@ -4,11 +4,15 @@ package config.client;
 
 option go_package = "github.com/aligang/Gophkeeper/pkg/client/config";
 
+import "proto/config/log_level.proto";
+
 message Config {
   string server_address = 1;
   string login = 2;
   string password = 3;
   string static_token = 4;
+
+  log_level.LogLevel log_level = 10;
 
   string config_file = 99;
 }

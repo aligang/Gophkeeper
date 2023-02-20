@@ -1,5 +1,7 @@
 package config
 
+import "github.com/aligang/Gophkeeper/pkg/common/logging"
+
 const DEFAULT_CLIENT_CONFIG_FILE_LOCATION = "/etc/gophkeeper/client.yaml"
 
 func getServerDefaultConfig() *Config {
@@ -11,5 +13,6 @@ func getServerDefaultConfig() *Config {
 		TokenRenewalTimeMinutes:  1,
 		FileStaleTimeMinutes:     1,
 		SecretEncryptionEnabled:  false,
+		LogLevel:                 logging.LogLevel_CRITICAL,
 	}
 }

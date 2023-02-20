@@ -31,8 +31,7 @@ func Update(client secret2.SecretServiceClient, getter *tokengetter.TokenGetter,
 	logger.Debug("Sending request...")
 	desc, err := client.Update(ctx, req)
 	if err != nil {
-		logger.Debug("Failed to Update Secret: %s", err.Error())
-		return
+		logger.Fatal("Failed to Update Secret: %s", err.Error())
 	}
 	desc.ToStdout()
 	logger.Debug("Finished Pipeline execution")

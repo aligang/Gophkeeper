@@ -61,7 +61,7 @@ func (gb *FileSystemGB) CleanStale(ctx context.Context) {
 		},
 	)
 	if err != nil {
-		gb.logger.Debug("Error during deletion: %s", err.Error())
+		gb.logger.Crit("Error during deletion: %s", err.Error())
 	}
 	gb.logger.Debug("filesystem clean sequence is finished")
 }

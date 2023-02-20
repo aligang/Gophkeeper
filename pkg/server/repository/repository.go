@@ -57,12 +57,12 @@ type Storage interface {
 
 func New(serverConfig *config.Config) Storage {
 	var storage Storage
-	logging.Debug("Initialization Storage")
+	logging.Info("Initialization Storage")
 	if serverConfig.GetRepositoryType() == config.RepositoryType_IN_MEMORY {
 		storage = inmemory.New()
 	} else if serverConfig.GetRepositoryType() == config.RepositoryType_SQL {
 		storage = sql.New(serverConfig)
 	}
-	logging.Debug("Storage Initialization finished")
+	logging.Info("Storage Initialization finished")
 	return storage
 }

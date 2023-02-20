@@ -16,13 +16,13 @@ func (r *Repository) AddToken(ctx context.Context, t *tokenInstance.Token, tx *t
 	r.log.Debug("Preparing statement to create token to Repository: %+s", t.Id)
 	statement, err := tx.Sql.PreparexContext(ctx, query)
 	if err != nil {
-		r.log.Warn("Error During statement creation %s", query)
+		r.log.Crit("Error During statement creation %s", query)
 		return err
 	}
 	r.log.Debug("Executing statement to create token to Repository: %+s", t.Id)
 	_, err = statement.ExecContext(ctx, args...)
 	if err != nil {
-		r.log.Warn("Error During statement Execution for storing token with id:  %s", t.Id)
+		r.log.Crit("Error During statement Execution for storing token with id:  %s", t.Id)
 		return err
 	}
 	return nil
@@ -53,7 +53,7 @@ func (r *Repository) GetToken(ctx context.Context, tokenValue string, tx *transa
 		r.log.Warn("Database response is empty")
 		return nil, repositoryerrors.ErrNoContent
 	case err != nil:
-		r.log.Warn("Error during decoding database response: %s", err.Error())
+		r.log.Crit("Error during decoding database response: %s", err.Error())
 		return nil, err
 	default:
 		return a, nil
@@ -85,13 +85,13 @@ func (r *Repository) listTokens(ctx context.Context, query string, args []any, t
 		statement, err = r.DB.PreparexContext(ctx, query)
 	}
 	if err != nil {
-		r.log.Warn("Error During statement creation %s", query)
+		r.log.Crit("Error During statement creation %s", query)
 		return nil, err
 	}
 	r.log.Debug("Executing statement to fetch orders from Repository")
 	err = statement.SelectContext(ctx, &tokens, args...)
 	if err != nil {
-		r.log.Warn("Error During statement Execution %s with %s", query, args[0])
+		r.log.Crit("Error During statement Execution %s with %s", query, args[0])
 		return tokens, err
 	}
 	return tokens, nil

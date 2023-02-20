@@ -19,8 +19,8 @@ func Update(client secret2.SecretServiceClient, getter *tokengetter.TokenGetter,
 	data, err := fs.ReadFile(context.Background(), update.FilePath)
 
 	if err != nil {
-		logger.Debug("Could not find file: %s", update.FilePath)
-		return
+		logger.Fatal("Could not find file: %s", update.FilePath)
+
 	}
 
 	req := &secret2.UpdateSecretRequest{

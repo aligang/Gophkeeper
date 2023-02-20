@@ -16,17 +16,17 @@ func (r *Repository) WithinTransaction(ctx context.Context, fn func(context.Cont
 	}
 	r.log.Debug("Running SQL transaction")
 	if err := fn(ctx, tx); err != nil {
-		r.log.Debug("Rolling Back SQL transaction")
+		r.log.Warn("Rolling Back SQL transaction")
 		if err := tx.Sql.Rollback(); err != nil {
-			r.log.Warn("rollback tx: %s", err.Error())
+			r.log.Crit("rollback tx: %s", err.Error())
 		}
 		return fmt.Errorf("run tx: %w", err)
 	}
 	r.log.Debug("Running SQL commit")
 	if err := tx.Sql.Commit(); err != nil {
-		r.log.Debug("Rolling Back SQL transaction")
+		r.log.Warn("Rolling Back SQL transaction")
 		if err := tx.Sql.Rollback(); err != nil {
-			r.log.Warn("rollback tx: %s", err.Error())
+			r.log.Crit("rollback tx: %s", err.Error())
 		}
 		return fmt.Errorf("commit tx: %w", err)
 	}

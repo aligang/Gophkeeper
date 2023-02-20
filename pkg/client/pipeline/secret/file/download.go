@@ -24,8 +24,7 @@ func Download(client secret2.SecretServiceClient, getter *tokengetter.TokenGette
 	logger.Debug("Sending request...")
 	resp, err := client.Get(ctx, req)
 	if err != nil {
-		logger.Debug("Failed to Download Secret: %s", err.Error())
-		return
+		logger.Fatal("Failed to Download Secret: %s", err.Error())
 	}
 	data := resp.Secret.(*secret2.Secret_File).File.Data
 	err = fs.SaveFile(context.Background(), download.FilePath, data)

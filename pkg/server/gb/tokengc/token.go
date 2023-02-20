@@ -52,7 +52,7 @@ func (gc *TokenGC) CleanStale(ctx context.Context) {
 		},
 	)
 	if err != nil {
-		gc.logger.Debug("Error during deletion: %s", err.Error())
+		gc.logger.Crit("Error during deletion: %s", err.Error())
 	}
 	if deletedTokenCounter != 0 {
 		gc.logger.Debug("Token were deleted: %d", deletedTokenCounter)

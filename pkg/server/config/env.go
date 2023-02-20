@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
 	"os"
 	"strconv"
 )
@@ -33,6 +34,7 @@ func getConfigFromEnv() *Config {
 		TokenRenewalTimeMinutes:  TokenRenewalTime,
 		FileStaleTimeMinutes:     FileStaleTime,
 		SecretEncryptionEnabled:  EnableSecretEncryption,
+		LogLevel:                 logging.GetLogLevelFromString(os.Getenv("LOGLEVEL")),
 	}
 	if s.RepositoryType == RepositoryType_SQL {
 		//s.OptionalDatabaseUri = &Config_DatabaseUri{DatabaseUri: os.Getenv("DATABASE_URI")}

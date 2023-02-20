@@ -6,25 +6,17 @@ import (
 	"os"
 )
 
-func GetClientPipelineParamsFromCli() *PipelineInitTree {
-	target := &PipelineInitTree{}
-
-	//flag.StringVar(&conf.ServerAddress, "a", "", "host to listen on")
-	//flag.StringVar(&conf.Login, "l", "", "File Storage Path")
-	//flag.StringVar(&conf.Password, "p", "", "Config File Path")
+func GetPipeline(target *PipelineInitTree, inline func()) *PipelineInitTree {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: ./client \n")
-		fmt.Fprintf(os.Stderr, "options:\n")
-		//fmt.Fprintf(os.Stderr, "-a 'server address'.\n")
-		//fmt.Fprintf(os.Stderr, "-l 'login'.\n")
-		//fmt.Fprintf(os.Stderr, "-p 'password'.\n")
+		inline()
 		fmt.Fprintf(os.Stderr, "sub-command:\n")
 		fmt.Fprintf(os.Stderr, "account|secret|version|token'.\n")
 	}
 
 	flag.Parse()
-
 	args := flag.Args()
+
+	//target := &PipelineInitTree{}
 	if len(args) < 1 {
 		flag.Usage()
 		os.Exit(1)

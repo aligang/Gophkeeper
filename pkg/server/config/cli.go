@@ -3,6 +3,7 @@ package config
 import (
 	"flag"
 	"fmt"
+	"github.com/aligang/Gophkeeper/pkg/common/logging"
 	"os"
 	"strings"
 )
@@ -28,7 +29,12 @@ func getConfigFromCli() *Config {
 	flag.Int64Var(&conf.TokenRenewalTimeMinutes, "tr", -1, "File Storage Path")
 	flag.Int64Var(&conf.FileStaleTimeMinutes, "fs", -1, "Config File Path")
 	flag.BoolVar(&conf.SecretEncryptionEnabled, "e", false, "Enable encryption")
+
+	var logLevel string
+	flag.StringVar(&logLevel, "log-level", "", "Loggin level")
+
 	flag.Parse()
+	conf.LogLevel = logging.GetLogLevelFromString(logLevel)
 	parsedRepoType := flag.Arg(0)
 	//if parsedRepoType != "in-memory" && parsedRepoType != "sql" {
 	//	return conf

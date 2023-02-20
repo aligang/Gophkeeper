@@ -7,11 +7,27 @@ import (
 
 var Logger InternalLogger
 
+func Fatal(msg string, args ...interface{}) {
+	if len(args) > 0 {
+		Logger.Logger.Fatal().Msgf(msg, args...)
+	} else {
+		Logger.Logger.Fatal().Msg(msg)
+	}
+}
+
 func Crit(msg string, args ...interface{}) {
 	if len(args) > 0 {
 		Logger.Logger.Error().Msgf(msg, args...)
 	} else {
 		Logger.Logger.Error().Msg(msg)
+	}
+}
+
+func Info(msg string, args ...interface{}) {
+	if len(args) > 0 {
+		Logger.Logger.Info().Msgf(msg, args...)
+	} else {
+		Logger.Logger.Info().Msg(msg)
 	}
 }
 
@@ -31,11 +47,14 @@ func Debug(msg string, args ...interface{}) {
 	}
 }
 
-func Configure(dst io.Writer, level zerolog.Level) {
+func Init(dst io.Writer) {
 	Logger = InternalLogger{
 		zerolog.New(dst).With().Timestamp().Logger(),
 	}
-	zerolog.SetGlobalLevel(level)
+}
+
+func SetLogLevel(level LogLevel) {
+	zerolog.SetGlobalLevel(LogMapping[level])
 }
 
 type InternalLogger struct {
@@ -56,6 +75,14 @@ func (l *InternalLogger) Crit(msg string, args ...interface{}) {
 	}
 }
 
+func (l *InternalLogger) Fatal(msg string, args ...interface{}) {
+	if len(args) > 0 {
+		l.Logger.Fatal().Msgf(msg, args...)
+	} else {
+		l.Logger.Fatal().Msg(msg)
+	}
+}
+
 func (l *InternalLogger) Warn(msg string, args ...interface{}) {
 	if len(args) > 0 {
 		l.Logger.Warn().Msgf(msg, args...)
@@ -69,5 +96,13 @@ func (l *InternalLogger) Debug(msg string, args ...interface{}) {
 		l.Logger.Debug().Msgf(msg, args...)
 	} else {
 		l.Logger.Debug().Msg(msg)
+	}
+}
+
+func (l *InternalLogger) Info(msg string, args ...interface{}) {
+	if len(args) > 0 {
+		l.Logger.Info().Msgf(msg, args...)
+	} else {
+		l.Logger.Info().Msg(msg)
 	}
 }

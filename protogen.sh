@@ -6,6 +6,7 @@ protoc \
   --go-grpc_opt=module=github.com/aligang/Gophkeeper \
   proto/config/server.proto \
   proto/config/client.proto \
+  proto/config/log_level.proto \
   proto/account/account.proto \
   proto/account/account_service.proto \
   proto/secret/secret.proto \

@@ -26,7 +26,7 @@ func Create(client secret2.SecretServiceClient, getter *tokengetter.TokenGetter,
 	logger.Debug("Sending request...")
 	desc, err := client.Create(ctx, req)
 	if err != nil {
-		logger.Debug("Failed to Create Secret: %s", err.Error())
+		logger.Fatal("Failed to Create Secret: %s", err.Error())
 		return
 	}
 	desc.ToStdout()

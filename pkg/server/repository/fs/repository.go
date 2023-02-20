@@ -21,8 +21,7 @@ func New(s *config.Config) *FileRepository {
 	repo.logger.Debug("Initialization file storage")
 	err := os.MkdirAll(repo.root, 0755)
 	if err != nil {
-		repo.logger.Debug("File storage initialization failed")
-		panic(err.Error())
+		repo.logger.Fatal("File storage initialization failed :%s", err.Error())
 	}
 	repo.logger.Debug("File storage initialization succeeded")
 	return repo
@@ -34,7 +33,7 @@ func (r *FileRepository) Save(ctx context.Context, objectName string, object []b
 	logger.Debug("saving object %s to file %s", objectName, storageFilePath)
 	err := SaveFile(ctx, storageFilePath, object)
 	if err != nil {
-		logger.Debug("Filed to save file: %s", storageFilePath)
+		logger.Crit("Filed to save file: %s", storageFilePath)
 		return err
 	}
 	logger.Debug("file written: %s", storageFilePath)
@@ -47,7 +46,7 @@ func (r *FileRepository) Read(ctx context.Context, objectName string) ([]byte, e
 	storageFilePath := r.root + "/" + objectName
 	data, err := ReadFile(ctx, storageFilePath)
 	if err != nil {
-		logger.Debug("Failed")
+		logger.Crit("Failed")
 		return nil, err
 	}
 	logger.Debug("Succeeded")
@@ -60,7 +59,7 @@ func (r *FileRepository) Delete(ctx context.Context, objectName string) error {
 	logger.Debug("Deleting file from file repository %s", filePath)
 	err := DeleteFile(ctx, filePath)
 	if err != nil {
-		logger.Debug("Could not delete file repository %s", filePath)
+		logger.Crit("Could not delete file repository %s", filePath)
 		return err
 	}
 	r.logger.Debug("File successfully deleted %s", filePath)
@@ -73,13 +72,12 @@ func (r *FileRepository) ListHashes(ctx context.Context) (map[string]any, error)
 	files, err := os.ReadDir(r.root)
 	repoContent := map[string]any{}
 	if err != nil {
-		logger.Debug("Error during listing directory content: %s, %s", r.root, err.Error())
-		panic(err)
+		logger.Fatal("Error during listing directory content: %s, %s", r.root, err.Error())
 	}
 	for _, f := range files {
 		content, err := r.Read(ctx, f.Name())
 		if err != nil {
-			logger.Debug("Error reading object from filesystem")
+			logger.Crit("Error reading object from filesystem")
 			return repoContent, err
 		}
 		md5Hash := md5.Sum(content)

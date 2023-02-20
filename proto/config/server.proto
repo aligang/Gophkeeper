@@ -4,6 +4,8 @@ package config.server;
 
 option go_package = "github.com/aligang/Gophkeeper/pkg/server/config";
 
+import "proto/config/log_level.proto";
+
 
 enum RepositoryType {
   UNSPECIFIED = 0;
@@ -11,9 +13,9 @@ enum RepositoryType {
   SQL = 2;
 }
 
-
 message Config {
   string address = 1;
+  log_level.LogLevel log_level = 2;
 
   RepositoryType repository_type = 11;
   string database_dsn = 12;
