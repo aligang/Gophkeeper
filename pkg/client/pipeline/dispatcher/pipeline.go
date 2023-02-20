@@ -22,10 +22,10 @@ import (
 )
 
 func RunPipeline(cfg *config.Config, pipelineTree *pipeline.PipelineInitTree) {
-	//if pipelineTree.BuildInfo != nil {
-	//	version.Print()
-	//	os.Exit(0)
-	//}
+	if pipelineTree.BuildInfo != nil {
+		version.Print()
+		os.Exit(0)
+	}
 
 	logging.Debug("Connecting to %s", cfg.ServerAddress)
 	conn, err := grpc.Dial(cfg.ServerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
