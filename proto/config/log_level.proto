@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package config.log_level;
 
-option go_package = "github.com/aligang/Gophkeeper/pkg/common/logging";
+option go_package = "github.com/aligang/Gophkeeper/internal/common/logging";
 
 
 

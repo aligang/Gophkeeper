@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package account;
 
-option go_package = "github.com/aligang/Gophkeeper/pkg/common/account";
+option go_package = "github.com/aligang/Gophkeeper/internal/common/account";
 
 
 message Account {

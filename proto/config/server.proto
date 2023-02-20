@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package config.server;
 
-option go_package = "github.com/aligang/Gophkeeper/pkg/server/config";
+option go_package = "github.com/aligang/Gophkeeper/internal/server/config";
 
 import "proto/config/log_level.proto";
 

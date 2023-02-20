@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/aligang/Gophkeeper/pkg/client/config"
-	"github.com/aligang/Gophkeeper/pkg/client/pipeline"
-	"github.com/aligang/Gophkeeper/pkg/client/pipeline/dispatcher"
-	"github.com/aligang/Gophkeeper/pkg/common/logging"
+	"github.com/aligang/Gophkeeper/internal/client/config"
+	"github.com/aligang/Gophkeeper/internal/client/pipeline"
+	"github.com/aligang/Gophkeeper/internal/client/pipeline/dispatcher"
+	"github.com/aligang/Gophkeeper/internal/common/logging"
 	"os"
 )
 
