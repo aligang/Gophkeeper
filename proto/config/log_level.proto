@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package config.log_level;
+
+option go_package = "github.com/aligang/Gophkeeper/internal/common/logging";
+
+
+
+enum LogLevel {
+  LOGLEVEL_UNSPECIFIED = 0;
+  DEBUG = 4;
+  INFO = 3;
+  WARNING = 2;
+  CRITICAL = 1;
+}
+

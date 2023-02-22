@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package config.server;
+
+option go_package = "github.com/aligang/Gophkeeper/internal/server/config";
+
+import "proto/config/log_level.proto";
+
+
+enum RepositoryType {
+  UNSPECIFIED = 0;
+  IN_MEMORY = 1;
+  SQL = 2;
+}
+
+message Config {
+  string address = 1;
+  log_level.LogLevel log_level = 2;
+  string tls_cert_path = 3;
+  string tls_key_path = 4;
+
+  RepositoryType repository_type = 11;
+  string database_dsn = 12;
+  string file_storage = 13;
+
+  int64 token_renewal_time_minutes = 21;
+  int64 token_validity_time_minutes = 22;
+  int64 file_stale_time_minutes = 23;
+
+  bool secret_encryption_enabled = 31;
+
+  string config_file = 99;
+}
+

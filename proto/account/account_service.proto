@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package account;
+
+option go_package = "github.com/aligang/Gophkeeper/internal/common/account";
+
+import "proto/token/token.proto";
+import "proto/account/account.proto";
+
+
+service AccountService {
+  rpc Register(RegisterRequest)
+      returns (RegisterResponse);
+
+  rpc Authenticate(AuthenticationRequest)
+      returns (AuthenticationResponse);
+}
+
+message RegisterRequest {
+  string login = 1;
+  string password = 2;
+}
+
+
+message RegisterResponse {
+  Account account = 1;
+}
+
+
+message AuthenticationRequest {
+  string login = 1;
+  string password = 2;
+}
+
+
+message AuthenticationResponse {
+  token.Token token = 1;
+}

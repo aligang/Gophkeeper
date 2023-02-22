@@ -1,0 +1,8 @@
+address: "127.0.0.1:8090"
+file_storage: "/tmp/gophkeeper"
+repository_type: SQL
+database_dsn: "postgres://gophkeeper:gophkeeper@127.0.0.1:5432/gophkeeper"
+log_level: "DEBUG"
+secret_encryption_enabled: true
+tls_cert_path: "/home/alex-limonov/repos/Gophkeeper/x509/server.pem"
+tls_key_path: "/home/alex-limonov/repos/Gophkeeper/x509/server.key"
